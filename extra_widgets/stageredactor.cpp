@@ -10,6 +10,25 @@ void stageRedactor::applyChanges()
 
 }
 
+void stageRedactor::deleteStage()
+{
+
+    qDebug() << "Отправка сигнала на удаление к Stage";
+   // this->_stage->de
+    this->close();
+}
+
+void stageRedactor::showDeleteDialog()
+{
+    DeleteDialog *deleteDialog = new DeleteDialog(0);
+    deleteDialog->setModal(true);
+
+    connect(deleteDialog, &DeleteDialog::accepted, this, &stageRedactor::deleteStage);
+    deleteDialog->show();
+
+
+}
+
 stageRedactor::stageRedactor(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::stageRedactor)
@@ -22,7 +41,7 @@ stageRedactor::stageRedactor(QWidget *parent) :
     ui->_start_date_edit->setCalendarPopup(true);
     ui->_finish_date_edit->setCalendarPopup(true);
 
-//    connect(this, change(), this, apply_changes());
+    connect(ui->pushButton, &QPushButton::clicked, this, &stageRedactor::showDeleteDialog);
 
 }
 
@@ -52,4 +71,25 @@ void stageRedactor::setStage(Stage *stage)
     ui->_start_date_edit->setDate(_stage->getStartDate());
     ui->_finish_date_edit->setDate(_stage->getFinishDate());
     ui->textEdit->setText(_stage->getStageName());
+}
+
+/**class Delete dialog **/
+DeleteDialog::DeleteDialog(QWidget *parent):QDialog(parent)
+{
+    vlayout = new QVBoxLayout();
+    hlayout = new QHBoxLayout();
+    setLayout(vlayout);
+    msg_label= new QLabel("Удалить этап?", this);
+    vlayout->addWidget(msg_label);
+    vlayout->addLayout(hlayout);
+    ok_button = new QPushButton(this);
+    ok_button->setText("Подтвердить");
+    hlayout->addWidget(ok_button);
+    cancel_button = new QPushButton(this);
+    cancel_button ->setText("Отменить");
+    hlayout->addWidget(cancel_button);
+    connect(ok_button, &QPushButton::clicked, this, &DeleteDialog::accepted);
+    connect(ok_button, &QPushButton::clicked, this, &DeleteDialog::close);
+    connect(cancel_button, &QPushButton::clicked, this, &DeleteDialog::rejected);
+    connect(ok_button, &QPushButton::clicked, this, &DeleteDialog::close);
 }

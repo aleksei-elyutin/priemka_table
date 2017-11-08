@@ -2,11 +2,16 @@
 #define STAGEREDACTOR_H
 
 #include <QWidget>
+#include <QDialog>
+#include <QLayout>
+#include <QLabel>
+#include <QPushButton>
 #include "../headers/stage.h"
 
 
 namespace Ui {
 class stageRedactor;
+class DeleteDialog;
 }
 
 class stageRedactor : public QWidget
@@ -22,6 +27,8 @@ private:
 
 public slots:
     void applyChanges();
+    void deleteStage();
+    void showDeleteDialog();
 
 public:
     explicit stageRedactor(QWidget *parent = 0);
@@ -31,6 +38,18 @@ public:
     void setStage(Stage *stage);
 
 
+
+
+};
+class DeleteDialog : public QDialog
+{
+    QVBoxLayout *vlayout;
+    QHBoxLayout *hlayout;
+    QLabel *msg_label;
+    QPushButton *ok_button;
+    QPushButton *cancel_button;
+public:
+    explicit DeleteDialog(QWidget *parent=0);
 
 
 };
