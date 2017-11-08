@@ -1,14 +1,25 @@
 #include "../headers/contract.h"
 
-Contract::Contract(int number,  QString name)
+Contract::Contract(QObject *parent) : QObject(parent)
 {
-    //_number = number;
-    _contract_name = name;
+
 }
 
 void Contract::pushStage(Stage *stage)
 {
     _stages.push_back(stage);
+}
+
+Stage *Contract::createStage()
+{
+    Stage *st = new Stage(this);
+    return st;
+}
+
+int Contract::getNumStages()
+{
+    int sz = _stages.size();
+    return  sz;
 }
 
 Stage *Contract::getStage(int stage_num)
@@ -20,9 +31,15 @@ Stage *Contract::getStage(int stage_num)
     else return _stages[stage_num];
 }
 
+void Contract::deleteStage(int stage_num)
+{
+    delete _stages[stage_num];
+    _stages.remove(stage_num);
+    _stages.squeeze();
+}
+
 int Contract::getNumber()
 {
-    int sz = _stages.size();
-    return  sz;
+
 }
 

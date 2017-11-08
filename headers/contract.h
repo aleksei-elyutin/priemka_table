@@ -19,7 +19,7 @@ private:
 
 public:
     /*explicit*/
-    Contract(int number, QString name);
+    explicit Contract(QObject *parent = 0);
     /**
      * @brief setContractName Задать имя договора
      * @param name
@@ -33,15 +33,22 @@ public:
     QString getContractName() {return _contract_name;}
 
     /**
-     * @brief pushStage Добавить этап
+     * @brief pushStage Добавить существующий этап
      */
     void pushStage(Stage *stage);
+
+    /**
+     * @brief createStageСоздать новый этап
+     * @return Указатель на созданный объект Stage
+     */
+    Stage *createStage();
+
 
     /**
      * @brief getNumStages Получить количество этапов
      * @return
      */
-    int getNumStages() {return _stages.size();}
+    int getNumStages();
 
     /**
      * @brief getStage Получить этап по номеру
@@ -50,7 +57,12 @@ public:
      */
     Stage *getStage(int stage_num);
 
-    int getNumber () ;
+    /**
+     * @brief deleteStage Удалить указатель на этап с номером stage_num и очистить память по нему
+     * @param stage_num
+     */
+    void deleteStage(int stage_num);
+
 
 
 signals:

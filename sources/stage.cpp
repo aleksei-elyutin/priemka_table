@@ -1,11 +1,8 @@
 #include "../headers/stage.h"
 
 //using namespace stage;
-Stage::Stage(QDate start_date, QDate finish_date)
+Stage::Stage(QObject *parent) : QObject(parent)
 {
- setFinishDate(finish_date);
-    setStartDate(start_date);
-
 
 }
 
@@ -35,6 +32,12 @@ void Stage::setFinishDate(QDate finishdate)
         _finish_date = QDate::currentDate();
       // qDebug() << "Invalid start_date. StartDate must be < finish_date:" << _finish_date.toString("yyyy.MMMM.dddd");
     }
+}
+
+Stage::deleteStage()
+{
+    delete this;
+    
 }
 
 

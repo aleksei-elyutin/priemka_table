@@ -19,7 +19,7 @@ private:
 
 
 public:
-    Stage( QDate start_date = QDate(1,1,2017), QDate finish_date= QDate(1,31,2017));
+    explicit Stage(QObject *parent = 0);
 
     /** Public nethods */
     /**
@@ -61,9 +61,18 @@ public:
      */
     bool getDoneStatus() {return _is_done;} //inline impl
 
+    /**
+     * @brief setStatusDone Установить статус исполнения ятапа в "Выполнено"
+     */
     void setStatusDone() { _is_done = true;} //inline impl
 
+    /**
+     * @brief setStatusUnDone Установить статус исполнения этапа в "Невыполнено"
+     */
     void setStatusUnDone() { _is_done = false;} //inline impl
+    
+public slots:
+    deleteStage();
 };
 
 

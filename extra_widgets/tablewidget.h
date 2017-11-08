@@ -14,7 +14,7 @@ class TableWidget : public QWidget
 {
     Q_OBJECT
 private:
-    DataBase *_base;
+    DataBase *_base; //Указатель на базу данных
 
     QScrollArea *_scrollArea;
     QWidget *table_dock;
