@@ -9,30 +9,20 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
 
-
-
     TableWidget *main_table = new TableWidget(this);
     ui->gridLayout->addWidget(main_table);
-   // setCentralWidget(main_table);
-
-
-
 
     //main_table->setSizePolicy(QSizePolicy::QSizePolicy::Maximum,QSizePolicy::Maximum);
-
 
 
     DataBase *base = new DataBase(this);
     /*заполнение бд*/
         for (int i = 0; i < 5; i++){
-            Contract *tmp_contract  = new Contract(i+1,
-                    QString("Наименование контракта номер ")+QString::number(i+1));
+            Contract* tmp_contract=base->createContract();
             for (int k=0; k<=i; k++)
             {
-                Stage *tmp_stage = new Stage(QDate(2017,5,10),QDate(2017,11,10+k+i));
-                tmp_contract->pushStage(tmp_stage);
+                Stage *tmp_stage = tmp_contract->createStage();
             }
-            base->contracts.push_back(tmp_contract);
         }
 
 

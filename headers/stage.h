@@ -5,6 +5,7 @@
 #include <QDate>
 #include <QVector>
 #include <QDebug>
+//#include "headers/contract.h"
 
 
 class Stage: public QObject {
@@ -16,10 +17,8 @@ private:
     QString _stage_name = QString("Этап без названия");
     bool _is_done = false;
 
-
-
 public:
-    explicit Stage(QObject *parent = 0);
+    /*explicit*/ Stage(QObject *parent = 0);
 
     /** Public nethods */
     /**
@@ -70,9 +69,12 @@ public:
      * @brief setStatusUnDone Установить статус исполнения этапа в "Невыполнено"
      */
     void setStatusUnDone() { _is_done = false;} //inline impl
-    
-public slots:
-    deleteStage();
+
+    void deleteRequest();
+
+signals:
+    void deleteMe();
+
 };
 
 

@@ -36,12 +36,13 @@ public:
     ~stageRedactor();
 
     void setStage(Stage *stage);
-
+signals:
+    void deleteStageRequest();
 
 
 
 };
-class DeleteDialog : public QDialog
+class StageDeleteDialog : public QDialog
 {
     QVBoxLayout *vlayout;
     QHBoxLayout *hlayout;
@@ -49,7 +50,8 @@ class DeleteDialog : public QDialog
     QPushButton *ok_button;
     QPushButton *cancel_button;
 public:
-    explicit DeleteDialog(QWidget *parent=0);
+    explicit StageDeleteDialog(QWidget *parent=0);
+     ~StageDeleteDialog();
 
 
 };

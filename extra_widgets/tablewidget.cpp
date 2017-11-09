@@ -38,6 +38,9 @@ void TableWidget::draw()
             qDebug()<<"added stage";
 
     }
+    add_contract_button = new QPushButton(this);
+    table_glayout->addWidget(add_contract_button,_last_entry, 1, 2);
+
 
 qDebug()<<"added contract";
 

@@ -5,14 +5,18 @@
 #include <QDate>
 #include <QString>
 #include <QVector>
-#include "../headers/stage.h"
+#include "headers/stage.h"
+//#include "headers/database.h"
 
-class Contract : public QObject
-{
+class Contract : public QObject {
+
     Q_OBJECT
+
 private:
-    QString _contract_name = "";
-    QVector <Stage*> _stages;
+
+    //DataBase *_dataBase;
+    QString _contract_name = "Контракт без названия";
+    QVector <Stage *> _stages;
     //int _number;
 
 
@@ -63,11 +67,11 @@ public:
      */
     void deleteStage(int stage_num);
 
+    void deleteStageByDelRequest(); /*SLOT*/
+
+    void deleteThisContract();
 
 
-signals:
-
-public slots:
 };
 
-#endif // TABLEENTRY_H
+#endif // CONTRACT_H

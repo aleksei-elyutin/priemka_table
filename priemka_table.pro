@@ -16,6 +16,7 @@ TEMPLATE = app
 
 SOURCES += ./sources/main.cpp\
         ./sources/mainwindow.cpp \
+        ./sources/database.cpp \
     ./sources/stage.cpp \
     ./sources/contract.cpp \
     ./extra_widgets/monheaderwidget.cpp \
@@ -24,10 +25,11 @@ SOURCES += ./sources/main.cpp\
     ./extra_widgets/stageredactor.cpp \
     ./extra_widgets/tablewidget.cpp \
     ./extra_widgets/contractredactordialog.cpp \
-    sources/database.cpp
 
-INCLUDEPATH += $$PWD/ $$PWD/headers/ $$PWD/extra_widgets/
+
+#INCLUDEPATH += $$PWD/ $$PWD/headers/ $$PWD/extra_widgets/
 HEADERS  += ./headers/mainwindow.h \
+    ./headers/database.h \
     ./headers/stage.h \
     ./headers/contract.h \
     ./extra_widgets/monheaderwidget.h \
@@ -36,7 +38,7 @@ HEADERS  += ./headers/mainwindow.h \
     ./extra_widgets/stageredactor.h \
     ./extra_widgets/tablewidget.h \
     ./extra_widgets/contractredactordialog.h \
-    headers/database.h
+
 
 FORMS    += ./forms/mainwindow.ui \
     ./extra_widgets/stageredactor.ui \

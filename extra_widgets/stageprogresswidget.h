@@ -8,7 +8,7 @@
 #include <QLayout>
 #include <QPushButton>
 #include <QCheckBox>
-#include "../headers/stage.h"
+#include "./headers/stage.h"
 #include "./monheaderwidget.h"
 
 class StageProgressWidget : public QFrame

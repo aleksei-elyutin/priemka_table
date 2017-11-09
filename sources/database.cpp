@@ -5,9 +5,9 @@ DataBase::DataBase(QObject *parent) : QObject(parent)
 
 }
 
-void DataBase::pushContract(Stage *stage)
+void DataBase::pushContract(Contract *contract)
 {
-    _contracts_base.push_back(stage);
+    _contracts_base.push_back(contract);
 }
 
 
@@ -22,10 +22,17 @@ Contract *DataBase::getContract(int contract_num)
     return _contracts_base.at(contract_num);
 }
 
-void DataBase::deleteContract(int contract_num)
+Contract *DataBase::createContract()
 {
-    delete _contracts_base[contract_num];
-    _contracts_base.remove(contract_num);
-    _contracts_base.squeeze();
+    Contract *ct = new Contract(this);
+    ct->setParentBase(this);
+    return ct;
+}
+
+void DataBase::deleteContract(Contract *contract)
+{
+    _contracts_base.remove(_contracts_base.indexOf(contract));
+    delete contract;
+   // _contracts_base.squeeze();
 }
 

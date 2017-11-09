@@ -4,11 +4,12 @@
 
 #include <QMainWindow>
 
-#include <tablewidget.h>
-#include <contract.h>
-#include <stage.h>
-#include <contractredactordialog.h>
-#include <database.h>
+#include "extra_widgets/tablewidget.h"
+#include "extra_widgets/contractredactordialog.h"
+#include "headers/contract.h"
+#include "headers/stage.h"
+
+#include "headers/database.h"
 
 namespace Ui {
 class MainWindow;

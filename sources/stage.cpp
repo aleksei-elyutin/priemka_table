@@ -4,6 +4,7 @@
 Stage::Stage(QObject *parent) : QObject(parent)
 {
 
+
 }
 
 void Stage::setStartDate(QDate startdate)
@@ -34,11 +35,12 @@ void Stage::setFinishDate(QDate finishdate)
     }
 }
 
-Stage::deleteStage()
+void Stage::deleteRequest()
 {
-    delete this;
-    
+    emit this->deleteMe();
 }
+
+
 
 
 

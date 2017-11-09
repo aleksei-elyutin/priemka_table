@@ -13,6 +13,7 @@ void Contract::pushStage(Stage *stage)
 Stage *Contract::createStage()
 {
     Stage *st = new Stage(this);
+    connect(st, &Stage::deleteMe, this, &Contract::deleteStageByDelRequest);
     return st;
 }
 
@@ -31,15 +32,41 @@ Stage *Contract::getStage(int stage_num)
     else return _stages[stage_num];
 }
 
-void Contract::deleteStage(int stage_num)
+bool Contract::deleteStage(int stage_num)
 {
-    delete _stages[stage_num];
-    _stages.remove(stage_num);
-    _stages.squeeze();
+    if ((stage_num>=0)&(stage_num < _stages.size()))
+    {
+        _stages.remove(i);
+        return true;
+    }
+    else
+    {
+        qDebug() << "Индекс вне границ массива";
+        return false;
+    }
+}
+void Contract::deleteStageByDelRequest()/*SLOT*/
+{
+
+    int i = _stages.indexOf(qobject_cast<Stage*>( sender()) );
+    qDebug() << "Попытка удаления этапа номер" << i << " из " << this->getNumStages() << " (имя: " << this->getStage(i)->getStageName() << ") контракта " << this->getContractName() ;
+
+    if (deleteStage(i)){
+
+        delete sender();
+        qDebug() << "Этап удален.";
+     }
+     else
+    {
+        qDebug() << "Ошибка при удалении этапа";
+    }
+
+    //_stages.squeeze();
 }
 
-int Contract::getNumber()
+void Contract::deleteThisContract()
 {
-
+    _dataBase->deleteContract(this);
 }
+
 

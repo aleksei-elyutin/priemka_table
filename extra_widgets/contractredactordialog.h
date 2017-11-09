@@ -2,8 +2,8 @@
 #define CONTRACTREDACTORDIALOG_H
 
 #include <QDialog>
-#include <contract.h>
-#include <stageredactor.h>
+#include <headers/contract.h>
+#include <extra_widgets/stageredactor.h>
 
 namespace Ui {
 class contractRedactorDialog;

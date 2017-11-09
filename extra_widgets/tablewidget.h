@@ -6,9 +6,9 @@
 #include <QScrollArea>
 #include <QLCDNumber>
 
-#include <contractwidget.h>
-#include <contract.h>
-#include <database.h>
+#include "contractwidget.h"
+#include "headers/contract.h"
+#include "headers/database.h"
 
 class TableWidget : public QWidget
 {
@@ -20,6 +20,7 @@ private:
     QWidget *table_dock;
 
     QGridLayout *table_glayout;
+    QPushButton *add_contract_button;
 
 
     int _year = QDate::currentDate().year();

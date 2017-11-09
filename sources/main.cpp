@@ -1,6 +1,6 @@
 #include "../headers/mainwindow.h"
 #include <QApplication>
-#include <stageredactor.h>
+
 
 int main(int argc, char *argv[])
 {
