@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     w.show();*/
 
     QWidget main_window;
-    main_window.setStyleSheet("background-color: rgb(0, 0, 0);");
+    main_window.setStyleSheet("background-color: rgb(255, 255, 255);");
     main_window.resize(1500,1000);
     DataBase base;
 

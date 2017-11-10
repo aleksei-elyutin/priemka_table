@@ -73,14 +73,14 @@ void TableWidget::addContractWidget(Contract *contract)
 {
 
 
-       QLabel* num = new QLabel(QString::number(_last_entry),table_dock);
+      // QLabel* num = new QLabel(QString::number(_last_entry),table_dock);
 
-      /* QLCDNumber *num = new QLCDNumber(this);
+       QLCDNumber *num = new QLCDNumber(this);
        num->display(QString::number(_last_entry));
        num->setMinimumHeight(50);
        num->setMinimumWidth(50);
        num->setDigitCount(2);
-       num->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);*/
+       num->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
 
         num->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 1px; border: 0px solid black;");
         //num->setMinimumWidth(60);

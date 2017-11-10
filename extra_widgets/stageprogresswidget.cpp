@@ -35,6 +35,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
     _done_checkbox = new QCheckBox (QString("Выполнено"),this);
     _done_checkbox->setStyleSheet("background-color: rgb(240, 240, 240); width: 1px; border: 0px;");
     _widget_layout->addWidget(_done_checkbox,2,0);
+    connect (_done_checkbox, &QCheckBox::stateChanged, _stage, &Stage::setStatusDone);
 
 
     _today = QDate::currentDate();
