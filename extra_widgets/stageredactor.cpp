@@ -4,7 +4,7 @@
 
 void stageRedactor::applyChanges()
 {
-    if (_stage)
+    if (qobject_cast<Stage*>(_stage))
     {
         _stage->setStartDate(ui->_start_date_edit->date());
         _stage->setFinishDate(ui->_finish_date_edit->date());
@@ -21,20 +21,29 @@ void stageRedactor::showDeleteDialog()
     deleteDialog->setLabelText("Удалить \"" + _stage->getStageName() + " \" ?");
 
     connect(deleteDialog, & DleteDialog::accepted, _stage, &Stage::deleteRequest);
+    connect(deleteDialog, & DleteDialog::accepted, this, &stageRedactor::disconnectIfDeleted);
     connect(deleteDialog, & DleteDialog::accepted, this, &stageRedactor::close);
+
     deleteDialog->show();
+}
+
+void stageRedactor::disconnectIfDeleted()
+{
+    disconnect(_parent, &QDialog::accepted, this, &stageRedactor::applyChanges);
 }
 
 stageRedactor::stageRedactor(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::stageRedactor)
 {
+    _parent = qobject_cast<QDialog*>(parent);
     ui->setupUi(this);
     ui->_start_date_edit->setDate(QDate::currentDate());
     ui->_finish_date_edit->setDate(QDate::currentDate());
     ui->_start_date_edit->setCalendarPopup(true);
     ui->_finish_date_edit->setCalendarPopup(true);
 
+    connect(_parent, &QDialog::accepted, this, &stageRedactor::applyChanges);
     connect(ui->pushButton, &QPushButton::clicked, this, &stageRedactor::showDeleteDialog);
 
 }

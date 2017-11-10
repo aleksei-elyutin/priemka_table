@@ -23,9 +23,11 @@ class stageRedactor : public QWidget
 private:
     Ui::stageRedactor *ui;
 
+    QDialog*_parent;
     Stage *_stage;
 
 
+    void disconnectIfDeleted();
 
 public slots:
     void applyChanges();

@@ -15,13 +15,16 @@ ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QWidget(pa
 
     /*Кнопки изменить и удалить*/
     QWidget *button_box = new QWidget();
+    button_box->setMinimumHeight(30);
+    button_box->setMaximumHeight(30);
+
     button_box->setStyleSheet("text-align: middle; background-color: rgb(200, 200, 200); width: 1px; border: 0px solid black;");
     QHBoxLayout *hLayout = new QHBoxLayout(button_box);
     hLayout->setMargin(0);
     hLayout->setSpacing(3);
 
-    QSpacerItem *vspacer = new QSpacerItem(50,30,QSizePolicy::Expanding,QSizePolicy::Maximum);
-    hLayout->addItem(vspacer);
+    QSpacerItem *hspacer = new QSpacerItem(50,30,QSizePolicy::Expanding,QSizePolicy::Expanding);
+    hLayout->addItem(hspacer);
 
     setup_contract_button = new QPushButton (QString("..."),this);
     setup_contract_button->setMinimumHeight(30);
@@ -38,8 +41,10 @@ ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QWidget(pa
     delete_contract_button->setMaximumWidth(30);
     connect(delete_contract_button, &QPushButton::clicked, this, &ContractWidget::showDeleteDialog);
 
-    hLayout->addWidget(delete_contract_button);
+    hLayout->addWidget(delete_contract_button);       
     vLayout->addWidget(button_box);
+
+
     /*******/
 
 
@@ -61,8 +66,6 @@ ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QWidget(pa
     vLayout->addWidget(add_stage_button);
     connect(add_stage_button, &QPushButton::clicked, _contract, &Contract::createStage);
     /********/
-
-
 
 }
 void ContractWidget::setupContract()

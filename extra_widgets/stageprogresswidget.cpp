@@ -5,6 +5,7 @@
 StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFrame(parent)
 {
 
+    _stage=stage;
     setFrameStyle(QFrame::WinPanel | QFrame::Raised);
 
     _widget_layout = new QGridLayout(this);
@@ -26,13 +27,13 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
 
 
     _stage_name = new QLabel(stage->getStageName(),this);
-    _stage_name->setStyleSheet("background-color: rgb(240, 240, 240); width: 10px; border: 0px solid black;");
+    _stage_name->setStyleSheet("background-color: rgb(240, 240, 240); width: 1px; border: 0px solid black;");
     _widget_layout->addWidget(_stage_name,1,0);
 
 
-     /** ЧекбQGraphicsDropShadowEffectокс "Выполнено" **/
+     /** Чекбокс "Выполнено" **/
     _done_checkbox = new QCheckBox (QString("Выполнено"),this);
-    _done_checkbox->setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 0px;");
+    _done_checkbox->setStyleSheet("background-color: rgb(240, 240, 240); width: 1px; border: 0px;");
     _widget_layout->addWidget(_done_checkbox,2,0);
 
 
@@ -46,7 +47,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
     header->setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 1px solid grey;");
     _widget_layout->addWidget(header,3,0);
 
-    //Говнокод
+
     if (_finish_date.year() > _today.year())
     {
         _finish_date.setDate(_today.year(), 12, 31);
@@ -66,13 +67,13 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
     //TODO : исправить ошибку, при которой игнорируется заполнение прогресс-бара без учета года
 
     _progress->setValue(_today.dayOfYear());
-    _progress->setFormat("Осталось дней:"+QString::number(_today.daysTo(_finish_date)));
+    _progress->setFormat("Осталось дней:"+QString::number(_today.daysTo(stage->getFinishDate())));
 
-    if (_today.daysTo(_finish_date) <= 10)
+    if ((_today.daysTo(stage->getFinishDate()) <= 10)&(!_stage->getDoneStatus()))
     {
         _progress->setStyleSheet("QProgressBar { border: 2px solid grey; background-color: rgb(180, 180, 180); text-align: middle; border-radius: 5px;} \
         QProgressBar::chunk {background-color: rgb(255, 0, 0); width: 3px; margin: 0px;}");  //Устанавливаем красные chunk'и  и серую заливу
-    } else if (_today.daysTo(_finish_date) <= 20)
+    } else if ((_today.daysTo(stage->getFinishDate()) <= 20)&(!_stage->getDoneStatus()))
     {
         _progress->setStyleSheet("QProgressBar { border: 2px solid grey; background-color: rgb(180, 180, 180); text-align: middle; border-radius: 5px;} \
         QProgressBar::chunk {background-color: rgb(255, 255, 0); width: 3px; margin: 0px;}");  //Устанавливаем желтые chunk'и  и серую заливу
@@ -83,13 +84,13 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
     }
     _widget_layout->addWidget(_dock,4,0);
 
-    QLabel *_start_date_label = new QLabel((_start_date.toString("dd.MM.yyyy")),_dates_dock);
+    QLabel *_start_date_label = new QLabel((stage->getStartDate().toString("dd.MM.yyyy")),_dates_dock);
     _start_date_label->setGeometry(_start_date.dayOfYear()*_size_factor, 0,100,(int)_vert_size/2);
-    _start_date_label->setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 1px solid black;");
+    _start_date_label->setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 0px solid black;");
 
-    QLabel *_finish_date_label = new QLabel((_finish_date.toString("d.MM.yyyy")),_dates_dock);
+    QLabel *_finish_date_label = new QLabel((stage->getFinishDate().toString("d.MM.yyyy")),_dates_dock);
     _finish_date_label->setGeometry(_start_date.dayOfYear()*_size_factor+length, 0, 100,(int)_vert_size/2);
-    _finish_date_label->setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 1px solid black;");
+    _finish_date_label->setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 0px solid black;");
 
     _dates_dock->setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 0px solid black;");
     _widget_layout->addWidget(_dates_dock,5,0);

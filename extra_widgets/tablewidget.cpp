@@ -58,10 +58,9 @@ void TableWidget::draw()
     add_contract_button = new QPushButton(table_dock);
     tableDock_glayout->addWidget(add_contract_button, ++_last_entry, 0, 1, 4);
     add_contract_button->setText("Добавить контракт...");
-    add_contract_button->
     connect(add_contract_button, &QPushButton::clicked, _base, &DataBase::createContract);
 
-    QSpacerItem *vspacer = new QSpacerItem(20,40,QSizePolicy::Expanding,QSizePolicy::Expanding);
+    QSpacerItem *vspacer = new QSpacerItem(20,50,QSizePolicy::Expanding,QSizePolicy::Expanding);
     tableDock_glayout->addItem(vspacer,++_last_entry,0);
 
 //    QSpacerItem *hspacer = new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -74,14 +73,14 @@ void TableWidget::addContractWidget(Contract *contract)
 {
 
 
-       //QLabel* num = new QLabel(QString::number(_last_entry),table_dock);
+       QLabel* num = new QLabel(QString::number(_last_entry),table_dock);
 
-       QLCDNumber *num = new QLCDNumber(this);
+      /* QLCDNumber *num = new QLCDNumber(this);
        num->display(QString::number(_last_entry));
        num->setMinimumHeight(50);
        num->setMinimumWidth(50);
        num->setDigitCount(2);
-       num->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+       num->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);*/
 
         num->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 1px; border: 0px solid black;");
         //num->setMinimumWidth(60);
@@ -103,16 +102,15 @@ void TableWidget::addContractWidget(Contract *contract)
         _last_entry++;
 
 }
-
 void TableWidget::addHeader()
 {
     QLabel* num = new QLabel(QString("№ П/П"),table_dock);
     num->setStyleSheet("text-align: middle; background-color: rgb(240, 240, 240); width: 10px; border: 2px solid black;");
     //num->setMinimumWidth(60);
     tableDock_glayout->addWidget(num,0,0);
-    QLabel* name = new QLabel(QString("Номер контракта"),table_dock);
+    QLabel* name = new QLabel(QString("Номер \nконтракта"),table_dock);
     name->setStyleSheet("text-align: middle; background-color: rgb(240, 240, 240); width: 10px; border: 2px solid black;");
-    name->setWordWrap(true);
+   // name->setWordWrap(true);
    // name->setMinimumWidth(400);
     tableDock_glayout->addWidget(name,0,1);
     QLabel* st = new QLabel(QString("Прогресс выполнения"),table_dock);

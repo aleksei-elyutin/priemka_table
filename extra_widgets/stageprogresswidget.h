@@ -15,6 +15,7 @@ class StageProgressWidget : public QFrame
 {
     Q_OBJECT
 private:
+    Stage *_stage;
     QProgressBar* _progress;
     int _start_position;
     int _end_position;
@@ -25,6 +26,8 @@ private:
     int _vert_size = 30;
     QGridLayout *_widget_layout;
     QLabel *_stage_name;
+
+    int _selected_year;
 
 
     QCheckBox *_done_checkbox;
