@@ -18,7 +18,7 @@ public:
      void pushContract(Contract *contract);
 
      /**
-      * @brief getNumStages Получить количество э
+      * @brief getNumContracts Получить количество контрактов
       * @return
       */
      int getNumContracts();
@@ -30,25 +30,28 @@ public:
       */
      Contract *getContract(int contract_num);
 
-     Contract * createContract();
+     Contract *createContract();
 
      /**
       * @brief deleteContract Удалить указатель контракт с номером contract_num и очистиь память по нему
       * @param contract_num
       */
 
-     void deleteContract(Contract* contract);
-
+     bool deleteContract(int contract_num);
 
      /**Не реализовано*/
      //Методы для кодирования записи в файл и декодирования записи из файла
      //codeBase();
      //decodeBase();
 
+public slots:
+     void deleteContractByDelRequest();/*SLOT*/
+     void childChanged(); /*SLOT*/
+
 
 signals:
+     void base_changed();
 
-public slots:
 };
 
 #endif // DATABASE_H

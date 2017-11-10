@@ -47,7 +47,7 @@ public:
      * @brief setContractName Задать название этапа
      * @param name
      */
-    void setStageName(QString name) {_stage_name = name;} //inline impl
+    void setStageName(QString name); //inline impl
     /**
      * @brief getContractName Получить название этапа
      * @return
@@ -70,10 +70,15 @@ public:
      */
     void setStatusUnDone() { _is_done = false;} //inline impl
 
+public slots:
+    /**
+     * @brief deleteRequest Обработка запрос на удаление к этому этапу от ГУИ
+     */
     void deleteRequest();
 
 signals:
     void deleteMe();
+    void imChanged();
 
 };
 

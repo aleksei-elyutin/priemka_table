@@ -4,26 +4,24 @@
 
 void stageRedactor::applyChanges()
 {
-    _stage->setStartDate(ui->_start_date_edit->date());
-    _stage->setFinishDate(ui->_finish_date_edit->date());
-    _stage->setStageName(ui->textEdit->toPlainText());
+    if (_stage)
+    {
+        _stage->setStartDate(ui->_start_date_edit->date());
+        _stage->setFinishDate(ui->_finish_date_edit->date());
+        _stage->setStageName(ui->textEdit->toPlainText());
+    }
 
 }
 
-void stageRedactor::deleteStage()
-{
 
-    qDebug() << "Отправка сигнала на удаление к Stage";
-    _stage->;
-    this->close();
-}
 
 void stageRedactor::showDeleteDialog()
 {
-    DeleteDialog *deleteDialog = new DeleteDialog(0);
-    deleteDialog->setModal(true);
+    DleteDialog *deleteDialog = new DleteDialog(0);
+    deleteDialog->setLabelText("Удалить \"" + _stage->getStageName() + " \" ?");
 
-    connect(deleteDialog, &DeleteDialog::accepted, this, &stageRedactor::deleteStage);
+    connect(deleteDialog, & DleteDialog::accepted, _stage, &Stage::deleteRequest);
+    connect(deleteDialog, & DleteDialog::accepted, this, &stageRedactor::close);
     deleteDialog->show();
 }
 
@@ -67,12 +65,12 @@ void stageRedactor::setStage(Stage *stage)
     ui->_start_date_edit->setDate(_stage->getStartDate());
     ui->_finish_date_edit->setDate(_stage->getFinishDate());
     ui->textEdit->setText(_stage->getStageName());
-    connect(this, &stageRedactor::deleteStage, _stage, &stageRedactor::showDeleteDialog);
+   // connect(this, &stageRedactor::deleteStage, _stage, &stageRedactor::showDeleteDialog);
 
 }
 
 /**class StageDeleteDialog **/
-StageDeleteDialog::StageDeleteDialog(QWidget *parent):QDialog(parent)
+/*StageDeleteDialog::StageDeleteDialog(QWidget *parent):QDialog(parent)
 {
     vlayout = new QVBoxLayout();
     hlayout = new QHBoxLayout();
@@ -86,14 +84,14 @@ StageDeleteDialog::StageDeleteDialog(QWidget *parent):QDialog(parent)
     cancel_button = new QPushButton(this);
     cancel_button ->setText("Отменить");
     hlayout->addWidget(cancel_button);
-    connect(ok_button, &QPushButton::clicked, this, &DeleteDialog::accepted);
-    connect(ok_button, &QPushButton::clicked, this, &DeleteDialog::close);
-    connect(cancel_button, &QPushButton::clicked, this, &DeleteDialog::rejected);
-    connect(ok_button, &QPushButton::clicked, this, &DeleteDialog::close);
+    connect(ok_button, &QPushButton::clicked, this, &StageDeleteDialog::accepted);
+    connect(ok_button, &QPushButton::clicked, this, &StageDeleteDialog::close);
+    connect(cancel_button, &QPushButton::clicked, this, &StageDeleteDialog::rejected);
+    connect(ok_button, &QPushButton::clicked, this, &StageDeleteDialog::close);
 }
 
 StageDeleteDialog::~StageDeleteDialog()
 {
     delete vlayout;
     delete hlayout;
-}
+}*/

@@ -13,7 +13,7 @@ void DataBase::pushContract(Contract *contract)
 
 int DataBase::getNumContracts()
 {
-    int sz = _stages.size();
+    int sz = _contracts_base.size();
     return sz;
 }
 
@@ -25,14 +25,51 @@ Contract *DataBase::getContract(int contract_num)
 Contract *DataBase::createContract()
 {
     Contract *ct = new Contract(this);
-    ct->setParentBase(this);
+    pushContract(ct);
+    connect(ct, &Contract::deleteMe, this, &DataBase::deleteContractByDelRequest);
+    connect(ct, &Contract::imChanged, this, &DataBase::childChanged);
+    emit base_changed();
     return ct;
 }
 
-void DataBase::deleteContract(Contract *contract)
+
+bool DataBase::deleteContract(int contract_num)
 {
-    _contracts_base.remove(_contracts_base.indexOf(contract));
-    delete contract;
-   // _contracts_base.squeeze();
+    if ((contract_num>=0)&(contract_num < _contracts_base.size()))
+    {
+        _contracts_base.remove(contract_num);
+        return true;
+    }
+    else
+    {
+        qDebug() << "Индекс вне границ массива";
+        return false;
+    }
+}
+
+/*SLOTS*/
+void DataBase::deleteContractByDelRequest()
+{
+    int i = _contracts_base.indexOf(qobject_cast<Contract*>( sender()) );
+    qDebug() << "Попытка удаления контракта номер" << i << this->getNumContracts()
+             << " (имя: " << this->_contracts_base.at(i)->getContractName()  << " )";
+
+    if (deleteContract(i)){
+
+        delete sender();
+        qDebug() << "Контракт удален.";
+     }
+     else
+    {
+        qDebug() << "Ошибка при удалении контракта";
+    }
+
+    emit base_changed();
+    //_stages.squeeze();
+}
+
+void DataBase::childChanged()
+{
+    emit base_changed();
 }
 

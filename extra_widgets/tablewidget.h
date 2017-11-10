@@ -10,16 +10,18 @@
 #include "headers/contract.h"
 #include "headers/database.h"
 
-class TableWidget : public QWidget
+
+class TableWidget : public QFrame
 {
     Q_OBJECT
 private:
     DataBase *_base; //Указатель на базу данных
-
+    QGridLayout *_layout;
     QScrollArea *_scrollArea;
-    QWidget *table_dock;
 
-    QGridLayout *table_glayout;
+    QWidget *table_dock;
+    QGridLayout *tableDock_glayout;
+
     QPushButton *add_contract_button;
 
 
@@ -28,9 +30,8 @@ private:
     int _last_entry = 1;
 
 
-
 public:
-    explicit TableWidget(QWidget *parent = 0);
+    explicit TableWidget(QFrame *parent = 0);
 
     void addContractWidget (Contract *contract);
 
@@ -39,7 +40,6 @@ public:
     void setContent(DataBase *base);
 
     void setYear(int year ) {_year = year;}
-
 
 
 signals:

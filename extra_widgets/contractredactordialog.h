@@ -20,8 +20,9 @@ public:
     explicit contractRedactorDialog(QWidget *parent = 0);
     ~contractRedactorDialog();
 
-    void linkContract(Contract* contract) {_contract=contract;} /** inline impl */
+    void linkContract(Contract* contract); /** inline impl */
     void draw();
+    void applyChanges();
 signals:
 
 private:

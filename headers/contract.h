@@ -65,11 +65,24 @@ public:
      * @brief deleteStage Удалить указатель на этап с номером stage_num и очистить память по нему
      * @param stage_num
      */
-    void deleteStage(int stage_num);
-
-    void deleteStageByDelRequest(); /*SLOT*/
+    bool deleteStage(int stage_num);
 
     void deleteThisContract();
+
+
+public slots:
+
+    /**
+     * @brief deleteRequest Обработка запрос на удаление к этому этапу от ГУИ
+     */
+    void deleteRequest();
+    void deleteStageByDelRequest(); /*SLOT*/
+    void childChanged(); /*SLOT*/
+
+signals:
+    void deleteMe();
+    void imChanged();
+
 
 
 };

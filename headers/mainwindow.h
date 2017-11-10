@@ -5,10 +5,6 @@
 #include <QMainWindow>
 
 #include "extra_widgets/tablewidget.h"
-#include "extra_widgets/contractredactordialog.h"
-#include "headers/contract.h"
-#include "headers/stage.h"
-
 #include "headers/database.h"
 
 namespace Ui {

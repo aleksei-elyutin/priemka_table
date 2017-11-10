@@ -5,6 +5,8 @@
 StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFrame(parent)
 {
 
+    setFrameStyle(QFrame::WinPanel | QFrame::Raised);
+
     _widget_layout = new QGridLayout(this);
     _widget_layout->setVerticalSpacing ( 0);
 

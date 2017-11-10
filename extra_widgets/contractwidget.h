@@ -5,25 +5,33 @@
 #include <QVector>
 #include <QLayout>
 #include <QLabel>
+
 #include "stageprogresswidget.h"
 #include "../headers/contract.h"
-#include "./monheaderwidget.h"
+#include "monheaderwidget.h"
+#include "dletedialog.h"
+#include "contractredactordialog.h"
 
-class ContractWidget : public QFrame
+class ContractWidget : public QWidget
 {
     Q_OBJECT
 private:
     QVector <StageProgressWidget*> _stages_widgets;
-    //QHBoxLayout *hLayout;
+
+    Contract* _contract;
     QVBoxLayout *vLayout;
-    //QLabel *num;
-    // QLabel *name;
-    // QWidget *_dock;
+
     MonHeaderWidget *header;
-    QPushButton *_edit_button;
+    QPushButton *add_stage_button;
+    QPushButton *delete_contract_button;
+    QPushButton *setup_contract_button;
+
+    void showDeleteDialog();
+    void setupContract();
 
 public:
     /*explicit*/ ContractWidget(QWidget *parent, Contract* contract);
+    ~ContractWidget();
 
 
 signals:

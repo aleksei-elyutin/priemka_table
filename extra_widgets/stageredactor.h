@@ -6,6 +6,8 @@
 #include <QLayout>
 #include <QLabel>
 #include <QPushButton>
+
+#include "dletedialog.h"
 #include "../headers/stage.h"
 
 
@@ -27,7 +29,6 @@ private:
 
 public slots:
     void applyChanges();
-    void deleteStage();
     void showDeleteDialog();
 
 public:
@@ -42,7 +43,7 @@ signals:
 
 
 };
-class StageDeleteDialog : public QDialog
+/*class StageDeleteDialog : public QDialog
 {
     QVBoxLayout *vlayout;
     QHBoxLayout *hlayout;
@@ -54,6 +55,6 @@ public:
      ~StageDeleteDialog();
 
 
-};
+};*/
 
 #endif // STAGEREDACTOR_H

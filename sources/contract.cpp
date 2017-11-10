@@ -13,7 +13,10 @@ void Contract::pushStage(Stage *stage)
 Stage *Contract::createStage()
 {
     Stage *st = new Stage(this);
+    pushStage(st);
     connect(st, &Stage::deleteMe, this, &Contract::deleteStageByDelRequest);
+    connect(st, &Stage::imChanged, this, &Contract::childChanged);
+    emit imChanged();
     return st;
 }
 
@@ -36,7 +39,7 @@ bool Contract::deleteStage(int stage_num)
 {
     if ((stage_num>=0)&(stage_num < _stages.size()))
     {
-        _stages.remove(i);
+        _stages.remove(stage_num);
         return true;
     }
     else
@@ -60,13 +63,19 @@ void Contract::deleteStageByDelRequest()/*SLOT*/
     {
         qDebug() << "Ошибка при удалении этапа";
     }
-
+    emit imChanged();
     //_stages.squeeze();
 }
 
-void Contract::deleteThisContract()
+  /*SLOTS*/
+void Contract::deleteRequest()
 {
-    _dataBase->deleteContract(this);
+    emit this->deleteMe();
+}
+
+void Contract::childChanged()
+{
+    emit imChanged();
 }
 
 

@@ -25,6 +25,7 @@ SOURCES += ./sources/main.cpp\
     ./extra_widgets/stageredactor.cpp \
     ./extra_widgets/tablewidget.cpp \
     ./extra_widgets/contractredactordialog.cpp \
+    extra_widgets/dletedialog.cpp
 
 
 #INCLUDEPATH += $$PWD/ $$PWD/headers/ $$PWD/extra_widgets/
@@ -38,10 +39,12 @@ HEADERS  += ./headers/mainwindow.h \
     ./extra_widgets/stageredactor.h \
     ./extra_widgets/tablewidget.h \
     ./extra_widgets/contractredactordialog.h \
+    extra_widgets/dletedialog.h
 
 
 FORMS    += ./forms/mainwindow.ui \
     ./extra_widgets/stageredactor.ui \
-    ./extra_widgets/contractredactordialog.ui
+    ./extra_widgets/contractredactordialog.ui \
+    extra_widgets/dletedialog.ui
    # ./extra_widgets/forms/monheaderwidget.ui \
     #extra_widgets/stagewidget.ui
