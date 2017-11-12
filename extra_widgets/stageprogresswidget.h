@@ -31,6 +31,8 @@ private:
 
 
     QCheckBox *_done_checkbox;
+    QCheckBox *_done10_checkbox;
+    QCheckBox *_done20_checkbox;
 
 
 public:

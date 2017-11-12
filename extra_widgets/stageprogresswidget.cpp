@@ -31,11 +31,31 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
     _widget_layout->addWidget(_stage_name,1,0);
 
 
-     /** Чекбокс "Выполнено" **/
-    _done_checkbox = new QCheckBox (QString("Выполнено"),this);
+     /** Чекбоксы "Выполнено..." **/
+
+    QWidget *chkBoxesContainer = new QWidget(this);
+    QHBoxLayout *chkBoxesContainerLayout = new QHBoxLayout(chkBoxesContainer);
+
+    _done20_checkbox = new QCheckBox (QString("20 дней осталось"),chkBoxesContainer);
+    _done20_checkbox->setStyleSheet("background-color: rgb(240, 240, 240); width: 1px; border: 0px;");
+    _done20_checkbox->setChecked(_stage->getLeft20DoneStatus());
+    chkBoxesContainerLayout->addWidget(_done20_checkbox);
+    connect (_done20_checkbox, &QCheckBox::stateChanged, _stage, &Stage::setLeft20Status);
+
+    _done10_checkbox = new QCheckBox (QString("10 дней осталось"),chkBoxesContainer);
+    _done10_checkbox->setStyleSheet("background-color: rgb(240, 240, 240); width: 1px; border: 0px;");
+    _done10_checkbox->setChecked(_stage->getLeft10DoneStatus());
+    chkBoxesContainerLayout->addWidget(_done10_checkbox);
+    connect (_done10_checkbox, &QCheckBox::stateChanged, _stage, &Stage::setLeft10Status);
+
+    _done_checkbox = new QCheckBox (QString("Выполнено"),chkBoxesContainer);
     _done_checkbox->setStyleSheet("background-color: rgb(240, 240, 240); width: 1px; border: 0px;");
-    _widget_layout->addWidget(_done_checkbox,2,0);
-    connect (_done_checkbox, &QCheckBox::stateChanged, _stage, &Stage::setStatusDone);
+    _done_checkbox->setChecked(_stage->getDoneStatus());
+    chkBoxesContainerLayout->addWidget(_done_checkbox);
+    connect (_done_checkbox, &QCheckBox::stateChanged, _stage, &Stage::setDoneStatus);
+
+    _widget_layout->addWidget(chkBoxesContainer,2,0);
+
 
 
     _today = QDate::currentDate();
@@ -65,16 +85,16 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
     _progress->setMinimum(_start_date.dayOfYear());
     _progress->setMaximum(_finish_date.dayOfYear());
 
-    //TODO : исправить ошибку, при которой игнорируется заполнение прогресс-бара без учета года
-
     _progress->setValue(_today.dayOfYear());
     _progress->setFormat("Осталось дней:"+QString::number(_today.daysTo(stage->getFinishDate())));
 
-    if ((_today.daysTo(stage->getFinishDate()) <= 10)&(!_stage->getDoneStatus()))
+    //qDebug() << _today.daysTo(stage->getFinishDate());
+
+    if ((_today.daysTo(stage->getFinishDate()) <= 10)&(!_stage->getLeft10DoneStatus()))
     {
         _progress->setStyleSheet("QProgressBar { border: 2px solid grey; background-color: rgb(180, 180, 180); text-align: middle; border-radius: 5px;} \
         QProgressBar::chunk {background-color: rgb(255, 0, 0); width: 3px; margin: 0px;}");  //Устанавливаем красные chunk'и  и серую заливу
-    } else if ((_today.daysTo(stage->getFinishDate()) <= 20)&(!_stage->getDoneStatus()))
+    } else if ((_today.daysTo(stage->getFinishDate()) <= 20)&(!_stage->getLeft20DoneStatus()))
     {
         _progress->setStyleSheet("QProgressBar { border: 2px solid grey; background-color: rgb(180, 180, 180); text-align: middle; border-radius: 5px;} \
         QProgressBar::chunk {background-color: rgb(255, 255, 0); width: 3px; margin: 0px;}");  //Устанавливаем желтые chunk'и  и серую заливу

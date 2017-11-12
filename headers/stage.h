@@ -16,6 +16,9 @@ private:
     QDate _finish_date;
     QString _stage_name = QString("Этап без названия");
     bool _is_done = false;
+    bool _is_20_done = false;
+    bool _is_10_done = false;
+    int priority = 0;
 
 public:
     /*explicit*/ Stage(QObject *parent = 0);
@@ -54,21 +57,27 @@ public:
      */
     QString getStageName() {return _stage_name;} //inline impl
 
-    /**
-     * @brief getDoneStatus Получить статус исполнения этапа
-     * @return
-     */
+
     bool getDoneStatus() {return _is_done;} //inline impl
 
-    /**
-     * @brief setStatusDone Установить статус исполнения ятапа в "Выполнено"
-     */
-    void setStatusDone() { _is_done = true;} //inline impl
+    bool getLeft10DoneStatus() {return _is_10_done;} //inline impl
 
-    /**
-     * @brief setStatusUnDone Установить статус исполнения этапа в "Невыполнено"
-     */
-    void setStatusUnDone() { _is_done = false;} //inline impl
+    bool getLeft20DoneStatus() {return _is_20_done;} //inline impl
+
+
+
+    void setDoneStatus(int status); //inline impl
+
+    void setLeft10Status(int status); //inline impl
+
+    void setLeft20Status(int status); //inline impl
+
+
+
+
+
+
+    int calculatePriority();
 
 public slots:
     /**

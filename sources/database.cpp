@@ -8,6 +8,7 @@ DataBase::DataBase(QObject *parent) : QObject(parent)
 void DataBase::pushContract(Contract *contract)
 {
     _contracts_base.push_back(contract);
+    emit base_changed();
 }
 
 
@@ -25,10 +26,12 @@ Contract *DataBase::getContract(int contract_num)
 Contract *DataBase::createContract()
 {
     Contract *ct = new Contract(this);
-    pushContract(ct);
+    _contracts_base.push_back(ct);
     connect(ct, &Contract::deleteMe, this, &DataBase::deleteContractByDelRequest);
     connect(ct, &Contract::imChanged, this, &DataBase::childChanged);
+    qSort(_contracts_base.begin(), _contracts_base.end(), Contract::lessThan);
     emit base_changed();
+    qDebug() << "Сигнал: база изменена createContract";
     return ct;
 }
 
@@ -63,13 +66,17 @@ void DataBase::deleteContractByDelRequest()
     {
         qDebug() << "Ошибка при удалении контракта";
     }
-
+    qSort(_contracts_base.begin(), _contracts_base.end(), Contract::lessThan);
     emit base_changed();
+    qDebug() << "Сигнал: база изменена deleteContractByDelRequest";
     //_stages.squeeze();
 }
 
+
 void DataBase::childChanged()
 {
+     qDebug() << "Сигнал: база изменена childChanged";
+    qSort(_contracts_base.begin(), _contracts_base.end(), Contract::lessThan);
     emit base_changed();
 }
 

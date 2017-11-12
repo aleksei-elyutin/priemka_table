@@ -14,10 +14,10 @@ class Contract : public QObject {
 
 private:
 
-    //DataBase *_dataBase;
     QString _contract_name = "Контракт без названия";
     QVector <Stage *> _stages;
-    //int _number;
+
+    int _priority = 0;
 
 
 
@@ -68,6 +68,12 @@ public:
     bool deleteStage(int stage_num);
 
     void deleteThisContract();
+
+    int calculateContractPriority();
+
+    static bool lessThan( Contract* s1, Contract* s2 );
+
+//    bool operator < (Contract& a);
 
 
 public slots:

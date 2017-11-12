@@ -52,6 +52,9 @@ void TableWidget::draw()
     for (int i = 0; i < num_contracts; i++)
     {
             addContractWidget(_base->getContract(i));
+            qDebug() << "Отрисован контракт "<<_base->getContract(i)->getContractName() << " с приритетом " <<
+                        _base->getContract(i)->calculateContractPriority();
+
     }
 
 
@@ -79,16 +82,18 @@ void TableWidget::addContractWidget(Contract *contract)
        num->display(QString::number(_last_entry));
        num->setMinimumHeight(50);
        num->setMinimumWidth(50);
+       num->setMaximumHeight(50);
+       //num->setMaximumWidth(50);
        num->setDigitCount(2);
        num->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
 
-        num->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 1px; border: 0px solid black;");
+        num->setStyleSheet("text-align: middle; background-color: rgb(250, 250, 250); width: 1px; border: 1px solid black;");
         //num->setMinimumWidth(60);
 
         tableDock_glayout->addWidget(num,_last_entry,0);
 
         QLabel* name = new QLabel(contract->getContractName(),table_dock);
-        name->setStyleSheet("text-align: middle; color: rgb(255, 255, 255); background-color: rgb(50, 50, 50); width: 1px; border: 0px solid black;");
+        name->setStyleSheet("text-align: middle; color: rgb(0, 0, 0); background-color: rgb(250, 250, 250); width: 1px; border: 1px solid black;");
         name->setWordWrap(true);
         name->setFont(QFont("Times", 16, QFont::Normal));
         name->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -106,7 +111,7 @@ void TableWidget::addHeader()
 {
     QLabel* num = new QLabel(QString("№ П/П"),table_dock);
     num->setStyleSheet("text-align: middle; background-color: rgb(240, 240, 240); width: 10px; border: 2px solid black;");
-    //num->setMinimumWidth(60);
+    num->setMinimumWidth(50);
     tableDock_glayout->addWidget(num,0,0);
     QLabel* name = new QLabel(QString("Номер \nконтракта"),table_dock);
     name->setStyleSheet("text-align: middle; background-color: rgb(240, 240, 240); width: 10px; border: 2px solid black;");
@@ -116,7 +121,7 @@ void TableWidget::addHeader()
     QLabel* st = new QLabel(QString("Прогресс выполнения"),table_dock);
     st->setStyleSheet("text-align: middle; background-color: rgb(240, 240, 240); width: 10px; border: 2px solid black;");
     st->setWordWrap(true);
-   // st->setMinimumWidth(400);
+    st->setMinimumWidth(1000); /*Костыль !!!!*/
     tableDock_glayout->addWidget(st,0,2);
 }
 

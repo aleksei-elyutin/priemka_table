@@ -16,6 +16,7 @@ Stage *Contract::createStage()
     pushStage(st);
     connect(st, &Stage::deleteMe, this, &Contract::deleteStageByDelRequest);
     connect(st, &Stage::imChanged, this, &Contract::childChanged);
+    //calculateContractPriority();
     emit imChanged();
     return st;
 }
@@ -48,6 +49,34 @@ bool Contract::deleteStage(int stage_num)
         return false;
     }
 }
+
+int  Contract::calculateContractPriority()
+{
+    _priority = 0;
+    int num_stages = _stages.size();
+    for (int i=0; i< num_stages; i++)
+    {
+         _priority += _stages.at(i)->calculatePriority();
+         qDebug() << "Рассчитан приоретет контракта " << this->getContractName() << " : " << _priority;
+
+    }
+    return _priority;
+}
+
+//bool Contract::operator<(Contract& a)
+//{
+//    qDebug() << "Вызван оператор сравнения";
+//    return a.calculateContractPriority() < this->calculateContractPriority();
+//}
+bool Contract::lessThan( Contract* s1, Contract* s2 )
+{
+     qDebug() << "Вызван оператор сравнения";
+    return s1->calculateContractPriority() > s2->calculateContractPriority();
+
+}
+
+
+
 void Contract::deleteStageByDelRequest()/*SLOT*/
 {
 
@@ -63,6 +92,7 @@ void Contract::deleteStageByDelRequest()/*SLOT*/
     {
         qDebug() << "Ошибка при удалении этапа";
     }
+    //calculateContractPriority();
     emit imChanged();
     //_stages.squeeze();
 }
@@ -75,6 +105,7 @@ void Contract::deleteRequest()
 
 void Contract::childChanged()
 {
+    calculateContractPriority();
     emit imChanged();
 }
 
