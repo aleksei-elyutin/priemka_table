@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVector>
+#include <QFile>
 #include "headers/contract.h"
 
 class DataBase : public QObject {
@@ -11,6 +12,7 @@ class DataBase : public QObject {
 
 private:
      QVector <Contract *> _contracts_base;
+     QDate _lastInFile;
 
 public:
     explicit DataBase(QObject *parent = 0);
@@ -43,6 +45,8 @@ public:
      //Методы для кодирования записи в файл и декодирования записи из файла
      //codeBase();
      //decodeBase();
+
+     void readFromFile(QFile *file);
 
 public slots:
      void deleteContractByDelRequest();/*SLOT*/

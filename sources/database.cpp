@@ -50,6 +50,57 @@ bool DataBase::deleteContract(int contract_num)
     }
 }
 
+void DataBase::writeToFile(QFile *file)
+{
+    if(!file->open(QIODevice::WriteOnly))
+    {
+        qDebug() << "Ошибка открытия файла для записи";
+    }
+
+    /**Запись заголовка базы **/
+    /*TODO : добавить magicword */
+    qint64 creation_date_Julian = QDate::currentDate().toJulianDay(); //Дата создания
+    int creation_time_msecs = QTime::currentTime().msecsSinceStartOfDay(); //Время создания
+    file->write((const char*)&creation_date_Julian,sizeof(qint64)); //Запись даты создания
+    file->write((const char*)&creation_time_msecs,sizeof(int)); //Запись времени создания
+    int size = _contracts_base.size();
+    file->write((const char*)&size,sizeof(int)); ,,
+
+
+    file->close();
+
+}
+
+void DataBase::readFromFile(QFile *file)
+{
+    if(!file->open(QIODevice::ReadOnly))
+    {
+        qDebug() << "Ошибка открытия файла для чтения";
+    }
+
+    /**Чтение заголовка базы **/
+    /*TODO : добавить magicword */
+    qint64 creation_date_Julian;
+    int creation_time_msecs;
+    file->read((char*)&creation_date_Julian,sizeof(qint64)); //Чтение даты создания
+    file->read((char*)&creation_time_msecs,sizeof(int)); //Чтение времени создания
+    int base_size;
+    file->read((char*)&size,sizeof(int)); //Чтение размеры базы (количество контрактов)
+
+    for (int i=0; i< size; i++)
+    {
+
+        int contract_size;
+        file->read((char*)&size,sizeof(int)); //Чтение размера i-го контракта (количество этапов)
+        Contract* tmp_contract = createContract();
+
+            tmp_contract->createStage()
+    }
+
+    file->close();
+
+}
+
 /*SLOTS*/
 void DataBase::deleteContractByDelRequest()
 {

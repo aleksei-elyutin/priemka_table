@@ -1,9 +1,12 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include <QScrollArea>
+#include <QObject>
+#include <QDebug>
 #include <QLayout>
-#include <QTableWidget>
-#include <QPushButton>
+#include <QDate>
+#include <QFile>
+#include <QString>
+#include <iostream>
 
 //#include "../../extra_widgets/monheaderwidget.h"
 //#include "../../extra_widgets/stageprogresswidget.h"
@@ -14,60 +17,75 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+   // QApplication a(argc, argv);
     //MainWindow w;
-    QWidget w;
-//    w.setGeometry(0,0,1000,200);
-//     = new QScrollArea();
-//    QVBoxLayout* layout = new  QVBoxLayout(&w);
-//    QPalette *pal = new QPalette(QColor("grey"));
-//    QVector <Contract*> contracts;
-//     for (int i = 0; i < 5; i++){
-//         Contract *tmp_contract  = new Contract(i+1,
-//                 QString("Наименование контракта номер ")+QString::number(i+1));
-//         for (int k=0; k<=i; k++)
-//         {
-//             Stage *tmp_stage = new Stage(QDate(2017,5,10),QDate(2017,11,10+k+i));
-//             tmp_contract->pushStage(tmp_stage);
-//         }
-//         contracts.push_back(tmp_contract);
+  //  QWidget w;
+
+   /* QDate date = QDate::currentDate();
+    QTime time = QTime::currentTime();
+    QTime rt;
+    QDate rd;*/
+
+    QFile *file = new QFile("test.dat");
+    if(!file->open(QIODevice::ReadWrite))
+    {
+        qDebug() << "Ошибка открытия";
+    }
+
+//     qDebug() << date.toString() << " : " << date.toJulianDay();
+//     qDebug() << time.toString() << " : " <<  time.msecsSinceStartOfDay();
+//     qint64 dj = date.toJulianDay();
+//     int tms = time.msecsSinceStartOfDay();
+
+//     file->write((const char*)&dj,sizeof(qint64));
+//     file->write((const char*)&tms,sizeof(int));
+//     file->close();
+
+//     if(!file->open(QIODevice::ReadWrite))
+//     {
+//         qDebug() << "Ошибка открытия";
 //     }
 
-//     table = new TableWidget(&w,&contracts);
+//     qint64 dj2;
+//     int tms2;
+//     file->read((char*)&dj2,sizeof(qint64));
+//     file->read((char*)&tms2,sizeof(int));
+//     rd = QDate::fromJulianDay(dj2);
+//     rt = QTime::fromMSecsSinceStartOfDay(tms2);
+//     qDebug() << rd.toString() << " : " << rd.toJulianDay();
+//     qDebug() << rt.toString() << " : " <<  rt.msecsSinceStartOfDay();
 
-//     layout->addWidget(table);
-//     //table->resize(1700, 800);
-//     //_scrollArea->setWidget(table); //?????
-//    w.setLayout(layout);
+    QString str = "Жопа капуста";
+    QByteArray text = str.toLocal8Bit();
+    char *data = new char[text.size()+1];
+    int data_size = text.size()+1;
+    file->write((const char*)&data_size,sizeof(int));
+    strcpy(data, text.data());
+    file->write((const char*)data,text.size()+1);
+    delete [] data;
+    file->close();
 
-//    w.setPalette(*pal);
+    if(!file->open(QIODevice::ReadWrite))
+         {
+             qDebug() << "Ошибка открытия";
+         }
+    QString str2;
+   // QByteArray text ;
+    file->read((char*)&data_size,sizeof(int));
+    qDebug() << data_size;
+    data = new char[data_size];
 
-    QTableWidget *table = new QTableWidget(&w);
-    QLayout *layout = new QVBoxLayout(&w);
+    file->read((char*)data,data_size);
+    strcpy(text.data(),data);
+    str2 = QString::fromLocal8Bit(text);
 
+    delete [] data;
+        qDebug() << str2;
 
+    file->close();
 
-    layout->addWidget(table);
-    //QWidget *btnbar = new QWidget(&w);
-    QLayout *hlayout = new QHBoxLayout();
-    QPushButton *btn1 = new QPushButton();
-    //btn1->setSizePolicy(QSizePolicy());
-    QPushButton *btn2 = new QPushButton();
-    QSpacerItem *hspacer = new QSpacerItem(500,100);
-    layout->addL
-
-    hlayout->addWidget(btn1);
-    hlayout->addWidget(btn2);
-
-    //btnbar->layout()->setAlignment(btn1,Qt::AlignLeft);
-
-    //btnbar->setLayout(hlayout);
-
-
-   // w.setLayout(layout);
-    w.show();
 
 
    // table->show();
-    return a.exec();
+    return 0;//a.exec();
 }
