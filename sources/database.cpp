@@ -50,9 +50,9 @@ bool DataBase::deleteContract(int contract_num)
     }
 }
 
-void DataBase::writeToFile(QFile *file)
+void DataBase::writeToFile()
 {
-    if(!file->open(QIODevice::WriteOnly))
+    if(!_file->open(QIODevice::WriteOnly))
     {
         qDebug() << "Ошибка открытия файла для записи";
     }
@@ -61,19 +61,60 @@ void DataBase::writeToFile(QFile *file)
     /*TODO : добавить magicword */
     qint64 creation_date_Julian = QDate::currentDate().toJulianDay(); //Дата создания
     int creation_time_msecs = QTime::currentTime().msecsSinceStartOfDay(); //Время создания
-    file->write((const char*)&creation_date_Julian,sizeof(qint64)); //Запись даты создания
-    file->write((const char*)&creation_time_msecs,sizeof(int)); //Запись времени создания
-    int size = _contracts_base.size();
-    file->write((const char*)&size,sizeof(int)); ,,
+    _file->write((const char*)&creation_date_Julian,sizeof(qint64)); //Запись даты создания
+    _file->write((const char*)&creation_time_msecs,sizeof(int)); //Запись времени создания
+    int base_size = _contracts_base.size();
+    _file->write((const char*)&base_size,sizeof(int)); //Запись размера базы (количество контрактов)
+
+    for (int c  =0; c < base_size; c++)
+    {
+        Contract* tmp_contract_pointer = _contracts_base.at(c);
+        QByteArray contract_text =tmp_contract_pointer->getContractName().toLocal8Bit();
+        int contract_name_length = contract_text.size()+1;
+        _file->write((char*)&contract_name_length,sizeof(int)); //Запись размера имени контракта
+
+        char *contract_name = new char[contract_name_length];
+        strcpy(contract_name, contract_text.data());
+        _file->write((const char*)contract_name,contract_name_length);
+        delete [] contract_name;
+        contract_name = NULL;
+
+        int contract_size=tmp_contract_pointer->getNumStages();
+        _file->write((char*)&contract_size,sizeof(int)); //Запись размера i-го контракта (количество этапов)
+
+        for (int st=0; st<contract_size; st++)
+        {
+            Stage* tmp_stage_pointer = tmp_contract_pointer->getStage(st);
+            QByteArray stage_text =tmp_stage_pointer->getStageName().toLocal8Bit();
+            int stage_name_length = stage_text.size()+1;
+            _file->write((char*)&stage_name_length,sizeof(int)); //Запись размера имени контракта
+
+            char *stage_name = new char[stage_name_length];
+            strcpy(stage_name, stage_text.data());
+            _file->write((const char*)stage_name,stage_name_length);
+            delete [] stage_name;
+            stage_name = NULL;
+
+            stage_structure ss;
+            ss.start_date_julian = tmp_stage_pointer->getStartDate().toJulianDay();
+            ss.finish_date_julian = tmp_stage_pointer->getFinishDate().toJulianDay();
+
+            if  (tmp_stage_pointer->getLeft10DoneStatus()) ss._10_done = Qt::Checked; else ss._10_done = Qt::Unchecked;
+            if  (tmp_stage_pointer->getLeft20DoneStatus())  ss._20_done = Qt::Checked; else ss._20_done = Qt::Unchecked;
+            if  (tmp_stage_pointer->getDoneStatus()) ss._done = Qt::Checked; else ss._done = Qt::Unchecked;
+            _file->write((char*)&ss,sizeof(stage_structure));
+
+        }
+    }
 
 
-    file->close();
+    _file->close();
 
 }
 
-void DataBase::readFromFile(QFile *file)
+void DataBase::readFromFile()
 {
-    if(!file->open(QIODevice::ReadOnly))
+    if(!_file->open(QIODevice::ReadOnly))
     {
         qDebug() << "Ошибка открытия файла для чтения";
     }
@@ -82,24 +123,57 @@ void DataBase::readFromFile(QFile *file)
     /*TODO : добавить magicword */
     qint64 creation_date_Julian;
     int creation_time_msecs;
-    file->read((char*)&creation_date_Julian,sizeof(qint64)); //Чтение даты создания
-    file->read((char*)&creation_time_msecs,sizeof(int)); //Чтение времени создания
+    _file->read((char*)&creation_date_Julian,sizeof(qint64)); //Чтение даты создания
+   qDebug() << QDate::fromJulianDay(creation_date_Julian);
+    _file->read((char*)&creation_time_msecs,sizeof(int)); //Чтение времени создания
+   qDebug() << QTime::fromMSecsSinceStartOfDay(creation_time_msecs);
     int base_size;
-    file->read((char*)&size,sizeof(int)); //Чтение размеры базы (количество контрактов)
+    _file->read((char*)&base_size,sizeof(int)); //Чтение размеры базы (количество контрактов)
 
-    for (int i=0; i< size; i++)
+    for (int c  =0; c < base_size; c++)
     {
 
-        int contract_size;
-        file->read((char*)&size,sizeof(int)); //Чтение размера i-го контракта (количество этапов)
-        Contract* tmp_contract = createContract();
+        Contract* tmp_contract_pointer = createContract();
+        int contract_name_length = 0;
+        _file->read((char*)&contract_name_length,sizeof(int)); //Чтение размера имени контракта
+        char *contract_name = new char[contract_name_length];
+        _file->read((char*)contract_name,contract_name_length); //Чтение имени контракта
+        QByteArray contract_text(contract_name, contract_name_length);
+       // strcpy(contract_text.data(),contract_name);
+        tmp_contract_pointer->setContractName(QString::fromLocal8Bit(contract_text)); //Установка имени контракта
+        delete [] contract_name;
+        contract_name = NULL;
 
-            tmp_contract->createStage()
+        int contract_size=0;
+        _file->read((char*)&contract_size,sizeof(int)); //Чтение размера i-го контракта (количество этапов)
+
+            for (int st=0; st<contract_size; st++)
+            {
+                Stage* tmp_stage_pointer = tmp_contract_pointer->createStage();
+                int stage_name_length = 0;
+                _file->read((char*)&stage_name_length,sizeof(int)); //Чтение размера имени этапа
+                char *stage_name = new char[stage_name_length];
+                _file->read((char*)stage_name,stage_name_length); //Чтение имени этапа
+                QByteArray stage_text(stage_name, stage_name_length);
+                //strcpy(stage_text.data(),stage_name);
+                tmp_stage_pointer->setStageName(QString::fromLocal8Bit(stage_text)); //Установка имени этапа
+                delete [] stage_name;
+                stage_name = NULL;
+
+                stage_structure ss;
+                _file->read((char*)&ss,sizeof(stage_structure));
+                tmp_stage_pointer->setStartDate( QDate::fromJulianDay(ss.start_date_julian));
+                tmp_stage_pointer->setFinishDate( QDate::fromJulianDay(ss.finish_date_julian));
+                tmp_stage_pointer->setLeft10Status(ss._10_done);
+                tmp_stage_pointer->setLeft20Status(ss._20_done);
+                tmp_stage_pointer->setDoneStatus(ss._done);
+            }
     }
 
-    file->close();
+    _file->close();
 
 }
+
 
 /*SLOTS*/
 void DataBase::deleteContractByDelRequest()

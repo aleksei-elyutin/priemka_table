@@ -13,9 +13,24 @@ class DataBase : public QObject {
 private:
      QVector <Contract *> _contracts_base;
      QDate _lastInFile;
+     QFile *_file;
+
+     struct stage_structure{
+         qint64 start_date_julian;
+         qint64 finish_date_julian;
+         char _20_done;
+         char _10_done;
+         char _done;
+     };
+
 
 public:
     explicit DataBase(QObject *parent = 0);
+
+     void writeToFile();
+     void readFromFile();
+     void setFile(QFile *file) {_file=file;}
+
 
      void pushContract(Contract *contract);
 
@@ -41,12 +56,7 @@ public:
 
      bool deleteContract(int contract_num);
 
-     /**Не реализовано*/
-     //Методы для кодирования записи в файл и декодирования записи из файла
-     //codeBase();
-     //decodeBase();
 
-     void readFromFile(QFile *file);
 
 public slots:
      void deleteContractByDelRequest();/*SLOT*/

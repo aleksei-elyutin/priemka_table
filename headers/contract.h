@@ -73,6 +73,7 @@ public:
 
     static bool lessThan( Contract* s1, Contract* s2 );
 
+
 //    bool operator < (Contract& a);
 
 
