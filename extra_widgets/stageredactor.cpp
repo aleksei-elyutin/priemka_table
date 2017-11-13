@@ -77,6 +77,10 @@ void stageRedactor::setStage(Stage *stage)
    // connect(this, &stageRedactor::deleteStage, _stage, &stageRedactor::showDeleteDialog);
 
 }
+void stageRedactor::setNoDeletion()
+{
+    this->ui->pushButton->setVisible(false);
+}
 
 /**class StageDeleteDialog **/
 /*StageDeleteDialog::StageDeleteDialog(QWidget *parent):QDialog(parent)

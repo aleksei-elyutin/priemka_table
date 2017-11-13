@@ -5,6 +5,8 @@
 StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFrame(parent)
 {
 
+//    QAnima
+
     _stage=stage;
     setFrameStyle(QFrame::WinPanel | QFrame::Raised);
 
@@ -25,15 +27,54 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
     setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 1px solid black;");
 
 
+     /*Название этапа*/
 
-    _stage_name = new QLabel(stage->getStageName(),this);
+
+    /*Кнопки изменить и удалить*/
+    QWidget *button_box = new QWidget(this); //!!!!
+    button_box->setMinimumHeight(30);
+    button_box->setMaximumHeight(30);
+
+    button_box->setStyleSheet("text-align: middle; background-color: rgb(240, 240, 240); width: 1px; border: 0px solid black;");
+    QHBoxLayout *hLayout = new QHBoxLayout(button_box);
+    hLayout->setMargin(0);
+    hLayout->setSpacing(3);
+
+    _stage_name = new QLabel(stage->getStageName(),button_box);
     _stage_name->setStyleSheet("background-color: rgb(240, 240, 240); width: 1px; border: 0px solid black;");
-    _widget_layout->addWidget(_stage_name,1,0);
+    hLayout->addWidget(_stage_name);
+
+
+    QSpacerItem *hspacer = new QSpacerItem(50,30,QSizePolicy::Expanding,QSizePolicy::Expanding);
+    hLayout->addItem(hspacer);
+
+    setup_stage_button = new QPushButton (QString("..."),button_box);
+    setup_stage_button->setMinimumHeight(30);
+    setup_stage_button->setMaximumHeight(30);
+    setup_stage_button->setMinimumWidth(30);
+    setup_stage_button->setMaximumWidth(30);
+    hLayout->addWidget(setup_stage_button);
+    connect(setup_stage_button, &QPushButton::clicked, this, &StageProgressWidget::setupStage);
+
+    delete_stage_button = new QPushButton (QString("X"),button_box);
+    delete_stage_button->setMinimumHeight(30);
+    delete_stage_button->setMaximumHeight(30);
+    delete_stage_button->setMinimumWidth(30);
+    delete_stage_button->setMaximumWidth(30);
+    hLayout->addWidget(delete_stage_button);
+    connect(delete_stage_button, &QPushButton::clicked, this, &StageProgressWidget::showDeleteDialog);
+
+
+    _widget_layout->addWidget(button_box,0,0);
+
+
+    /*******/
 
 
      /** Чекбоксы "Выполнено..." **/
 
     QWidget *chkBoxesContainer = new QWidget(this);
+    chkBoxesContainer->setStyleSheet("background-color: rgb(240, 240, 240); width: 1px; border: 0px;");
     QHBoxLayout *chkBoxesContainerLayout = new QHBoxLayout(chkBoxesContainer);
 
     _done20_checkbox = new QCheckBox (QString("20 дней осталось"),chkBoxesContainer);
@@ -54,7 +95,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
     chkBoxesContainerLayout->addWidget(_done_checkbox);
     connect (_done_checkbox, &QCheckBox::stateChanged, _stage, &Stage::setDoneStatus);
 
-    _widget_layout->addWidget(chkBoxesContainer,2,0);
+    _widget_layout->addWidget(chkBoxesContainer,1,0);
 
 
 
@@ -127,6 +168,36 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
 
     setLayout(_widget_layout);
     //_progress->show();
+}
+void StageProgressWidget::setupStage()
+{
+    QDialog *dial = new QDialog(0);
+    QVBoxLayout *dial_layout = new QVBoxLayout(dial);
+    stageRedactor *sr = new stageRedactor (dial);
+    sr->setStage(_stage);
+    sr->setNoDeletion();
+    dial_layout->addWidget(sr);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(dial);
+    buttonBox->setOrientation(Qt::Horizontal);
+    buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+    dial_layout->addWidget(buttonBox);
+    dial->show();
+
+    connect(buttonBox, &QDialogButtonBox::accepted,dial, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::accepted,dial, &QDialog::reject);
+    connect(dial, &QDialog::accepted, sr, &stageRedactor::applyChanges);
+    connect(dial, &QDialog::accepted, _stage, &Stage::imChanged);
+
+}
+
+
+void StageProgressWidget::showDeleteDialog()
+{
+    DleteDialog *dleteDialog = new DleteDialog(0);
+    dleteDialog->setLabelText("Удалить контракт \"" + _stage->getStageName() + " \" ?");
+
+    connect(dleteDialog, & DleteDialog::accepted, _stage, &Stage::deleteRequest);
+    dleteDialog->show();
 }
 
 /*StageProgressWidget::StageProgressWidget(QWidget *parent, Stage &stage)

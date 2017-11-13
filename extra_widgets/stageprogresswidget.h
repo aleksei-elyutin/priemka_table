@@ -8,8 +8,12 @@
 #include <QLayout>
 #include <QPushButton>
 #include <QCheckBox>
+#include <QDialogButtonBox>
 #include "./headers/stage.h"
 #include "./monheaderwidget.h"
+#include "dletedialog.h"
+#include "dletedialog.h"
+#include "stageredactor.h"
 
 class StageProgressWidget : public QFrame
 {
@@ -34,10 +38,18 @@ private:
     QCheckBox *_done10_checkbox;
     QCheckBox *_done20_checkbox;
 
+    QPushButton *add_stage_button;
+    QPushButton *delete_stage_button;
+    QPushButton *setup_stage_button;
+
 
 public:
     /*explicit*/ StageProgressWidget(QWidget *parent , Stage *stage);
     //StageProgressWidget(QWidget *parent = 0, Stage&  stage);
+
+    void setupStage();
+
+    void showDeleteDialog();
 
 
 signals:

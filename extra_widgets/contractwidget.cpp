@@ -18,7 +18,7 @@ ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QWidget(pa
     button_box->setMinimumHeight(30);
     button_box->setMaximumHeight(30);
 
-    button_box->setStyleSheet("text-align: middle; background-color: rgb(200, 200, 200); width: 1px; border: 0px solid black;");
+    button_box->setStyleSheet("text-align: middle; background-color: rgb(250, 250, 250); width: 1px; border: 0px solid black;");
     QHBoxLayout *hLayout = new QHBoxLayout(button_box);
     hLayout->setMargin(0);
     hLayout->setSpacing(3);
@@ -63,6 +63,7 @@ ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QWidget(pa
 
     /*Кнопка добавить*/
     add_stage_button = new QPushButton (QString("Добавить этап..."),this);
+    add_stage_button->setStyleSheet("text-align: middle; background-color: rgb(250, 250, 250); width: 1px; border: 0px solid black;");
     vLayout->addWidget(add_stage_button);
     connect(add_stage_button, &QPushButton::clicked, _contract, &Contract::createStage);
     /********/
