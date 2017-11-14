@@ -17,7 +17,7 @@ Stage *Contract::createStage()
     connect(st, &Stage::deleteMe, this, &Contract::deleteStageByDelRequest);
     connect(st, &Stage::imChanged, this, &Contract::childChanged);
     //calculateContractPriority();
-    emit imChanged();
+    if (!fileload_status) emit imChanged();
     return st;
 }
 
@@ -63,19 +63,13 @@ int  Contract::calculateContractPriority()
     return _priority;
 }
 
-//bool Contract::operator<(Contract& a)
-//{
-//    qDebug() << "Вызван оператор сравнения";
-//    return a.calculateContractPriority() < this->calculateContractPriority();
-//}
+
 bool Contract::lessThan( Contract* s1, Contract* s2 )
 {
      qDebug() << "Вызван оператор сравнения";
     return s1->calculateContractPriority() > s2->calculateContractPriority();
 
 }
-
-
 
 void Contract::deleteStageByDelRequest()/*SLOT*/
 {
@@ -93,20 +87,20 @@ void Contract::deleteStageByDelRequest()/*SLOT*/
         qDebug() << "Ошибка при удалении этапа";
     }
     //calculateContractPriority();
-    emit imChanged();
+   if (!fileload_status)  emit imChanged();
     //_stages.squeeze();
 }
 
   /*SLOTS*/
 void Contract::deleteRequest()
 {
-    emit this->deleteMe();
+   if (!fileload_status) emit this->deleteMe();
 }
 
 void Contract::childChanged()
 {
     calculateContractPriority();
-    emit imChanged();
+    if (!fileload_status) emit imChanged();
 }
 
 

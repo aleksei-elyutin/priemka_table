@@ -8,7 +8,8 @@ DataBase::DataBase(QObject *parent) : QObject(parent)
 void DataBase::pushContract(Contract *contract)
 {
     _contracts_base.push_back(contract);
-    emit base_changed();
+    if (!fileload_status) emit base_changed();
+
 }
 
 
@@ -30,8 +31,8 @@ Contract *DataBase::createContract()
     connect(ct, &Contract::deleteMe, this, &DataBase::deleteContractByDelRequest);
     connect(ct, &Contract::imChanged, this, &DataBase::childChanged);
     qSort(_contracts_base.begin(), _contracts_base.end(), Contract::lessThan);
-    emit base_changed();
-    qDebug() << "Сигнал: база изменена createContract";
+    if (!fileload_status) emit base_changed();
+   // qDebug() << "Сигнал: база изменена createContract";
     return ct;
 }
 
@@ -118,6 +119,7 @@ void DataBase::readFromFile()
     {
         qDebug() << "Ошибка открытия файла для чтения";
     }
+    fileload_status = true;
 
     /**Чтение заголовка базы **/
     /*TODO : добавить magicword */
@@ -134,6 +136,7 @@ void DataBase::readFromFile()
     {
 
         Contract* tmp_contract_pointer = createContract();
+        tmp_contract_pointer->setFileloadStatus(true);
         int contract_name_length = 0;
         _file->read((char*)&contract_name_length,sizeof(int)); //Чтение размера имени контракта
         char *contract_name = new char[contract_name_length];
@@ -150,6 +153,7 @@ void DataBase::readFromFile()
             for (int st=0; st<contract_size; st++)
             {
                 Stage* tmp_stage_pointer = tmp_contract_pointer->createStage();
+                tmp_stage_pointer->setFileloadStatus(true);
                 int stage_name_length = 0;
                 _file->read((char*)&stage_name_length,sizeof(int)); //Чтение размера имени этапа
                 char *stage_name = new char[stage_name_length];
@@ -167,10 +171,14 @@ void DataBase::readFromFile()
                 tmp_stage_pointer->setLeft10Status(ss._10_done);
                 tmp_stage_pointer->setLeft20Status(ss._20_done);
                 tmp_stage_pointer->setDoneStatus(ss._done);
+                tmp_stage_pointer->setFileloadStatus(false);
             }
+          tmp_contract_pointer->setFileloadStatus(false);
     }
 
     _file->close();
+    fileload_status = false;
+    base_changed();
 
 }
 
@@ -192,7 +200,8 @@ void DataBase::deleteContractByDelRequest()
         qDebug() << "Ошибка при удалении контракта";
     }
     qSort(_contracts_base.begin(), _contracts_base.end(), Contract::lessThan);
-    emit base_changed();
+
+    if (!fileload_status) emit base_changed();
     qDebug() << "Сигнал: база изменена deleteContractByDelRequest";
     //_stages.squeeze();
 }
@@ -200,8 +209,8 @@ void DataBase::deleteContractByDelRequest()
 
 void DataBase::childChanged()
 {
-     qDebug() << "Сигнал: база изменена childChanged";
     qSort(_contracts_base.begin(), _contracts_base.end(), Contract::lessThan);
-    emit base_changed();
+    if (!fileload_status) emit base_changed();
+
 }
 

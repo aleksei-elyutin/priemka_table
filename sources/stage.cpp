@@ -19,7 +19,7 @@ void Stage::setStartDate(QDate startdate)
 //        _start_date = QDate::currentDate();
 //        //qDebug() << "Invalid start_date. StartDate must be < finish_date:" <<  _finish_date.toString("yyyy.MMMM.dddd");
 //    }
-    emit imChanged();
+   if (!fileload_status)  emit imChanged();
 
 }
 void Stage::setFinishDate(QDate finishdate)
@@ -35,13 +35,13 @@ void Stage::setFinishDate(QDate finishdate)
 //        _finish_date = QDate::currentDate();
 //      // qDebug() << "Invalid start_date. StartDate must be < finish_date:" << _finish_date.toString("yyyy.MMMM.dddd");
 //    }
-    emit imChanged();
+    if (!fileload_status) emit imChanged();
 }
 
 void Stage::setStageName(QString name)
 {
     _stage_name = name;
-    emit imChanged();
+   if (!fileload_status)  emit imChanged();
 }
 
 void Stage::setDoneStatus(int status)
@@ -52,7 +52,7 @@ void Stage::setDoneStatus(int status)
     }
     else _is_done = false;
     calculatePriority();
-    emit imChanged();
+    if (!fileload_status) emit imChanged();
 }
 
 void Stage::setLeft10Status(int status)
@@ -63,7 +63,7 @@ void Stage::setLeft10Status(int status)
     }
     else _is_10_done = false;
     calculatePriority();
-    emit imChanged();
+    if (!fileload_status) emit imChanged();
 }
 
 void Stage::setLeft20Status(int status)
@@ -74,7 +74,7 @@ void Stage::setLeft20Status(int status)
     }
     else _is_20_done = false;
     calculatePriority();
-    emit imChanged();
+    if (!fileload_status) emit imChanged();
 }
 
 
@@ -102,7 +102,7 @@ int Stage::calculatePriority()
 
 void Stage::deleteRequest()
 {
-    emit this->deleteMe();
+    if (!fileload_status) emit this->deleteMe();
 }
 
 

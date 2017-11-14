@@ -184,7 +184,7 @@ void StageProgressWidget::setupStage()
     dial->show();
 
     connect(buttonBox, &QDialogButtonBox::accepted,dial, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::accepted,dial, &QDialog::reject);
+    connect(buttonBox, &QDialogButtonBox::rejected,dial, &QDialog::reject);
     connect(dial, &QDialog::accepted, sr, &stageRedactor::applyChanges);
     connect(dial, &QDialog::accepted, _stage, &Stage::imChanged);
 

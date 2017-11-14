@@ -85,8 +85,9 @@ void TableWidget::addContractWidget(Contract *contract)
        num->setMaximumHeight(50);
        //num->setMaximumWidth(50);
        num->setDigitCount(2);
-       num->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+       num->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Expanding);
 
+//        num->setStyleSheet("border: 0px solid black;");
         num->setStyleSheet("text-align: middle; background-color: rgb(250, 250, 250); width: 1px; border: 1px solid black;");
         //num->setMinimumWidth(60);
 

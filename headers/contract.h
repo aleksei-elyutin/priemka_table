@@ -18,6 +18,7 @@ private:
     QVector <Stage *> _stages;
 
     int _priority = 0;
+    bool fileload_status = false;
 
 
 
@@ -72,6 +73,9 @@ public:
     int calculateContractPriority();
 
     static bool lessThan( Contract* s1, Contract* s2 );
+
+    void setFileloadStatus(bool status) {fileload_status = status;}
+
 
 
 //    bool operator < (Contract& a);

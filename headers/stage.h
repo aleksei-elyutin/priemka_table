@@ -19,6 +19,7 @@ private:
     bool _is_20_done = false;
     bool _is_10_done = false;
     int priority = 0;
+    bool fileload_status = false;
 
 public:
     /*explicit*/ Stage(QObject *parent = 0);
@@ -71,6 +72,9 @@ public:
     void setLeft10Status(int status); //inline impl
 
     void setLeft20Status(int status); //inline impl
+
+
+    void setFileloadStatus(bool status) {fileload_status = status;}
 
 
 

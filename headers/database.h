@@ -15,6 +15,8 @@ private:
      QDate _lastInFile;
      QFile *_file;
 
+     bool fileload_status = false; //Флаг - Производится чтение из файла
+
      struct stage_structure{
          qint64 start_date_julian;
          qint64 finish_date_julian;
