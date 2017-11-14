@@ -58,6 +58,8 @@ public:
 
      bool deleteContract(int contract_num);
 
+     void purgeBase();
+
 
 
 public slots:

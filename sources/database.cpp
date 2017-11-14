@@ -51,6 +51,23 @@ bool DataBase::deleteContract(int contract_num)
     }
 }
 
+void DataBase::purgeBase()
+{
+
+    int base_size = _contracts_base.size();
+    for (int c  = base_size-1; c >= 0 ; c--)
+    {
+        int contract_size = _contracts_base.at(c)->getNumStages();
+
+        for (int st = contract_size-1; st >= 0; st--)
+        {
+            _contracts_base.at(c)->getStage(st)->deleteRequest();
+        }
+         _contracts_base.at(c)->deleteRequest();
+    }
+    emit base_changed();
+}
+
 void DataBase::writeToFile()
 {
     if(!_file->open(QIODevice::WriteOnly))
@@ -178,7 +195,7 @@ void DataBase::readFromFile()
 
     _file->close();
     fileload_status = false;
-    base_changed();
+    emit base_changed();
 
 }
 
