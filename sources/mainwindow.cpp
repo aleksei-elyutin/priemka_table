@@ -44,9 +44,10 @@ void MainWindow::load()
         connect(purge_dialog, &DleteDialog::accepted, base, &DataBase::readFromFile);
         connect(purge_dialog, &DleteDialog::accepted, purge_dialog, &DleteDialog::close);
         purge_dialog->show();
-    } else
+    }
+    else if ((file->exists())&(file->size()>0))
     {
-        base->readFromFile();
+              base->readFromFile();
     }
 }
 void MainWindow::save()
