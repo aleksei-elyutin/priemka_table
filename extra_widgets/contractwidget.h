@@ -12,7 +12,7 @@
 #include "dletedialog.h"
 #include "contractredactordialog.h"
 
-class ContractWidget : public QWidget
+class ContractWidget : public QFrame
 {
     Q_OBJECT
 private:

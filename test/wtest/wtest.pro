@@ -13,7 +13,7 @@ TEMPLATE = app
 
 CONFIG += c++11
 
-INCLUDEPATH+= /usr/include/x86_64-linux-gnu/qt5/
+#INCLUDEPATH+= /usr/include/x86_64-linux-gnu/qt5/
 SOURCES += \
     main.cpp\
 #        mainwindow.cpp \
@@ -23,6 +23,7 @@ SOURCES += \
 #    ../../sources/stage.cpp \
 #    ../../extra_widgets/monheaderwidget.cpp \
 #     ../../extra_widgets/tablewidget.cpp
+    mywidget.cpp
 
 HEADERS  += \
 #     ../../extra_widgets/stageprogresswidget.h \
@@ -32,3 +33,4 @@ HEADERS  += \
 #    mainwindow.h \
 #    ../../extra_widgets/monheaderwidget.h \
 #     ../../extra_widgets/tablewidget.h
+    mywidget.h

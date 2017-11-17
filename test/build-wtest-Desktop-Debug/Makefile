@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -m64 -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -m64 -pipe -g -std=c++0x -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../wtest -I. -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64
+INCPATH       = -I../wtest -I. -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64
 QMAKE         = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -48,8 +48,11 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../wtest/main.cpp 
-OBJECTS       = main.o
+SOURCES       = ../wtest/main.cpp \
+		../wtest/mywidget.cpp moc_mywidget.cpp
+OBJECTS       = main.o \
+		mywidget.o \
+		moc_mywidget.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -107,7 +110,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../wtest/wtest.pro  ../wtest/main.cpp
+		../wtest/wtest.pro ../wtest/mywidget.h ../wtest/main.cpp \
+		../wtest/mywidget.cpp
 QMAKE_TARGET  = wtest
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = wtest
@@ -275,7 +279,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../wtest/main.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../wtest/mywidget.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../wtest/main.cpp ../wtest/mywidget.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -298,8 +303,12 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all:
+compiler_moc_header_make_all: moc_mywidget.cpp
 compiler_moc_header_clean:
+	-$(DEL_FILE) moc_mywidget.cpp
+moc_mywidget.cpp: ../wtest/mywidget.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/aleksey/qt_projects/priemka_table/test/wtest -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../wtest/mywidget.h -o moc_mywidget.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
 compiler_uic_make_all:
@@ -310,12 +319,19 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: 
+compiler_clean: compiler_moc_header_clean 
 
 ####### Compile
 
-main.o: ../wtest/main.cpp ../wtest/mainwindow.h
+main.o: ../wtest/main.cpp ../wtest/mainwindow.h \
+		../wtest/mywidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../wtest/main.cpp
+
+mywidget.o: ../wtest/mywidget.cpp ../wtest/mywidget.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mywidget.o ../wtest/mywidget.cpp
+
+moc_mywidget.o: moc_mywidget.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mywidget.o moc_mywidget.cpp
 
 ####### Install
 

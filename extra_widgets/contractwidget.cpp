@@ -1,6 +1,6 @@
 #include "contractwidget.h"
 
-ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QWidget(parent)
+ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QFrame(parent)
 {
 
 //    hLayout->setSpacing(0);
@@ -8,10 +8,10 @@ ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QWidget(pa
 
     _contract=contract;
     vLayout = new QVBoxLayout(this);
-    vLayout->setSpacing(3);
-    vLayout->setMargin(3);
+    vLayout->setSpacing(0);
+    vLayout->setMargin(0);
 
-    setStyleSheet("text-align: middle; background-color: rgb(200, 200, 200); width: 1px; border: 1px solid black;");
+    setStyleSheet("text-align: middle; background-color: rgb(200, 200, 200); width: 1px; border: 2px solid black;");
 
     /*Кнопки изменить и удалить*/
     QWidget *button_box = new QWidget();
@@ -45,6 +45,7 @@ ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QWidget(pa
     vLayout->addWidget(button_box);
 
 
+
     /*******/
 
 
@@ -67,6 +68,8 @@ ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QWidget(pa
     vLayout->addWidget(add_stage_button);
     connect(add_stage_button, &QPushButton::clicked, _contract, &Contract::createStage);
     /********/
+
+    vLayout->setSpacing(3);
 
 }
 void ContractWidget::setupContract()

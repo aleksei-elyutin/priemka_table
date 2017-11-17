@@ -5,8 +5,6 @@
 StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFrame(parent)
 {
 
-//    QAnima
-
     _stage=stage;
     setFrameStyle(QFrame::WinPanel | QFrame::Raised);
 
@@ -27,10 +25,8 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
     setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 1px solid black;");
 
 
-     /*Название этапа*/
 
-
-    /*Кнопки изменить и удалить*/
+    /*Кнопки изменить и удалить + название контракта*/
     QWidget *button_box = new QWidget(this); //!!!!
     button_box->setMinimumHeight(30);
     button_box->setMaximumHeight(30);
@@ -97,7 +93,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
 
     _widget_layout->addWidget(chkBoxesContainer,1,0);
 
-
+    /************/
 
     _today = QDate::currentDate();
 

@@ -1,12 +1,15 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QObject>
+#include <QTableWidget>
 #include <QDebug>
 #include <QLayout>
-#include <QDate>
-#include <QFile>
+#include <QLabel>
+#include <QPushButton>
 #include <QString>
+#include <QDate>
 #include <iostream>
+#include "mywidget.h"
 
 //#include "../../extra_widgets/monheaderwidget.h"
 //#include "../../extra_widgets/stageprogresswidget.h"
@@ -15,77 +18,35 @@
 //#include "../../headers/contract.h"
 //#include "../../headers/stage.h"
 
+
 int main(int argc, char *argv[])
 {
-   // QApplication a(argc, argv);
-    //MainWindow w;
-  //  QWidget w;
+    QApplication a(argc, argv);
+//    QWidget window;
 
-   /* QDate date = QDate::currentDate();
-    QTime time = QTime::currentTime();
-    QTime rt;
-    QDate rd;*/
+//    QVBoxLayout *l = new QVBoxLayout(&window);
 
-    QFile *file = new QFile("test.dat");
-    if(!file->open(QIODevice::ReadWrite))
-    {
-        qDebug() << "Ошибка открытия";
-    }
+    mywidget *year_dock = new mywidget(0);
+//  QHBoxLayout *year_dock_layout = new QHBoxLayout(year_dock);
 
-//     qDebug() << date.toString() << " : " << date.toJulianDay();
-//     qDebug() << time.toString() << " : " <<  time.msecsSinceStartOfDay();
-//     qint64 dj = date.toJulianDay();
-//     int tms = time.msecsSinceStartOfDay();
+    //qDebug() << "Текущий день:"<< QDate::currentDate().dayOfYear();
 
-//     file->write((const char*)&dj,sizeof(qint64));
-//     file->write((const char*)&tms,sizeof(int));
-//     file->close();
+    year_dock->setYear(2017);
 
-//     if(!file->open(QIODevice::ReadWrite))
-//     {
-//         qDebug() << "Ошибка открытия";
-//     }
-
-//     qint64 dj2;
-//     int tms2;
-//     file->read((char*)&dj2,sizeof(qint64));
-//     file->read((char*)&tms2,sizeof(int));
-//     rd = QDate::fromJulianDay(dj2);
-//     rt = QTime::fromMSecsSinceStartOfDay(tms2);
-//     qDebug() << rd.toString() << " : " << rd.toJulianDay();
-//     qDebug() << rt.toString() << " : " <<  rt.msecsSinceStartOfDay();
-
-    QString str = "Жопа капуста";
-    QByteArray text = str.toLocal8Bit();
-    char *data = new char[text.size()+1];
-    int data_size = text.size()+1;
-    file->write((const char*)&data_size,sizeof(int));
-    strcpy(data, text.data());
-    file->write((const char*)data,text.size()+1);
-    delete [] data;
-    file->close();
-
-    if(!file->open(QIODevice::ReadWrite))
-         {
-             qDebug() << "Ошибка открытия";
-         }
-    QString str2;
-   // QByteArray text ;
-    file->read((char*)&data_size,sizeof(int));
-    qDebug() << data_size;
-    data = new char[data_size];
-
-    file->read((char*)data,data_size);
-    strcpy(text.data(),data);
-    str2 = QString::fromLocal8Bit(text);
-
-    delete [] data;
-        qDebug() << str2;
-
-    file->close();
+   // qDebug() << QDate::isLeapYear(QDate::currentDate().year());
+    year_dock->show();
 
 
 
-   // table->show();
-    return 0;//a.exec();
+//    mywidget *lbl = new mywidget(&window);
+//    QPushButton *btn = new QPushButton(&window);
+//    l->addWidget(lbl);
+//    l->addWidget(btn);
+//    lbl->setLinkedWidget(&window);
+//    QObject::connect(btn, &QPushButton::clicked , lbl, &mywidget::updateText);
+//    //tbl->set
+
+//    window.show();
+
+    return a.exec();
 }
