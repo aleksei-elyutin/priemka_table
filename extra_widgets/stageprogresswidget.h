@@ -19,19 +19,26 @@ class StageProgressWidget : public QFrame
 {
     Q_OBJECT
 private:
-    Stage *_stage;
-    QProgressBar* _progress;
-    int _start_position;
-    int _end_position;
+    Stage *_stage;   
     QDate _start_date;
     QDate _finish_date;
-    QDate _today;
+    int _selected_year;
+
+
+    QProgressBar* _progress;
+
+    int _start_progress_bar_position = 0;
+    int _end_progress_bar_position = 0;
+
     int _size_factor = 3;
     int _vert_size = 30;
-    QGridLayout *_widget_layout;
-    QLabel *_stage_name;
 
-    int _selected_year;
+    QVBoxLayout *_widget_layout;
+
+    QWidget* _progress_box;
+    QWidget* _startfinish_labels_box;
+    QWidget *_name_button_box;
+
 
 
     QCheckBox *_done_checkbox;
@@ -44,8 +51,12 @@ private:
 
 
 public:
-    /*explicit*/ StageProgressWidget(QWidget *parent , Stage *stage);
-    //StageProgressWidget(QWidget *parent = 0, Stage&  stage);
+    explicit StageProgressWidget(QWidget *parent = 0);
+   // StageProgressWidget(QWidget *parent = 0, Stage&  stage);
+
+    void setStage (Stage *stage);
+
+    void selectYear(int year);
 
     void setupStage();
 

@@ -3,30 +3,32 @@
 
 #include <QWidget>
 #include <QLabel>
+#include <QDate>
+#include <QResizeEvent>
+#include <QDebug>
 
 
 class MonHeaderWidget : public QWidget
 {
     Q_OBJECT
 
-private:
-    QLabel *jan_label;
-    QLabel *feb_label;
-    QLabel *mar_label;
-    QLabel *apr_label;
-    QLabel *may_label;
-    QLabel *jun_label;
-    QLabel *dec_label;
-    QLabel *jul_label;
-    QLabel *sep_label;
-    QLabel *oct_label;
-    QLabel *nov_label;
-    QLabel *aug_label;
 
+private:
+    int _year;
+    QLabel *lbl;
+    double _size_factor = 3;
+    int _wheight = 30;
+    QVector <QLabel*> mons;
 public:
     explicit MonHeaderWidget(QWidget *parent = 0);
 
+    void setYear(int year);
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 
 };
+
+
 
 #endif // MONHEADERWIDGET_H

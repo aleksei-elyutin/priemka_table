@@ -22,19 +22,17 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-//    QWidget window;
+    QWidget window;
 
-//    QVBoxLayout *l = new QVBoxLayout(&window);
+    QVBoxLayout *l = new QVBoxLayout(&window);
 
-    mywidget *year_dock = new mywidget(0);
-//  QHBoxLayout *year_dock_layout = new QHBoxLayout(year_dock);
-
-    //qDebug() << "Текущий день:"<< QDate::currentDate().dayOfYear();
+    mywidget *year_dock = new mywidget(&window);
+    l->addWidget(year_dock);
 
     year_dock->setYear(2017);
 
    // qDebug() << QDate::isLeapYear(QDate::currentDate().year());
-    year_dock->show();
+    window.show();
 
 
 

@@ -2,98 +2,52 @@
 
 MonHeaderWidget::MonHeaderWidget(QWidget *parent) :   QWidget(parent)
 {
-    int _size_factor = 3;
-    int _vert_size = 25;
-    resize(365*_size_factor, 28);
-    setMaximumSize(365*_size_factor,_vert_size);
-    setMinimumSize(365*_size_factor,_vert_size);
-            jan_label = new QLabel(this);
-            jan_label->setText(QString("Январь"));
-            jan_label->setObjectName(QStringLiteral("jan_label"));
-            jan_label->setGeometry(QRect(0, 0, 93, 28));
-//            QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-//            sizePolicy.setHorizontalStretch(0);
-//            sizePolicy.setVerticalStretch(0);
-//            sizePolicy.setHeightForWidth(jan_label->sizePolicy().hasHeightForWidth());
-//            jan_label->setSizePolicy(sizePolicy);
-            jan_label->setFrameShape(QFrame::Box);
-            feb_label = new QLabel(this);
-            feb_label->setText(QString("Февраль"));
-            feb_label->setObjectName(QStringLiteral("feb_label"));
-            feb_label->setGeometry(QRect(93, 0, 84, 28));
-//            sizePolicy.setHeightForWidth(feb_label->sizePolicy().hasHeightForWidth());
-//            feb_label->setSizePolicy(sizePolicy);
-            feb_label->setFrameShape(QFrame::Box);
-            mar_label = new QLabel(this);
-            mar_label->setText(QString("Март"));
-            mar_label->setObjectName(QStringLiteral("mar_label"));
-            mar_label->setGeometry(QRect(177, 0, 93, 28));
-//            sizePolicy.setHeightForWidth(mar_label->sizePolicy().hasHeightForWidth());
-//            mar_label->setSizePolicy(sizePolicy);
-            mar_label->setFrameShape(QFrame::Box);
-            apr_label = new QLabel(this);
-            apr_label->setText(QString("Апрель"));
-            apr_label->setObjectName(QStringLiteral("apr_label"));
-            apr_label->setGeometry(QRect(270, 0, 90, 28));
-//            sizePolicy.setHeightForWidth(apr_label->sizePolicy().hasHeightForWidth());
-//            apr_label->setSizePolicy(sizePolicy);
-            apr_label->setFrameShape(QFrame::Box);
-            may_label = new QLabel(this);
-            may_label->setText(QString("Май"));
-            may_label->setObjectName(QStringLiteral("may_label"));
-            may_label->setGeometry(QRect(360, 0, 93, 28));
-//            sizePolicy.setHeightForWidth(may_label->sizePolicy().hasHeightForWidth());
-//            may_label->setSizePolicy(sizePolicy);
-            may_label->setFrameShape(QFrame::Box);
-            jun_label = new QLabel(this);
-            jun_label->setObjectName(QStringLiteral("jun_label"));
-            jun_label->setText(QString("Июнь"));
-            jun_label->setGeometry(QRect(453, 0, 90, 28));
-//            sizePolicy.setHeightForWidth(jun_label->sizePolicy().hasHeightForWidth());
-//            jun_label->setSizePolicy(sizePolicy);
-            jun_label->setFrameShape(QFrame::Box);
-            dec_label = new QLabel(this);
-            dec_label->setText(QString("Декабрь"));
-            dec_label->setObjectName(QStringLiteral("dec_label"));
-            dec_label->setGeometry(QRect(1002, 0, 93, 28));
-//            sizePolicy.setHeightForWidth(dec_label->sizePolicy().hasHeightForWidth());
-//            dec_label->setSizePolicy(sizePolicy);
-            dec_label->setFrameShape(QFrame::Box);
-            jul_label = new QLabel(this);
-            jul_label->setObjectName(QStringLiteral("jul_label"));
-            jul_label->setText(QString("Июль"));
-            jul_label->setGeometry(QRect(543, 0, 93, 28));
-//            sizePolicy.setHeightForWidth(jul_label->sizePolicy().hasHeightForWidth());
-//            jul_label->setSizePolicy(sizePolicy);
-            jul_label->setFrameShape(QFrame::Box);
-            sep_label = new QLabel(this);
-            sep_label->setText(QString("Сентябрь"));
-            sep_label->setObjectName(QStringLiteral("sep_label"));
-            sep_label->setGeometry(QRect(729, 0, 90, 28));
-//            sizePolicy.setHeightForWidth(sep_label->sizePolicy().hasHeightForWidth());
-//            sep_label->setSizePolicy(sizePolicy);
-            sep_label->setFrameShape(QFrame::Box);
-            oct_label = new QLabel(this);
-            oct_label->setText(QString("Октябрь"));
-            oct_label->setObjectName(QStringLiteral("oct_label"));
-            oct_label->setGeometry(QRect(819, 0, 93, 28));
-//            sizePolicy.setHeightForWidth(oct_label->sizePolicy().hasHeightForWidth());
-//            oct_label->setSizePolicy(sizePolicy);
-            oct_label->setFrameShape(QFrame::Box);
-            nov_label = new QLabel(this);
-            nov_label->setText(QString("Ноябрь"));
-            nov_label->setObjectName(QStringLiteral("nov_label"));
-            nov_label->setGeometry(QRect(912, 0, 90, 28));
-//            sizePolicy.setHeightForWidth(nov_label->sizePolicy().hasHeightForWidth());
-//            nov_label->setSizePolicy(sizePolicy);
-            nov_label->setFrameShape(QFrame::Box);
-            aug_label = new QLabel(this);
-            aug_label->setText(QString("Август"));
-            aug_label->setObjectName(QStringLiteral("aug_label"));
-            aug_label->setGeometry(QRect(636, 0, 93, 28));
-//            sizePolicy.setHeightForWidth(aug_label->sizePolicy().hasHeightForWidth());
-//            aug_label->setSizePolicy(sizePolicy);
-            aug_label->setFrameShape(QFrame::Box);
 
+      setMaximumHeight(_wheight);
+      setMinimumHeight(_wheight);
+
+      for (int i=1; i <= 12; i++) //12
+      {
+          QLabel *month = new QLabel(this);
+
+          month->setObjectName("month_" + i);
+
+          month->setStyleSheet("border: 1px solid black;");
+          month->setText(QDate::longMonthName(i,QDate::StandaloneFormat));
+          qDebug() << QDate::longMonthName(i,QDate::StandaloneFormat);
+          mons.push_back(month);
+      }
+      setMinimumWidth(365*2);
+
+}
+
+void MonHeaderWidget::setYear(int year)
+{
+    _year = year;
+}
+
+void MonHeaderWidget::resizeEvent(QResizeEvent *event)
+{
+
+   // lbl->setText(QString::number(this->size().width())+"x" + QString::number(this->size().height()));
+    //size_factor
+    int total_width = 0;
+
+   // qDebug() << QString::number(event->size().width())+"x" + QString::number(event->size().height());
+
+    _size_factor = event->size().width()/QDate(_year,1,1).daysInYear();
+
+
+    mons[0]->setGeometry(0, 0, (QDate(_year,1,1).daysInMonth()*event->size().width())/QDate(_year,1,1).daysInYear() ,_wheight);
+    total_width += mons[0]->geometry().width();
+    for (int i=1; i < 12; i++) //12
+    {
+
+        mons[i]->setGeometry(mons[i-1]->geometry().x()+mons[i-1]->geometry().width(), 0, (QDate(_year,i,1).daysInMonth()*event->size().width())/QDate(_year,1,1).daysInYear() ,_wheight);
+        total_width += mons[i]->geometry().width();
+    }
+   // qDebug() << "Total: " << total_width;
+
+    QWidget::resizeEvent(event);
 }
 

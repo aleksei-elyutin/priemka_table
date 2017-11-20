@@ -5,6 +5,14 @@ TableWidget::TableWidget(QFrame *parent) : QFrame(parent)
 {  
     setFrameStyle(QFrame::Panel | QFrame::Sunken);
     _layout = new QGridLayout(this);
+
+
+
+    MonHeaderWidget* header = new MonHeaderWidget(this);
+    header->setYear(2017);
+    //header->setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 1px solid grey;");
+    _layout->addWidget(header,3,0);
+
     table_dock = new QWidget();
    // _layout->addWidget(table_dock,0,0);
    // add_contract_button = new QPushButton(this);

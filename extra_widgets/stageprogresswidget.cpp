@@ -5,21 +5,21 @@
 StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFrame(parent)
 {
 
-    _stage=stage;
+
     setFrameStyle(QFrame::WinPanel | QFrame::Raised);
 
     _widget_layout = new QGridLayout(this);
     _widget_layout->setVerticalSpacing ( 0);
 
-    QWidget* _dock = new QWidget(this);
-    _dock->setGeometry(0,0,365*_size_factor,_vert_size);
-    _dock->setMaximumSize(365*_size_factor,_vert_size);
-    _dock->setMinimumSize(365*_size_factor,_vert_size);
+    _progress_box = new QWidget(this);
+//    _dock->setGeometry(0,0,365*_size_factor,_vert_size);
+//    _dock->setMaximumSize(365*_size_factor,_vert_size);
+//    _dock->setMinimumSize(365*_size_factor,_vert_size);
 
-    QWidget* _dates_dock = new QWidget(this);
-    _dates_dock->setGeometry(0,0,365*_size_factor,(int)_vert_size/2);
-    _dates_dock->setMaximumSize(365*_size_factor,(int)_vert_size/2);
-    _dates_dock->setMinimumSize(365*_size_factor,(int)_vert_size/2);
+     _startfinish_labels_box = new QWidget(this);
+//    _dates_dock->setGeometry(0,0,365*_size_factor,(int)_vert_size/2);
+//    _dates_dock->setMaximumSize(365*_size_factor,(int)_vert_size/2);
+//    _dates_dock->setMinimumSize(365*_size_factor,(int)_vert_size/2);
 
     //setStyleSheet("border: 2px solid grey; background-color: rgb(250, 250, 250); ");
     setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 1px solid black;");
@@ -27,16 +27,16 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
 
 
     /*Кнопки изменить и удалить + название контракта*/
-    QWidget *button_box = new QWidget(this); //!!!!
-    button_box->setMinimumHeight(30);
-    button_box->setMaximumHeight(30);
+     = new QWidget(this); //!!!!
+    _name_button_box->setMinimumHeight(30);
+    _name_button_box->setMaximumHeight(30);
 
-    button_box->setStyleSheet("text-align: middle; background-color: rgb(240, 240, 240); width: 1px; border: 0px solid black;");
-    QHBoxLayout *hLayout = new QHBoxLayout(button_box);
+    _name_button_box->setStyleSheet("text-align: middle; background-color: rgb(240, 240, 240); width: 1px; border: 0px solid black;");
+    QHBoxLayout *hLayout = new QHBoxLayout(_name_button_box);
     hLayout->setMargin(0);
     hLayout->setSpacing(3);
 
-    _stage_name = new QLabel(stage->getStageName(),button_box);
+    QLabel *_stage_name = new QLabel(stage->getStageName(),_name_button_box);
     _stage_name->setStyleSheet("background-color: rgb(240, 240, 240); width: 1px; border: 0px solid black;");
     hLayout->addWidget(_stage_name);
 
@@ -44,7 +44,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
     QSpacerItem *hspacer = new QSpacerItem(50,30,QSizePolicy::Expanding,QSizePolicy::Expanding);
     hLayout->addItem(hspacer);
 
-    setup_stage_button = new QPushButton (QString("..."),button_box);
+    setup_stage_button = new QPushButton (QString("..."),_name_button_box);
     setup_stage_button->setMinimumHeight(30);
     setup_stage_button->setMaximumHeight(30);
     setup_stage_button->setMinimumWidth(30);
@@ -52,7 +52,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
     hLayout->addWidget(setup_stage_button);
     connect(setup_stage_button, &QPushButton::clicked, this, &StageProgressWidget::setupStage);
 
-    delete_stage_button = new QPushButton (QString("X"),button_box);
+    delete_stage_button = new QPushButton (QString("X"),_name_button_box);
     delete_stage_button->setMinimumHeight(30);
     delete_stage_button->setMaximumHeight(30);
     delete_stage_button->setMinimumWidth(30);
@@ -61,7 +61,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
     connect(delete_stage_button, &QPushButton::clicked, this, &StageProgressWidget::showDeleteDialog);
 
 
-    _widget_layout->addWidget(button_box,0,0);
+    _widget_layout->addWidget(_name_button_box,0,0);
 
 
     /*******/
@@ -101,9 +101,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
 
     _start_date = stage->getStartDate(); _finish_date = stage->getFinishDate();
 
-    MonHeaderWidget* header = new MonHeaderWidget(this);
-    header->setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 1px solid grey;");
-    _widget_layout->addWidget(header,3,0);
+
 
 
     if (_finish_date.year() > _today.year())
@@ -165,6 +163,12 @@ StageProgressWidget::StageProgressWidget(QWidget *parent, Stage *stage ) : QFram
     setLayout(_widget_layout);
     //_progress->show();
 }
+void StageProgressWidget::setStage(Stage *stage)
+{
+    _stage=stage;
+}
+
+
 void StageProgressWidget::setupStage()
 {
     QDialog *dial = new QDialog(0);
