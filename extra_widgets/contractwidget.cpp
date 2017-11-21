@@ -54,7 +54,8 @@ ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QFrame(par
     int num_stages = _contract->getNumStages();
     for (int i=0; i< num_stages; i++)
     {
-         StageProgressWidget *_stage_widget = new StageProgressWidget(this,contract->getStage(i));
+         StageProgressWidget *_stage_widget = new StageProgressWidget(this);
+         _stage_widget->setStage(contract->getStage(i));
          vLayout->addWidget(_stage_widget);
          //tmp_stage_widget->show();
     }

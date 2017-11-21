@@ -7,12 +7,6 @@ TableWidget::TableWidget(QFrame *parent) : QFrame(parent)
     _layout = new QGridLayout(this);
 
 
-
-    MonHeaderWidget* header = new MonHeaderWidget(this);
-    header->setYear(2017);
-    //header->setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 1px solid grey;");
-    _layout->addWidget(header,3,0);
-
     table_dock = new QWidget();
    // _layout->addWidget(table_dock,0,0);
    // add_contract_button = new QPushButton(this);
@@ -51,6 +45,9 @@ void TableWidget::draw()
 
 
     tableDock_glayout = new QGridLayout(table_dock);
+    tableDock_glayout->setColumnStretch(0,0);
+    tableDock_glayout->setColumnStretch(1,0);
+    tableDock_glayout->setColumnStretch(2,1);
     tableDock_glayout->setSpacing(3);
     table_dock->setLayout(tableDock_glayout);
 
@@ -104,7 +101,7 @@ void TableWidget::addContractWidget(Contract *contract)
         QLabel* name = new QLabel(contract->getContractName(),table_dock);
         name->setStyleSheet("text-align: middle; color: rgb(0, 0, 0); background-color: rgb(250, 250, 250); width: 1px; border: 1px solid black;");
         name->setWordWrap(true);
-        name->setFont(QFont("Times", 16, QFont::Normal));
+        name->setFont(QFont("Times", 14, QFont::Normal));
         name->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         //name->setMinimumWidth(400);
 
@@ -113,6 +110,7 @@ void TableWidget::addContractWidget(Contract *contract)
         ContractWidget *contractWidget = new ContractWidget(table_dock, contract);
         tableDock_glayout->addWidget(contractWidget,_last_entry,2);
 
+        tableDock_glayout->setRowStretch(_last_entry,0); ///???
         _last_entry++;
 
 }
@@ -121,17 +119,24 @@ void TableWidget::addHeader()
     QLabel* num = new QLabel(QString("№ П/П"),table_dock);
     num->setStyleSheet("text-align: middle; background-color: rgb(240, 240, 240); width: 10px; border: 2px solid black;");
     num->setMinimumWidth(50);
+    num->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Preferred);
     tableDock_glayout->addWidget(num,0,0);
     QLabel* name = new QLabel(QString("Номер \nконтракта"),table_dock);
     name->setStyleSheet("text-align: middle; background-color: rgb(240, 240, 240); width: 10px; border: 2px solid black;");
    // name->setWordWrap(true);
    // name->setMinimumWidth(400);
     tableDock_glayout->addWidget(name,0,1);
-    QLabel* st = new QLabel(QString("Прогресс выполнения"),table_dock);
-    st->setStyleSheet("text-align: middle; background-color: rgb(240, 240, 240); width: 10px; border: 2px solid black;");
-    st->setWordWrap(true);
-    st->setMinimumWidth(1000); /*Костыль !!!!*/
-    tableDock_glayout->addWidget(st,0,2);
+
+
+    MonHeaderWidget* header = new MonHeaderWidget(this);
+    header->setYear(2017);
+    //header->setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 1px solid grey;");
+    tableDock_glayout->addWidget(header,0,2);
+//    QLabel* st = new QLabel(QString("Прогресс выполнения"),table_dock);
+//    st->setStyleSheet("text-align: middle; background-color: rgb(240, 240, 240); width: 10px; border: 2px solid black;");
+//    st->setWordWrap(true);
+//    st->setMinimumWidth(1000); /*Костыль !!!!*/
+//    tableDock_glayout->addWidget(st,0,2);
 }
 
 

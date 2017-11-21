@@ -24,7 +24,10 @@ public:
 
     void setYear(int year);
 
+    void setNamesVisible(bool v);
+
 protected:
+    void draw();
     void resizeEvent(QResizeEvent *event) override;
 
 };

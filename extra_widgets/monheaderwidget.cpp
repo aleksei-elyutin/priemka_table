@@ -21,10 +21,24 @@ MonHeaderWidget::MonHeaderWidget(QWidget *parent) :   QWidget(parent)
 
 }
 
+
+
 void MonHeaderWidget::setYear(int year)
 {
     _year = year;
 }
+
+void MonHeaderWidget::setNamesVisible(bool v)
+{
+
+    for (int i=0; i < 12; i++)
+    {
+       if (!v) mons.at(i)->setText("");
+       else mons.at(i)->setText(QDate::longMonthName(i+1,QDate::StandaloneFormat));
+    }
+}
+
+
 
 void MonHeaderWidget::resizeEvent(QResizeEvent *event)
 {

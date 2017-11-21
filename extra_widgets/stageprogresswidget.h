@@ -10,7 +10,7 @@
 #include <QCheckBox>
 #include <QDialogButtonBox>
 #include "./headers/stage.h"
-#include "./monheaderwidget.h"
+#include "monheaderwidget.h"
 #include "dletedialog.h"
 #include "dletedialog.h"
 #include "stageredactor.h"
@@ -20,12 +20,13 @@ class StageProgressWidget : public QFrame
     Q_OBJECT
 private:
     Stage *_stage;   
-    QDate _start_date;
-    QDate _finish_date;
+    QDate _curr_start_date;
+    QDate _curr_finish_date;
     int _selected_year;
 
 
-    QProgressBar* _progress;
+    QProgressBar *_progress;
+    MonHeaderWidget *_monheader;
 
     int _start_progress_bar_position = 0;
     int _end_progress_bar_position = 0;
@@ -41,6 +42,7 @@ private:
 
 
 
+
     QCheckBox *_done_checkbox;
     QCheckBox *_done10_checkbox;
     QCheckBox *_done20_checkbox;
@@ -48,6 +50,10 @@ private:
     QPushButton *add_stage_button;
     QPushButton *delete_stage_button;
     QPushButton *setup_stage_button;
+
+    QLabel *_stage_name;
+    QLabel *_start_date_label;
+    QLabel *_finish_date_label;
 
 
 public:
