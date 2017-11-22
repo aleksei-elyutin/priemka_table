@@ -14,9 +14,10 @@ class MonHeaderWidget : public QWidget
 
 
 private:
-    int _year;
+    int _year = QDate::currentDate().year(); ///!!!
     QLabel *lbl;
     double _size_factor = 3;
+    int _grid_width;
     int _wheight = 30;
     QVector <QLabel*> mons;
 public:
@@ -26,9 +27,14 @@ public:
 
     void setNamesVisible(bool v);
 
+    double getSizeFactor();
+
+    int getGridWidth();
+
 protected:
-    void draw();
+   // void draw();
     void resizeEvent(QResizeEvent *event) override;
+
 
 };
 

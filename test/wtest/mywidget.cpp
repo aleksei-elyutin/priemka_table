@@ -12,7 +12,7 @@ mywidget::mywidget(QWidget *parent) : QWidget(parent)
     setMaximumHeight(_wheight);
     setMinimumHeight(_wheight);
 
-
+    setStyleSheet("border: 1px solid grey; text-align: middle; color: rgba(180, 180, 180, 255);");
 
 
     for (int i=1; i <= 12; i++) //12
@@ -57,13 +57,14 @@ void mywidget::setYear(int year)
 void mywidget::resizeEvent(QResizeEvent *event)
 {
 
+   // QWidget::resizeEvent(event);
    // lbl->setText(QString::number(this->size().width())+"x" + QString::number(this->size().height()));
     //size_factor
     int total_width = 0;
 
     qDebug() << QString::number(event->size().width())+"x" + QString::number(event->size().height());
 
-    _size_factor = event->size().width()/QDate(_selected_year,1,1).daysInYear();
+    _size_factor = (double) event->size().width()/ (double) QDate(_selected_year,1,1).daysInYear();
 
 
     mons[0]->setGeometry(0, 0, (QDate(_selected_year,1,1).daysInMonth()*event->size().width())/QDate(_selected_year,1,1).daysInYear() ,_wheight);
@@ -71,15 +72,16 @@ void mywidget::resizeEvent(QResizeEvent *event)
     for (int i=1; i < 12; i++) //12
     {
 
-        mons[i]->setGeometry(mons[i-1]->geometry().x()+mons[i-1]->geometry().width(), 0, (QDate(_selected_year,i,1).daysInMonth()*event->size().width())/QDate(_selected_year,1,1).daysInYear() ,_wheight);
+        mons[i]->setGeometry(mons[i-1]->geometry().x()+mons[i-1]->geometry().width(), 0, QDate(_selected_year,i,1).daysInMonth()*_size_factor ,_wheight);
         total_width += mons[i]->geometry().width();
     }
 
 
-    qDebug() << "Total: " << total_width;
 
 
-    QWidget::resizeEvent(event);
+
+
+    qDebug() << "Total: " << total_width << ". Widget width: " << this->width();
 }
 
 

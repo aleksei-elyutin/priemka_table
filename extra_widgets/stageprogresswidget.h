@@ -36,7 +36,7 @@ private:
 
     QVBoxLayout *_widget_layout;
 
-    QWidget* _progress_box;
+    //QWidget* _progress_box;
     QWidget* _startfinish_labels_box;
     QWidget *_name_button_box;
 
@@ -55,6 +55,11 @@ private:
     QLabel *_start_date_label;
     QLabel *_finish_date_label;
 
+    void setCheckBoxesState();
+    void updateStartFinishLabels();
+    void updateProgress();
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 
 public:
     explicit StageProgressWidget(QWidget *parent = 0);
@@ -63,6 +68,8 @@ public:
     void setStage (Stage *stage);
 
     void selectYear(int year);
+
+    void draw();
 
     void setupStage();
 

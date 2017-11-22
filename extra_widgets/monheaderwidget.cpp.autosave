@@ -44,9 +44,9 @@ void MonHeaderWidget::resizeEvent(QResizeEvent *event)
 {
 
     _grid_width = 0;
-    qDebug() << "Event size: " <<(double) event->size().width() << "Days: "  << (double) QDate(_year,1,1).daysInYear();
+   // qDebug() << "Event size: " <<(double) event->size().width() << "Days: "  << (double) QDate(_year,1,1).daysInYear();
     _size_factor = (double) event->size().width()/ (double) QDate(_year,1,1).daysInYear();
-    qDebug() << "Size factor " << _size_factor;
+  //  qDebug() << "Size factor " << _size_factor;
 
     mons[0]->setGeometry(0, 0, (QDate(_year,1,1).daysInMonth()*event->size().width())/QDate(_year,1,1).daysInYear() ,_wheight);
     _grid_width += mons[0]->geometry().width();
