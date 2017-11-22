@@ -36,7 +36,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     hLayout->setMargin(0);
     hLayout->setSpacing(3);
     _stage_name = new QLabel(_name_button_box);
-    _stage_name->setStyleSheet("background-color: rgb(240, 240, 240); width: 1px; border: 0px solid black;");
+    _stage_name->setStyleSheet("background-color: rgb(240, 240, 240); width: 0px; border: 0px solid black;");
     hLayout->addWidget(_stage_name);
 
     QSpacerItem *hspacer = new QSpacerItem(50,30,QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -90,8 +90,9 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
 
     /*Создание меток*/
     _startfinish_labels_box = new QWidget(this);
-    _startfinish_labels_box->setMinimumHeight(30);
-    _startfinish_labels_box->setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 1px solid black;");
+    _startfinish_labels_box->setMinimumHeight(20);
+    _startfinish_labels_box->setMaximumHeight(20);
+    _startfinish_labels_box->setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 0px solid black;");
     _start_date_label = new QLabel(_startfinish_labels_box);
     _finish_date_label = new QLabel(_startfinish_labels_box);
 
@@ -169,12 +170,12 @@ void StageProgressWidget::updateStartFinishLabels()
     double _size_factor =  _monheader->getSizeFactor();
 
     _start_date_label->setText(_stage->getStartDate().toString("dd.MM.yyyy"));
-    _start_date_label->setGeometry((_curr_start_date.dayOfYear()-1)*_size_factor, 0,100,(int)_vert_size);
+    _start_date_label->setGeometry((_curr_start_date.dayOfYear()-1)*_size_factor, 0,100,20);
     _start_date_label->setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 0px solid black;");
 
 
     _finish_date_label->setText(_stage->getFinishDate().toString("d.MM.yyyy"));
-    _finish_date_label->setGeometry((_curr_finish_date.dayOfYear()-1)*_size_factor, 0, 100,(int)_vert_size);
+    _finish_date_label->setGeometry((_curr_finish_date.dayOfYear()-1)*_size_factor, 0, 100,20);
     _finish_date_label->setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 0px solid black;");
 
 
@@ -220,8 +221,8 @@ void StageProgressWidget::resizeEvent(QResizeEvent *event)
     int length = _size_factor*(_curr_start_date.daysTo(_curr_finish_date));
 
     _progress->setGeometry((_curr_start_date.dayOfYear()-1)*_size_factor, 0, length, _vert_size);
-    _start_date_label->setGeometry((_curr_start_date.dayOfYear()-1)*_size_factor, 0,100,(int)_vert_size);
-    _finish_date_label->setGeometry((_curr_finish_date.dayOfYear()-1)*_size_factor, 0, 100,(int)_vert_size);
+    _start_date_label->setGeometry((_curr_start_date.dayOfYear()-1)*_size_factor, 0,100,20);
+    _finish_date_label->setGeometry((_curr_finish_date.dayOfYear()-1)*_size_factor, 0, 100,20);
 }
 
 /*StageProgressWidget::StageProgressWidget(QWidget *parent, Stage &stage)

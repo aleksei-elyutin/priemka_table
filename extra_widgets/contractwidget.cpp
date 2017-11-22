@@ -13,7 +13,7 @@ ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QFrame(par
 
     setStyleSheet("text-align: middle; background-color: rgb(200, 200, 200); width: 1px; border: 2px solid black;");
 
-    /*Кнопки изменить и удалить*/
+    /*Кнопки добавить, изменить и удалить*/
     QWidget *button_box = new QWidget();
     button_box->setMinimumHeight(30);
     button_box->setMaximumHeight(30);
@@ -25,6 +25,16 @@ ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QFrame(par
 
     QSpacerItem *hspacer = new QSpacerItem(50,30,QSizePolicy::Expanding,QSizePolicy::Expanding);
     hLayout->addItem(hspacer);
+    add_stage_button = new QPushButton (QString("+"),this);
+    add_stage_button->setMinimumHeight(30);
+    add_stage_button->setMaximumHeight(30);
+    add_stage_button->setMinimumWidth(30);
+    add_stage_button->setMaximumWidth(30);
+    // add_stage_button->setStyleSheet("text-align: middle; background-color: rgb(250, 250, 250); width: 1px; border: 0px solid black;");
+    hLayout->addWidget(add_stage_button);
+    connect(add_stage_button, &QPushButton::clicked, _contract, &Contract::createStage);
+
+
 
     setup_contract_button = new QPushButton (QString("..."),this);
     setup_contract_button->setMinimumHeight(30);
@@ -42,11 +52,10 @@ ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QFrame(par
     connect(delete_contract_button, &QPushButton::clicked, this, &ContractWidget::showDeleteDialog);
 
     hLayout->addWidget(delete_contract_button);       
+
     vLayout->addWidget(button_box);
+    /********/
 
-
-
-    /*******/
 
 
     /*Содержимое */
@@ -63,12 +72,6 @@ ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QFrame(par
 
 
 
-    /*Кнопка добавить*/
-    add_stage_button = new QPushButton (QString("Добавить этап..."),this);
-    add_stage_button->setStyleSheet("text-align: middle; background-color: rgb(250, 250, 250); width: 1px; border: 0px solid black;");
-    vLayout->addWidget(add_stage_button);
-    connect(add_stage_button, &QPushButton::clicked, _contract, &Contract::createStage);
-    /********/
 
     vLayout->setSpacing(3);
 

@@ -16,9 +16,11 @@ class TableWidget : public QFrame
     Q_OBJECT
 private:
     DataBase *_base; //Указатель на базу данных
-    QGridLayout *_layout;
+    QVBoxLayout *_layout;
+    QHBoxLayout * header_dock_layout;
     QScrollArea *_scrollArea;
 
+    QFrame *header_dock;
     QWidget *table_dock;
     QGridLayout *tableDock_glayout;
 
