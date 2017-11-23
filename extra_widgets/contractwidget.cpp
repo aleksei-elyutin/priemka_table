@@ -11,7 +11,7 @@ ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QFrame(par
     vLayout->setSpacing(0);
     vLayout->setMargin(0);
 
-    setStyleSheet("text-align: middle; background-color: rgb(200, 200, 200); width: 1px; border: 2px solid black;");
+    setStyleSheet("text-align: middle; background-color: rgb(200, 200, 200); width: 1px; border: 1px solid black;");
 
     /*Кнопки добавить, изменить и удалить*/
     QWidget *button_box = new QWidget();

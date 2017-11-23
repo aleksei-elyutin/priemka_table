@@ -5,6 +5,7 @@
 #include <QLayout>
 #include <QScrollArea>
 #include <QLCDNumber>
+#include <QGraphicsEffect>
 
 #include "contractwidget.h"
 #include "headers/contract.h"
@@ -28,8 +29,9 @@ private:
 
 
     int _year = QDate::currentDate().year();
-
     int _last_entry = 1;
+
+    void addHeader();
 
 
 public:
@@ -37,7 +39,6 @@ public:
 
     void addContractWidget (Contract *contract);
 
-    void addHeader();
 
     void setContent(DataBase *base);
 

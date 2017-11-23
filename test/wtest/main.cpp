@@ -22,29 +22,16 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QWidget window;
+//    QWidget window;
 
-    QVBoxLayout *l = new QVBoxLayout(&window);
+//    QVBoxLayout *l = new QVBoxLayout(&window);
 
-    mywidget *year_dock = new mywidget(&window);
-    l->addWidget(year_dock);
-
-    year_dock->setYear(2017);
-
-   // qDebug() << QDate::isLeapYear(QDate::currentDate().year());
-    window.show();
+    mywidget *w = new mywidget();
 
 
+    w->show();
 
-//    mywidget *lbl = new mywidget(&window);
-//    QPushButton *btn = new QPushButton(&window);
-//    l->addWidget(lbl);
-//    l->addWidget(btn);
-//    lbl->setLinkedWidget(&window);
-//    QObject::connect(btn, &QPushButton::clicked , lbl, &mywidget::updateText);
-//    //tbl->set
 
-//    window.show();
 
     return a.exec();
 }

@@ -41,6 +41,7 @@ public:
     void setStage(Stage *stage);
     void setNoDeletion();
 signals:
+
     void deleteStageRequest();
 
 

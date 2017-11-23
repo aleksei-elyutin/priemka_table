@@ -31,6 +31,8 @@ public:
 
     int getGridWidth();
 
+    void setVerticalSize(int vs);
+
 protected:
    // void draw();
     void resizeEvent(QResizeEvent *event) override;

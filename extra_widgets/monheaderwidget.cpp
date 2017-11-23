@@ -3,8 +3,9 @@
 MonHeaderWidget::MonHeaderWidget(QWidget *parent) :   QWidget(parent)
 {
 
-      setMaximumHeight(_wheight);
+      //setMaximumHeight(_wheight);
       setMinimumHeight(_wheight);
+      setStyleSheet("border: 1px solid black;");
 
       for (int i=1; i <= 12; i++) //12
       {
@@ -12,7 +13,7 @@ MonHeaderWidget::MonHeaderWidget(QWidget *parent) :   QWidget(parent)
 
           month->setObjectName("month_" + i);
 
-          month->setStyleSheet("border: 1px solid black;");
+        //  month->setStyleSheet("border: 1px solid black;");
           month->setText(QDate::longMonthName(i,QDate::StandaloneFormat));
           //qDebug() << QDate::longMonthName(i,QDate::StandaloneFormat);
           mons.push_back(month);
@@ -39,14 +40,25 @@ void MonHeaderWidget::setNamesVisible(bool v)
 }
 
 
+void MonHeaderWidget::setVerticalSize(int vs)
+{
+      _wheight = vs;
+      this->resize(this->width(),_wheight );
+//    for (int i=0; i < 12; i++)
+//    {
+//       mons.at(i)->setText("");
+//       else mons.at(i)->setText(QDate::longMonthName(i+1,QDate::StandaloneFormat));
+//    }
+}
+
 
 void MonHeaderWidget::resizeEvent(QResizeEvent *event)
 {
 
     _grid_width = 0;
-    qDebug() << "Event size: " <<(double) event->size().width() << "Days: "  << (double) QDate(_year,1,1).daysInYear();
+   // qDebug() << "Event size: " <<(double) event->size().width() << "Days: "  << (double) QDate(_year,1,1).daysInYear();
     _size_factor = (double) event->size().width()/ (double) QDate(_year,1,1).daysInYear();
-    qDebug() << "Size factor " << _size_factor;
+  //  qDebug() << "Size factor " << _size_factor;
 
     mons[0]->setGeometry(0, 0, (QDate(_year,1,1).daysInMonth()*event->size().width())/QDate(_year,1,1).daysInYear() ,_wheight);
     _grid_width += mons[0]->geometry().width();

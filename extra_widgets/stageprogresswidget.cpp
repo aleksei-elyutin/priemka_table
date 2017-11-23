@@ -1,5 +1,5 @@
 #include "stageprogresswidget.h"
-#include <QGraphicsEffect>
+
 
 
 void StageProgressWidget::setCheckBoxesState()
@@ -16,13 +16,10 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     setFrameStyle(QFrame::WinPanel | QFrame::Raised);
     setStyleSheet("background-color: rgb(240, 240, 240); width: 3px; border: 1px solid black;");
     //setStyleSheet("border: 2px solid grey; background-color: rgb(250, 250, 250); ");
-    QGraphicsDropShadowEffect* shadowEffect = new QGraphicsDropShadowEffect(this);
-        shadowEffect -> setBlurRadius(9.0);
-        shadowEffect -> setColor(QColor(90, 200, 40, 80));
-        shadowEffect -> setOffset(4.0);
-    setGraphicsEffect(shadowEffect);
+
     _widget_layout = new QVBoxLayout(this);
-    _widget_layout->setSpacing ( 5);
+    _widget_layout->setSpacing ( 1);
+    _widget_layout->setContentsMargins(3,1,3,1);
 
 
 
@@ -84,7 +81,9 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     /*Создание прогрессбара и сетки*/
     //_progress_box = new QWidget(this);
     _monheader = new MonHeaderWidget(this);
-    _monheader->setNamesVisible(true);   ///Изменить на false
+    _monheader->setNamesVisible(false);   ///Изменить на false
+    _monheader->setStyleSheet("border: 1px solid black;");
+    _monheader->setVerticalSize(30);
     _progress = new QProgressBar(_monheader);
     _widget_layout->addWidget(_monheader);
 
