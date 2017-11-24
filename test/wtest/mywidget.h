@@ -20,7 +20,7 @@ class mywidget : public QWidget
 
 private:
 //    QPushButton *btn;
-//    QPropertyAnimation *pa;
+    QPropertyAnimation *pa;
     QVBoxLayout *l ;
 
 
