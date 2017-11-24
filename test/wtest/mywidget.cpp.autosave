@@ -107,17 +107,15 @@ void mywidget::moveWidgetAnim(QWidget* _widget, int pos)
     if (l->indexOf(_widget)!=pos){
 
         qDebug() << "Вставка пустого виджета current_dummy в позицию " << l->indexOf(_widget);
-        l->addWidget(dummy_current);
         l->insertWidget(l->indexOf(_widget),dummy_current);
         qDebug() << "Теперь позиция пустого виджета current_dummy:"  << l->indexOf(dummy_current);
         qDebug() << "Удаление перемещаемого виджета с позиции " << l->indexOf(_widget);
         l->removeWidget(_widget);
         qDebug() << "Теперь позиция пустого виджета current_dummy:"  << l->indexOf(dummy_current);
         qDebug() << "Вставка пустого виджета new_dummy в позицию " << pos;
-         l->addWidget(dummy_new);
         l->insertWidget(pos, dummy_new);
-         qDebug() << "Теперь позиция пустого виджета new_dummy:"  << l->indexOf(dummy_new);
-         qDebug() << "Размер: " << l->itemAt(l->indexOf(dummy_new))->widget()->geometry();
+        qDebug() << "Теперь позиция пустого виджета new_dummy:"  << l->indexOf(dummy_new);
+        qDebug() << "Размер: " << l->itemAt(l->indexOf(dummy_new))->widget()->geometry();
 
 
         QRect new_widget_geometry = dummy_new->geometry();

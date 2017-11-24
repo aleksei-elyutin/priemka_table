@@ -11,6 +11,8 @@
 #include <QPushButton>
 #include <QTimer>
 #include <QPropertyAnimation>
+#include <QRegExp>
+#include <QLCDNumber>
 
 
 
@@ -23,6 +25,7 @@ private:
     QPropertyAnimation *pa;
     QVBoxLayout *l ;
 
+    void updateNumbers();
 
 public:
     explicit mywidget(QWidget *parent = 0);
@@ -30,9 +33,12 @@ public:
 protected:
 
     void buttonClicked();
+    void popWidgetAnim(QWidget* _widget);
+    void moveWidgetAnim(QWidget* _widget, int pos);
+
 
 signals:
-
+    void order_changed();
 
 };
 
