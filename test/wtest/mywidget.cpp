@@ -7,7 +7,7 @@ mywidget::mywidget(QWidget *parent) : QWidget(parent)
     resize(500,500);
 
     l = new QVBoxLayout(this);
-    for (int i =0; i<5 ; i++)
+    for (int i =0; i<10 ; i++)
     {
         QWidget *wdgt = new QWidget(this);
         QHBoxLayout *wdgt_layout = new QHBoxLayout(wdgt);
@@ -27,7 +27,8 @@ mywidget::mywidget(QWidget *parent) : QWidget(parent)
         QPushButton *pbtn = new QPushButton(wdgt);
         wdgt_layout->addWidget(pbtn);
         pbtn->setText("Pop");
-        pbtn->setFixedSize(200,30+i*10);
+        pbtn->setFixedSize(200,50+i*10);
+        pbtn->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding);
         pbtn->setStyleSheet("color: rgba(255, 255, 255, 255); background-color: rgb(50, 50, 50);");
         connect (pbtn, &QPushButton::clicked, this, &mywidget::buttonClicked);
 
@@ -39,107 +40,75 @@ mywidget::mywidget(QWidget *parent) : QWidget(parent)
         wdgt_layout->addWidget(name);
         l->addWidget(wdgt);
 
+
     }
     connect(this, &mywidget::order_changed, this, &mywidget::updateNumbers);
 
     pa = new QPropertyAnimation(this);
     pa->setPropertyName("geometry");
-    pa->setDuration(200);
 
-   // btn->setGeometry(width()/2, height()/2, 20 ,20);
-    //btn->setText("Съебус");
-
-
+    loop = new QEventLoop(this);
+    connect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
 
 }
 void mywidget::popWidgetAnim(QWidget* _widget)
 {
-    QRect current_widget_geometry = _widget->geometry();
+    moveWidgetAnim(_widget, 0);
+}
 
+void mywidget::swapWidgets(int widget_in_pos_a, int widget_in_pos_b)
+{
+    if (widget_in_pos_a < 0) widget_in_pos_a = 0;
+    if (widget_in_pos_a >= l->count()) widget_in_pos_a = l->count()-1;
+    if (widget_in_pos_b < 0) widget_in_pos_b = 0;
+    if (widget_in_pos_b >= l->count()) widget_in_pos_b = l->count()-1;
 
-    QWidget *dummy = new QWidget(this);
-    dummy->setFixedSize(current_widget_geometry.width(),current_widget_geometry.height());
-    dummy->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+    int upper, lower;
+    if (widget_in_pos_a < widget_in_pos_b)
+    {
+        upper = widget_in_pos_a;
+        lower =widget_in_pos_b;
+    }
+    else
+    {
+        upper = widget_in_pos_b;
+        lower =widget_in_pos_a;
+    }
 
+    moveWidgetAnim(l->itemAt(lower)->widget(), upper);
+    moveWidgetAnim(l->itemAt(upper+1)->widget(), lower);
+}
 
+void mywidget::moveWidgetAnim(QWidget* _widget, int pos)
+{
+    if (l->indexOf(_widget)!=pos)
+    {
+        if (pos < 0) pos = 0;
+        if (pos >= l->count()) pos = l->count()-1;
 
-    if (l->indexOf(_widget)){
+        QRect current_widget_geometry = _widget->geometry();
+        QRect new_widget_geometry =l->itemAt(pos)->geometry();
+        new_widget_geometry.setWidth(l->itemAt(pos)->geometry().width());
+        new_widget_geometry.setHeight(l->itemAt(pos)->geometry().height());
+        _widget->raise();
 
         l->removeWidget(_widget);
-        //l->insertWidget(index,&dummy);
-        l->insertWidget(0,dummy);
 
-        QRect new_widget_geometry = l->itemAt(1)->geometry();
-
+        pa->setDuration((int) ((float) abs(new_widget_geometry.top()-current_widget_geometry.top())*duration_factor));
 
         pa->setTargetObject(_widget);
         pa->setStartValue(current_widget_geometry);
-      //   qDebug() << "startValue:"<< pa->startValue();
+       // qDebug() << "startValue:"<< pa->startValue();
         pa->setEndValue(new_widget_geometry);
        // qDebug() << "endValue:"<< pa->endValue();
 
-        pa->start();
+         pa->start();
+        loop->exec();
 
-        l->removeWidget(dummy);
-        l->insertWidget(0,_widget);
-    }
-
-    delete dummy;
-}
-void mywidget::moveWidgetAnim(QWidget* _widget, int pos)
-{
-    if (pos < 0) pos = 0;
-    if (pos > l->count()) pos = l->count();
-     qDebug() << "selectedPos:"<< pos;
-    QRect current_widget_geometry = _widget->geometry();
-
-    QWidget *dummy_current = new QWidget(this);
-    dummy_current->setMinimumSize(current_widget_geometry.width(),current_widget_geometry.height());
-    dummy_current->setMaximumSize(current_widget_geometry.width(),current_widget_geometry.height());
-    dummy_current->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    QWidget *dummy_new = new QWidget(this);
-    dummy_new->setMinimumSize(current_widget_geometry.width(),current_widget_geometry.height());
-    dummy_new->setMaximumSize(current_widget_geometry.width(),current_widget_geometry.height());
-    dummy_new->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-
-
-
-    if (l->indexOf(_widget)!=pos){
-
-        qDebug() << "Вставка пустого виджета current_dummy в позицию " << l->indexOf(_widget);
-        l->addWidget(dummy_current);
-        l->insertWidget(l->indexOf(_widget),dummy_current);
-        qDebug() << "Теперь позиция пустого виджета current_dummy:"  << l->indexOf(dummy_current);
-        qDebug() << "Удаление перемещаемого виджета с позиции " << l->indexOf(_widget);
-        l->removeWidget(_widget);
-        qDebug() << "Теперь позиция пустого виджета current_dummy:"  << l->indexOf(dummy_current);
-        qDebug() << "Вставка пустого виджета new_dummy в позицию " << pos;
-         l->addWidget(dummy_new);
-        l->insertWidget(pos, dummy_new);
-         qDebug() << "Теперь позиция пустого виджета new_dummy:"  << l->indexOf(dummy_new);
-         qDebug() << "Размер: " << l->itemAt(l->indexOf(dummy_new))->widget()->geometry();
-
-
-        QRect new_widget_geometry = dummy_new->geometry();
-
-        qDebug() << "Размер: " << new_widget_geometry;
-          //       QRect new_widget_geometry = dummy_new->geometry();
-
-        pa->setTargetObject(_widget);
-        pa->setStartValue(current_widget_geometry);
-        qDebug() << "startValue:"<< pa->startValue();
-        pa->setEndValue(new_widget_geometry);
-        qDebug() << "endValue:"<< pa->endValue();
-
-      //  pa->start();
-        l->removeWidget(dummy_current);
-    //    l->insertWidget(pos,_widget);
-    //    l->removeWidget(dummy_new);
+        l->insertWidget(pos,_widget);
+        l->update();
 
     }
-
-   // delete dummy_current;
-    delete dummy_new;
 }
 
 
@@ -159,31 +128,19 @@ void mywidget::buttonClicked()
 {
 
     QWidget *_widget = qobject_cast<QWidget*> (sender()->parent());
-//    popWidgetAnim(_widget);
-    moveWidgetAnim(_widget,3);
+    popWidgetAnim(_widget);
+//    QTimer t;
+//    connect(&t, &QTimer::timeout, loop, &QEventLoop::quit);
+//    t.setSingleShot(true);
+//    t.start(1000);
+//    loop->exec();
+
+//   moveWidgetAnim(_widget,l->count());
+//    swapWidgets(1,8);
     emit order_changed();
 
 }
 
-//void mywidget::buttonClicked()
-//{
-//    pa->setDuration(100);
 
-//    QRect current_geometry = btn->geometry();
-//    pa->setStartValue(current_geometry);
-
-//    int new_X =  current_geometry.x()+((rand() % 200)-100);
-//    int new_Y = current_geometry.y()+((rand() % 200)-100);
-//    if (new_X+btn->width() > this->width()) new_X = this->width()-btn->width();
-//    if (new_Y+btn->height() > this->height()) new_Y = this->height()-btn->height();
-//    QRect new_geometry = QRect (new_X, new_Y, btn->width() ,btn->height());
-//    qDebug() << "Btn Current Geometry" << btn->x() << btn->y() << btn->width() << btn->height();
-//    pa->setEndValue(new_geometry);
-
-//    qDebug() << "Btn New Geometry" << btn->x() << btn->y() << btn->width() << btn->height();
-//    pa->start();
-//    pa->finished();
-
-//}
 
 
