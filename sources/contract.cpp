@@ -1,4 +1,4 @@
-#include "../headers/contract.h"
+ #include "../headers/contract.h"
 
 Contract::Contract(QObject *parent) : QObject(parent)
 {

@@ -4,36 +4,56 @@
 TableWidget::TableWidget(QFrame *parent) : QFrame(parent)
 {  
     setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    _layout = new QVBoxLayout(this);
+    main_layout = new QVBoxLayout(this);
 
     header_dock = new QFrame(this);
     header_dock_layout = new QHBoxLayout(header_dock);
-
     int left_margin = 0, top_margin = 0, right_margin = 0, bottom_margin = 0;
     header_dock_layout->getContentsMargins(&left_margin, &top_margin, &right_margin, &bottom_margin);
     header_dock_layout->setContentsMargins(left_margin, top_margin, 15, bottom_margin);
-    addHeader();
-    _layout->addWidget(header_dock);
+    createHeader();
+    main_layout->addWidget(header_dock);
 
 
     table_dock = new QWidget(this);
-   _scrollArea = new QScrollArea;
     _scrollArea->setWidget(table_dock);
-   _scrollArea->setWidgetResizable(true);
-   _layout->addWidget(_scrollArea);
 
-   QGraphicsDropShadowEffect* shadowEffect = new QGraphicsDropShadowEffect(this);
+
+
+   _scrollArea = new QScrollArea;
+   _scrollArea->setWidget(table_dock);
+   _scrollArea->setWidgetResizable(true);
+   main_layout->addWidget(_scrollArea);
+   table_dock_layout = new QVBoxLayout(table_dock);
+   table_dock_layout->setColumnStretch(0,0);
+   table_dock_layout->setColumnStretch(1,0);
+   table_dock_layout->setColumnStretch(2,1);
+   table_dock_layout->setSpacing(1);
+   table_dock->setLayout(table_dock_layout); //????
+
+   add_contract_button = new QPushButton(table_dock);
+   table_dock_layout->addWidget(add_contract_button);
+   add_contract_button->setText("Добавить контракт...");
+   add_contract_button->setStyleSheet("color: rgba(255, 255, 255, 255); background-color: rgb(50, 50, 50);");
+   connect(add_contract_button, &QPushButton::clicked, _base, &DataBase::createContract);
+
+   QSpacerItem *vspacer = new QSpacerItem(20,50,QSizePolicy::Expanding,QSizePolicy::Expanding);
+   table_dock_layout->addItem(vspacer);
+
+
+
+   /*QGraphicsDropShadowEffect* shadowEffect = new QGraphicsDropShadowEffect(this);
        shadowEffect -> setBlurRadius(9.0);
        shadowEffect -> setColor(QColor(90, 200, 40, 80));
        shadowEffect -> setOffset(4.0);
-   setGraphicsEffect(shadowEffect);
+   setGraphicsEffect(shadowEffect);*/
 
 }
 
 void TableWidget::setContent(DataBase *base)
 {
     _base = base;
-    connect(_base, &DataBase::base_changed, this, &TableWidget::draw);
+    //connect(_base, &DataBase::base_changed, this, &TableWidget::draw);
     draw();
 }
 
@@ -46,15 +66,6 @@ void TableWidget::draw()
     table_dock = new QWidget();
     _scrollArea->setWidget(table_dock);
 
-
-
-    tableDock_glayout = new QGridLayout(table_dock);
-    tableDock_glayout->setColumnStretch(0,0);
-    tableDock_glayout->setColumnStretch(1,0);
-    tableDock_glayout->setColumnStretch(2,1);
-    tableDock_glayout->setSpacing(1);
-    table_dock->setLayout(tableDock_glayout);
-
     int num_contracts=_base->getNumContracts();
     for (int i = 0; i < num_contracts; i++)
     {
@@ -65,63 +76,37 @@ void TableWidget::draw()
     }
 
 
-    add_contract_button = new QPushButton(table_dock);
-    tableDock_glayout->addWidget(add_contract_button, ++_last_entry, 0, 1, 4);
-    add_contract_button->setText("Добавить контракт...");
-    connect(add_contract_button, &QPushButton::clicked, _base, &DataBase::createContract);
 
-    QSpacerItem *vspacer = new QSpacerItem(20,50,QSizePolicy::Expanding,QSizePolicy::Expanding);
-    tableDock_glayout->addItem(vspacer,++_last_entry,0);
 
 //    QSpacerItem *hspacer = new QSpacerItem(40,20,QSizePolicy::Expanding,QSizePolicy::Expanding);
-//    tableDock_glayout->addItem(hspacer,0,4);
+//    table_dock_layout->addItem(hspacer,0,4);
 
 
 }
 
 void TableWidget::addContractWidget(Contract *contract)
 {
+    ContractWidget *contractWidget = new ContractWidget(table_dock);
+    contractWidget->setContract( contract);
+    contractWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
+    table_dock_layout->insertWidget(table_dock_layout->count()-3, contractWidget);
+  //  table_dock_layout->setRowStretch(_last_entry,1); ///???
+    updateNumbers();
+}
 
-
-      // QLabel* num = new QLabel(QString::number(_last_entry),table_dock);
-
-       QLCDNumber *num = new QLCDNumber(this);
-       num->display(QString::number(_last_entry));
-       num->setMinimumHeight(50);
-       num->setMinimumWidth(50);
-      // num->setMaximumHeight(50);
-       num->setMaximumWidth(50);
-       num->setDigitCount(3);
-       num->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
-
-//        num->setStyleSheet("border: 0px solid black;");
-        num->setStyleSheet("text-align: middle; background-color: rgb(250, 250, 250); width: 0px; border: 1px solid black;");
-        //num->setMinimumWidth(60);
-
-        tableDock_glayout->addWidget(num,_last_entry,0);
-
-        QLabel* name = new QLabel(contract->getContractName(),table_dock);
-        name->setStyleSheet("text-align: middle; color: rgb(0, 0, 0); background-color: rgb(250, 250, 250); width: 1px; border: 1px solid black;");
-        name->setWordWrap(true);
-        name->setFont(QFont("Times", 14, QFont::Normal));
-        name->setMinimumHeight(50);
-        name->setMinimumWidth(250);
-        name->setMaximumWidth(250);
-        name->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
-        //name->setMinimumWidth(400);
-
-        tableDock_glayout->addWidget(name,_last_entry, 1);
-
-        ContractWidget *contractWidget = new ContractWidget(table_dock, contract);
-        contractWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
-        tableDock_glayout->addWidget(contractWidget,_last_entry,2);
-
-
-        tableDock_glayout->setRowStretch(_last_entry,1); ///???
-        _last_entry++;
+void TableWidget::updateNumbers()
+{
+    int num_entries = table_dock_layout->count();
+    for (int i=0; i < num_entries; i ++) {
+        QWidget* _widget =(l->itemAt(i)->widget());
+        QLCDNumber* lbl = _widget->findChild<QLCDNumber*>("number");
+       // qDebug() << lbl->text();
+        lbl->display(QString::number(l->indexOf(qobject_cast<QWidget*>(_widget))));
+    }
 
 }
-void TableWidget::addHeader()
+
+void TableWidget::createHeader()
 {
     QLabel* num = new QLabel(QString("№ П/П"),header_dock);
     num->setStyleSheet("text-align: middle; background-color: rgb(230, 240, 240); width: 10px; border: 2px solid black;");

@@ -1,27 +1,48 @@
 #include "contractwidget.h"
 
-ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QFrame(parent)
+ContractWidget::ContractWidget(QWidget *parent) : QFrame(parent)
 {
+    /*** widget stylesheet **/
+    setStyleSheet("border: 1px solid grey; text-align: middle; color: rgba(255, 255, 255, 255); background-color: rgb(20, 20, 20);");
 
-//    hLayout->setSpacing(0);
-//    hLayout->setMargin(0);
+     main_layout = new QHBoxLayout (this);
 
-    _contract=contract;
-    vLayout = new QVBoxLayout(this);
-    vLayout->setSpacing(0);
-    vLayout->setMargin(0);
+
+     num = new QLCDNumber(this);
+     num->setObjectName("number");
+     num->setStyleSheet("text-align: middle; background-color: rgb(230, 240, 240); width: 10px; border: 2px solid black;");
+     num->setMinimumWidth(50);
+     num->setMaximumWidth(50);
+     num->setMinimumHeight(50);
+     num->setMaximumHeight(50);
+     main_layout->addWidget(num);
+
+     name = new QLabel(QString("Номер контракта"),header_dock); // \n
+     name->setStyleSheet("text-align: middle; background-color: rgb(230, 240, 240); width: 10px; border: 2px solid black;");
+     name->setFont(QFont("Times", 14, QFont::Normal));
+     name->setWordWrap(true);
+     name->setMinimumWidth(250);
+     name->setMaximumWidth(250);
+     name->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
+     main_layout->addWidget(name);
+
+
+    stages_box = new QWidget(this);
+    stages_box_layout = new QVBoxLayout(stages_box);
+    stages_box_layout->setSpacing(0);
+    stages_box_layout->setMargin(0);
 
     setStyleSheet("text-align: middle; background-color: rgb(200, 200, 200); width: 1px; border: 1px solid black;");
 
     /*Кнопки добавить, изменить и удалить*/
-    QWidget *button_box = new QWidget();
+    button_box = new QWidget(this);
     button_box->setMinimumHeight(30);
     button_box->setMaximumHeight(30);
 
     button_box->setStyleSheet("text-align: middle; background-color: rgb(250, 250, 250); width: 1px; border: 0px solid black;");
-    QHBoxLayout *hLayout = new QHBoxLayout(button_box);
-    hLayout->setMargin(0);
-    hLayout->setSpacing(3);
+    button_box_layout = new QHBoxLayout(button_box);
+    button_box_layout->setMargin(0);
+    button_box_layout->setSpacing(3);
 
     QSpacerItem *hspacer = new QSpacerItem(50,30,QSizePolicy::Expanding,QSizePolicy::Expanding);
     hLayout->addItem(hspacer);
@@ -31,7 +52,7 @@ ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QFrame(par
     add_stage_button->setMinimumWidth(30);
     add_stage_button->setMaximumWidth(30);
     // add_stage_button->setStyleSheet("text-align: middle; background-color: rgb(250, 250, 250); width: 1px; border: 0px solid black;");
-    hLayout->addWidget(add_stage_button);
+    button_box_layout->addWidget(add_stage_button);
     connect(add_stage_button, &QPushButton::clicked, _contract, &Contract::createStage);
 
 
@@ -41,7 +62,7 @@ ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QFrame(par
     setup_contract_button->setMaximumHeight(30);
     setup_contract_button->setMinimumWidth(30);
     setup_contract_button->setMaximumWidth(30);
-    hLayout->addWidget(setup_contract_button);
+    button_box_layout->addWidget(setup_contract_button);
     connect(setup_contract_button, &QPushButton::clicked, this, &ContractWidget::setupContract);
 
     delete_contract_button = new QPushButton (QString("X"),this);
@@ -51,31 +72,20 @@ ContractWidget::ContractWidget(QWidget *parent, Contract* contract) : QFrame(par
     delete_contract_button->setMaximumWidth(30);
     connect(delete_contract_button, &QPushButton::clicked, this, &ContractWidget::showDeleteDialog);
 
-    hLayout->addWidget(delete_contract_button);       
+    button_box_layout->addWidget(delete_contract_button);
 
-    vLayout->addWidget(button_box);
+    stages_box_layout->addWidget(button_box);
     /********/
 
 
 
-    /*Содержимое */
 
-    int num_stages = _contract->getNumStages();
-    for (int i=0; i< num_stages; i++)
-    {
-         StageProgressWidget *_stage_widget = new StageProgressWidget(this);
-         _stage_widget->setStage(contract->getStage(i));
-         vLayout->addWidget(_stage_widget);
-         //tmp_stage_widget->show();
-    }
-    /*******/
-
-
-
-
-    vLayout->setSpacing(3);
+    stages_box_layout->setSpacing(3);
+    main_layout->addWidget(stages_box);
 
 }
+
+
 void ContractWidget::setupContract()
 {
     contractRedactorDialog *dial = new contractRedactorDialog (0);
@@ -84,6 +94,20 @@ void ContractWidget::setupContract()
     dial->show();
     connect(dial, &contractRedactorDialog::accepted, _contract, &Contract::imChanged);
 
+}
+
+void ContractWidget::setContract(Contract *contract)
+{
+    _contract = contract;
+    /**************!!!!!!!!!!!!!!!!!*/
+    int num_stages = _contract->getNumStages();
+    for (int i=0; i< num_stages; i++)
+    {
+         StageProgressWidget *_stage_widget = new StageProgressWidget(this);
+         _stage_widget->setStage(contract->getStage(i));
+         stages_box_layout->addWidget(_stage_widget);
+         //tmp_stage_widget->show();
+    }
 }
 
 

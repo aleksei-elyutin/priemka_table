@@ -57,6 +57,7 @@ stageRedactor::stageRedactor(QWidget *parent, Stage *stage):
 
     ui->_start_date_edit->setCalendarPopup(true);
     ui->_finish_date_edit->setCalendarPopup(true);
+    ui->_finish_date_edit->clearMinimumDate();
 
 //    connect(this, change(), this, apply_changes());
 

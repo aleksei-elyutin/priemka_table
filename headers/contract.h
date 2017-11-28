@@ -92,7 +92,6 @@ public slots:
 
 signals:
     void deleteMe();
-    void
     void imChanged();
 
 

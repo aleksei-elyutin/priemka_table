@@ -19,19 +19,32 @@ private:
     QVector <StageProgressWidget*> _stages_widgets;
 
     Contract* _contract;
-    QVBoxLayout *vLayout;
+
+    QHBoxLayout *main_layout;
+    QLCDNumber *num;
+    QLabel *name;
+
+    QWidget *stages_box;
+    QVBoxLayout *stages_box_layout;
+        QWidget *button_box;
+        QHBoxLayout *button_box_layout;
+
 
     MonHeaderWidget *header;
     QPushButton *add_stage_button;
     QPushButton *delete_contract_button;
     QPushButton *setup_contract_button;
 
+
+
     void showDeleteDialog();
     void setupContract();
 
 public:
-    /*explicit*/ ContractWidget(QWidget *parent, Contract* contract);
+    /*explicit*/ ContractWidget(QWidget *parent, );
+    void setContract (Contract* contract);
     ~ContractWidget();
+
 
 
 signals:

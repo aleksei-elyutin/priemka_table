@@ -17,13 +17,14 @@ class TableWidget : public QFrame
     Q_OBJECT
 private:
     DataBase *_base; //Указатель на базу данных
-    QVBoxLayout *_layout;
-    QHBoxLayout * header_dock_layout;
+    QVBoxLayout *main_layout; // Основной layout виджета
+
     QScrollArea *_scrollArea;
 
     QFrame *header_dock;
+    QHBoxLayout * header_dock_layout; //Layout заголовка таблицы
     QWidget *table_dock;
-    QGridLayout *tableDock_glayout;
+    QVBoxLayout *table_dock_layout; //Layout содержимого таблицы
 
     QPushButton *add_contract_button;
 
@@ -31,7 +32,7 @@ private:
     int _year = QDate::currentDate().year();
     int _last_entry = 1;
 
-    void addHeader();
+    void createHeader();
 
 
 public:
@@ -43,6 +44,8 @@ public:
     void setContent(DataBase *base);
 
     void setYear(int year ) {_year = year;}
+
+    void updateNumbers();
 
 
 signals:
