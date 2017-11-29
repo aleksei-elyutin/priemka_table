@@ -25,10 +25,7 @@ TableWidget::TableWidget(QFrame *parent) : QFrame(parent)
    _scrollArea->setWidgetResizable(true);
    main_layout->addWidget(_scrollArea);
    table_dock_layout = new QVBoxLayout(table_dock);
-   table_dock_layout->setColumnStretch(0,0);
-   table_dock_layout->setColumnStretch(1,0);
-   table_dock_layout->setColumnStretch(2,1);
-   table_dock_layout->setSpacing(1);
+
    table_dock->setLayout(table_dock_layout); //????
 
    add_contract_button = new QPushButton(table_dock);
@@ -98,10 +95,10 @@ void TableWidget::updateNumbers()
 {
     int num_entries = table_dock_layout->count();
     for (int i=0; i < num_entries; i ++) {
-        QWidget* _widget =(l->itemAt(i)->widget());
+        QWidget* _widget =(table_dock_layout->itemAt(i)->widget());
         QLCDNumber* lbl = _widget->findChild<QLCDNumber*>("number");
        // qDebug() << lbl->text();
-        lbl->display(QString::number(l->indexOf(qobject_cast<QWidget*>(_widget))));
+        lbl->display(QString::number(table_dock_layout->indexOf(qobject_cast<QWidget*>(_widget))));
     }
 
 }

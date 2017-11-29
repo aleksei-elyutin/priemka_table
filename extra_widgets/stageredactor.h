@@ -43,6 +43,7 @@ public:
 signals:
 
     void deleteStageRequest();
+    void setNameRequest(QString name);
 
 
 

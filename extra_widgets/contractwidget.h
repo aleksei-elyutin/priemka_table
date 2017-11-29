@@ -5,6 +5,7 @@
 #include <QVector>
 #include <QLayout>
 #include <QLabel>
+#include <QLCDNumber>
 
 #include "stageprogresswidget.h"
 #include "../headers/contract.h"
@@ -41,7 +42,7 @@ private:
     void setupContract();
 
 public:
-    /*explicit*/ ContractWidget(QWidget *parent, );
+    /*explicit*/ ContractWidget(QWidget *parent);
     void setContract (Contract* contract);
     ~ContractWidget();
 

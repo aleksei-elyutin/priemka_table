@@ -7,6 +7,11 @@ ContractWidget::ContractWidget(QWidget *parent) : QFrame(parent)
 
      main_layout = new QHBoxLayout (this);
 
+     main_layout->setStretch(0,0);
+     main_layout->setStretch(1,0);
+     main_layout->setStretch(2,1);
+     main_layout->setSpacing(1);
+
 
      num = new QLCDNumber(this);
      num->setObjectName("number");
@@ -17,7 +22,7 @@ ContractWidget::ContractWidget(QWidget *parent) : QFrame(parent)
      num->setMaximumHeight(50);
      main_layout->addWidget(num);
 
-     name = new QLabel(QString("Номер контракта"),header_dock); // \n
+     name = new QLabel(QString("Номер контракта"),this); // \n
      name->setStyleSheet("text-align: middle; background-color: rgb(230, 240, 240); width: 10px; border: 2px solid black;");
      name->setFont(QFont("Times", 14, QFont::Normal));
      name->setWordWrap(true);
@@ -45,7 +50,8 @@ ContractWidget::ContractWidget(QWidget *parent) : QFrame(parent)
     button_box_layout->setSpacing(3);
 
     QSpacerItem *hspacer = new QSpacerItem(50,30,QSizePolicy::Expanding,QSizePolicy::Expanding);
-    hLayout->addItem(hspacer);
+    button_box_layout->addItem(hspacer);
+
     add_stage_button = new QPushButton (QString("+"),this);
     add_stage_button->setMinimumHeight(30);
     add_stage_button->setMaximumHeight(30);
