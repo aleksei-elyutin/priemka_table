@@ -72,7 +72,7 @@ public:
 
     int calculateContractPriority();
 
-    static bool lessThan( Contract* s1, Contract* s2 );
+   // static bool lessThan( Contract* s1, Contract* s2 );
 
     void setFileloadStatus(bool status) {fileload_status = status;}
 
@@ -86,12 +86,12 @@ public slots:
     /**
      * @brief deleteRequest Обработка запрос на удаление к этому этапу от ГУИ
      */
-    void deleteRequest();
+    void deleteContractRequestHandler();
     void deleteStageByDelRequest(); /*SLOT*/
     void childChanged(); /*SLOT*/
 
 signals:
-    void deleteMe();
+    void deleteRequested();
     void imChanged();
 
 

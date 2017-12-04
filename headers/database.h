@@ -33,6 +33,7 @@ public:
      void readFromFile();
      void setFile(QFile *file) {_file=file;}
 
+     bool getFileloadStatus() {return fileload_status;}
 
      void pushContract(Contract *contract);
 
@@ -68,6 +69,7 @@ public slots:
 
 
 signals:
+     void base_loaded();
      void base_changed();
 
 };

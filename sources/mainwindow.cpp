@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->setupUi(this);
     file = new QFile("base.dat");
 
-    setStyleSheet("background-color: rgb(255, 255, 255);");
+    setStyleSheet("background-color: rgb(0, 0, 0);");
 
     base = new DataBase(this);
     base->setFile(file);
@@ -17,12 +17,20 @@ MainWindow::MainWindow(QWidget *parent) :
     main_table = new TableWidget();
     main_table->setContent(base);
     main_window_layout->addWidget(main_table);
+
+
     QPushButton *read = new QPushButton(this);
     read->setText("Загрузить из файла");
+    read->setStyleSheet("text-align: middle; background-color: rgb(20, 20, 20); width: 10px; "
+                                "color: rgb(255, 255, 255); border: 0px solid black;");
     QObject::connect (read, &QPushButton::clicked, this, &MainWindow::load);
+
+
     main_window_layout->addWidget(read);
     QPushButton *write = new QPushButton(this);
     write->setText("Сохранить в файл");
+    write->setStyleSheet("text-align: middle; background-color: rgb(20, 20, 20); width: 10px; "
+                                "color: rgb(255, 255, 255); border: 0px solid black;");
     QObject::connect (write, &QPushButton::clicked, this, &MainWindow::save);
     main_window_layout->addWidget(write);
 
@@ -40,9 +48,10 @@ void MainWindow::load()
         DleteDialog *purge_dialog = new DleteDialog(0);
         purge_dialog->setLabelText("Текущие записи будут удалены. Продолжить?");
 
-        connect(purge_dialog, &DleteDialog::accepted, base, &DataBase::purgeBase);
+       // connect(purge_dialog, &DleteDialog::accepted, base, &DataBase::purgeBase);
         connect(purge_dialog, &DleteDialog::accepted, base, &DataBase::readFromFile);
         connect(purge_dialog, &DleteDialog::accepted, purge_dialog, &DleteDialog::close);
+       // connect(purge_dialog, &DleteDialog::accepted, main_table , &TableWidget::reDrawAll);
         purge_dialog->show();
     }
     else if ((file->exists())&(file->size()>0))

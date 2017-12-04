@@ -14,7 +14,7 @@ Stage *Contract::createStage()
 {
     Stage *st = new Stage(this);
     pushStage(st);
-    connect(st, &Stage::deleteMe, this, &Contract::deleteStageByDelRequest);
+    connect(st, &Stage::deleteRequested, this, &Contract::deleteStageByDelRequest);
     connect(st, &Stage::imChanged, this, &Contract::childChanged);
     //calculateContractPriority();
     if (!fileload_status) emit imChanged();
@@ -57,30 +57,30 @@ int  Contract::calculateContractPriority()
     for (int i=0; i< num_stages; i++)
     {
          _priority += _stages.at(i)->calculatePriority();
-         qDebug() << "Рассчитан приоретет контракта " << this->getContractName() << " : " << _priority;
+        // qDebug() << "Рассчитан приоретет контракта " << this->getContractName() << " : " << _priority;
 
     }
     return _priority;
 }
 
 
-bool Contract::lessThan( Contract* s1, Contract* s2 )
+/*bool Contract::lessThan( Contract* s1, Contract* s2 )
 {
-     qDebug() << "Вызван оператор сравнения";
+    // qDebug() << "Вызван оператор сравнения";
     return s1->calculateContractPriority() > s2->calculateContractPriority();
 
-}
+}*/
 
 void Contract::deleteStageByDelRequest()/*SLOT*/
 {
 
     int i = _stages.indexOf(qobject_cast<Stage*>( sender()) );
-    qDebug() << "Попытка удаления этапа номер" << i << " из " << this->getNumStages() << " (имя: " << this->getStage(i)->getStageName() << ") контракта " << this->getContractName() ;
+   // qDebug() << "Попытка удаления этапа номер" << i << " из " << this->getNumStages() << " (имя: " << this->getStage(i)->getStageName() << ") контракта " << this->getContractName() ;
 
     if (deleteStage(i)){
 
         delete sender();
-        qDebug() << "Этап удален.";
+      //  qDebug() << "Этап удален.";
      }
      else
     {
@@ -88,13 +88,12 @@ void Contract::deleteStageByDelRequest()/*SLOT*/
     }
     //calculateContractPriority();
    if (!fileload_status)  emit imChanged();
-    //_stages.squeeze();
 }
 
   /*SLOTS*/
-void Contract::deleteRequest()
+void Contract::deleteContractRequestHandler()
 {
-   if (!fileload_status) emit this->deleteMe();
+   if (!fileload_status) emit this->deleteRequested();
 }
 
 void Contract::childChanged()

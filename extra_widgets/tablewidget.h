@@ -28,6 +28,8 @@ private:
 
     QPushButton *add_contract_button;
 
+    QEventLoop *loop ;
+    QPropertyAnimation *pa;
 
     int _year = QDate::currentDate().year();
     int _last_entry = 1;
@@ -40,18 +42,23 @@ public:
 
     void addContractWidget (Contract *contract);
 
-
     void setContent(DataBase *base);
 
     void setYear(int year ) {_year = year;}
 
     void updateNumbers();
 
+    void clearTable();
+
+    void createContractWidgetRequestHandler (); //SLOT
+
+    void deleteContractWidgetRequestHandler(); //SLOT
+
 
 signals:
 
 public slots:
-    void draw();
+    void reDrawAll();
 
 };
 

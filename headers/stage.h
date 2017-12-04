@@ -87,10 +87,10 @@ public slots:
     /**
      * @brief deleteRequest Обработка запрос на удаление к этому этапу от ГУИ
      */
-    void deleteRequest();
+    void deleteStageRequestHandler();
 
 signals:
-    void deleteMe();
+    void deleteRequested();
     void imChanged();
 
 };

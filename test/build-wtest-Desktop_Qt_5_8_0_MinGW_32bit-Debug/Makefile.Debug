@@ -218,11 +218,23 @@ debug/moc_mywidget.cpp: ../../../../Qt/5.8/mingw53_32/include/QtWidgets/QWidget 
 		../../../../Qt/5.8/mingw53_32/include/QtGui/qpainter.h \
 		../../../../Qt/5.8/mingw53_32/include/QtGui/qtextoption.h \
 		../../../../Qt/5.8/mingw53_32/include/QtGui/qpen.h \
-		../../../../Qt/5.8/mingw53_32/include/QtWidgets/QProgressBar \
-		../../../../Qt/5.8/mingw53_32/include/QtWidgets/qprogressbar.h \
+		../../../../Qt/5.8/mingw53_32/include/QtWidgets/QPushButton \
+		../../../../Qt/5.8/mingw53_32/include/QtWidgets/qpushbutton.h \
+		../../../../Qt/5.8/mingw53_32/include/QtWidgets/qabstractbutton.h \
+		../../../../Qt/5.8/mingw53_32/include/QtGui/qicon.h \
 		../../../../Qt/5.8/mingw53_32/include/QtCore/QTimer \
 		../../../../Qt/5.8/mingw53_32/include/QtCore/qtimer.h \
 		../../../../Qt/5.8/mingw53_32/include/QtCore/qbasictimer.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/QPropertyAnimation \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/qpropertyanimation.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/qvariantanimation.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/qeasingcurve.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/qabstractanimation.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/QRegExp \
+		../../../../Qt/5.8/mingw53_32/include/QtWidgets/QLCDNumber \
+		../../../../Qt/5.8/mingw53_32/include/QtWidgets/qlcdnumber.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/QEventLoop \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/qeventloop.h \
 		../wtest/mywidget.h \
 		debug/moc_predefs.h \
 		../../../../Qt/5.8/mingw53_32/bin/moc.exe
@@ -396,11 +408,18 @@ debug/main.o: ../wtest/main.cpp ../wtest/mainwindow.h \
 		../../../../Qt/5.8/mingw53_32/include/QtGui/qpainter.h \
 		../../../../Qt/5.8/mingw53_32/include/QtGui/qtextoption.h \
 		../../../../Qt/5.8/mingw53_32/include/QtGui/qpen.h \
-		../../../../Qt/5.8/mingw53_32/include/QtWidgets/QProgressBar \
-		../../../../Qt/5.8/mingw53_32/include/QtWidgets/qprogressbar.h \
 		../../../../Qt/5.8/mingw53_32/include/QtCore/QTimer \
 		../../../../Qt/5.8/mingw53_32/include/QtCore/qtimer.h \
-		../../../../Qt/5.8/mingw53_32/include/QtCore/qbasictimer.h
+		../../../../Qt/5.8/mingw53_32/include/QtCore/qbasictimer.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/QPropertyAnimation \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/qpropertyanimation.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/qvariantanimation.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/qeasingcurve.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/qabstractanimation.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/QRegExp \
+		../../../../Qt/5.8/mingw53_32/include/QtWidgets/QLCDNumber \
+		../../../../Qt/5.8/mingw53_32/include/QtWidgets/qlcdnumber.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/QEventLoop
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\main.o ..\wtest\main.cpp
 
 debug/mywidget.o: ../wtest/mywidget.cpp ../wtest/mywidget.h \
@@ -521,11 +540,23 @@ debug/mywidget.o: ../wtest/mywidget.cpp ../wtest/mywidget.h \
 		../../../../Qt/5.8/mingw53_32/include/QtGui/qpainter.h \
 		../../../../Qt/5.8/mingw53_32/include/QtGui/qtextoption.h \
 		../../../../Qt/5.8/mingw53_32/include/QtGui/qpen.h \
-		../../../../Qt/5.8/mingw53_32/include/QtWidgets/QProgressBar \
-		../../../../Qt/5.8/mingw53_32/include/QtWidgets/qprogressbar.h \
+		../../../../Qt/5.8/mingw53_32/include/QtWidgets/QPushButton \
+		../../../../Qt/5.8/mingw53_32/include/QtWidgets/qpushbutton.h \
+		../../../../Qt/5.8/mingw53_32/include/QtWidgets/qabstractbutton.h \
+		../../../../Qt/5.8/mingw53_32/include/QtGui/qicon.h \
 		../../../../Qt/5.8/mingw53_32/include/QtCore/QTimer \
 		../../../../Qt/5.8/mingw53_32/include/QtCore/qtimer.h \
-		../../../../Qt/5.8/mingw53_32/include/QtCore/qbasictimer.h
+		../../../../Qt/5.8/mingw53_32/include/QtCore/qbasictimer.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/QPropertyAnimation \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/qpropertyanimation.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/qvariantanimation.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/qeasingcurve.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/qabstractanimation.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/QRegExp \
+		../../../../Qt/5.8/mingw53_32/include/QtWidgets/QLCDNumber \
+		../../../../Qt/5.8/mingw53_32/include/QtWidgets/qlcdnumber.h \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/QEventLoop \
+		../../../../Qt/5.8/mingw53_32/include/QtCore/qeventloop.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\mywidget.o ..\wtest\mywidget.cpp
 
 debug/moc_mywidget.o: debug/moc_mywidget.cpp 

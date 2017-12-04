@@ -9,6 +9,8 @@
 #include <QPushButton>
 #include <QCheckBox>
 #include <QDialogButtonBox>
+#include <QEventLoop>
+#include <QPropertyAnimation>
 #include "./headers/stage.h"
 #include "monheaderwidget.h"
 #include "dletedialog.h"
@@ -58,8 +60,10 @@ private:
     void setCheckBoxesState();
     void updateStartFinishLabels();
     void updateProgress();
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
+
 
 public:
     explicit StageProgressWidget(QWidget *parent = 0);
@@ -77,7 +81,7 @@ public:
 
 
 signals:
-
+    void deleteRequested();
 
 public slots:
 

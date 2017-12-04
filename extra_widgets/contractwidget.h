@@ -13,11 +13,13 @@
 #include "dletedialog.h"
 #include "contractredactordialog.h"
 
-class ContractWidget : public QFrame
+class ContractWidget : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(int alpha READ alpha WRITE setAlpha)
+
 private:
-    QVector <StageProgressWidget*> _stages_widgets;
+    //QVector <StageProgressWidget*> _stages_widgets;
 
     Contract* _contract;
 
@@ -27,8 +29,8 @@ private:
 
     QWidget *stages_box;
     QVBoxLayout *stages_box_layout;
-        QWidget *button_box;
-        QHBoxLayout *button_box_layout;
+    QWidget *button_box;
+    QHBoxLayout *button_box_layout;
 
 
     MonHeaderWidget *header;
@@ -36,19 +38,27 @@ private:
     QPushButton *delete_contract_button;
     QPushButton *setup_contract_button;
 
-
+    int _alpha;
 
     void showDeleteDialog();
     void setupContract();
+    void addStageWidget(Stage* stage);
+    void createStageWidgetRequestHandler();
+    void deleteStageWidgetRequestHandler();
+    int alpha() {return _alpha;}
+    void setAlpha(int a);
+
 
 public:
-    /*explicit*/ ContractWidget(QWidget *parent);
+    explicit ContractWidget(QWidget *parent = 0);
     void setContract (Contract* contract);
     ~ContractWidget();
-
+    void reDrawAll();
+    void clearContractWidget();
 
 
 signals:
+    void deleteRequested();
 
 public slots:
 };

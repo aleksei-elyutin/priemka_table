@@ -23,7 +23,9 @@ SOURCES += \
 #    ../../sources/stage.cpp \
 #    ../../extra_widgets/monheaderwidget.cpp \
 #     ../../extra_widgets/tablewidget.cpp
-    mywidget.cpp
+    mywidget.cpp \
+    mywidgetbox.cpp
+
 
 HEADERS  += \
 #     ../../extra_widgets/stageprogresswidget.h \
@@ -33,4 +35,5 @@ HEADERS  += \
 #    mainwindow.h \
 #    ../../extra_widgets/monheaderwidget.h \
 #     ../../extra_widgets/tablewidget.h
-    mywidget.h
+    mywidget.h \
+    mywidgetbox.h

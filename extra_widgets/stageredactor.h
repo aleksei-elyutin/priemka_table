@@ -35,7 +35,7 @@ public slots:
 
 public:
     explicit stageRedactor(QWidget *parent = 0);
-    stageRedactor(QWidget *parent, Stage* stage);
+    //stageRedactor(QWidget *parent, Stage* stage);
     ~stageRedactor();
 
     void setStage(Stage *stage);

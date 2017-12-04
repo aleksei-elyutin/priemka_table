@@ -16,13 +16,13 @@
 #include <QEventLoop>
 
 
-
 class mywidget : public QWidget
 {
     Q_OBJECT
 
 private:
 //    QPushButton *btn;
+
     QPropertyAnimation *pa;
     QEventLoop *loop ;
     QVBoxLayout *l ;
@@ -47,4 +47,5 @@ signals:
 
 };
 
-#endif // MYWIDGET_H
+
+    #endif // MYWIDGET_H

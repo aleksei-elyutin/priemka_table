@@ -12,8 +12,9 @@ contractRedactorDialog::contractRedactorDialog(QWidget *parent) :
 void contractRedactorDialog::draw()
 {
 
-    QVBoxLayout *vlayout=new QVBoxLayout();
-    ui->scrollArea->setLayout(vlayout);
+    QWidget *stages_box = new QWidget(this);
+    QVBoxLayout *vlayout=new QVBoxLayout(stages_box);
+    ui->scrollArea->setWidget(stages_box);
 
     int num_stages=_contract->getNumStages();
     for (int i = 0; i < num_stages; i++)

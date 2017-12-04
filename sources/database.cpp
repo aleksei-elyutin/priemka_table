@@ -8,7 +8,7 @@ DataBase::DataBase(QObject *parent) : QObject(parent)
 void DataBase::pushContract(Contract *contract)
 {
     _contracts_base.push_back(contract);
-    if (!fileload_status) emit base_changed();
+    //if (!fileload_status) emit base_changed();
 
 }
 
@@ -28,11 +28,9 @@ Contract *DataBase::createContract()
 {
     Contract *ct = new Contract(this);
     _contracts_base.push_back(ct);
-    connect(ct, &Contract::deleteMe, this, &DataBase::deleteContractByDelRequest);
+    connect(ct, &Contract::deleteRequested, this, &DataBase::deleteContractByDelRequest);
     connect(ct, &Contract::imChanged, this, &DataBase::childChanged);
-    qSort(_contracts_base.begin(), _contracts_base.end(), Contract::lessThan);
-    if (!fileload_status) emit base_changed();
-   // qDebug() << "Сигнал: база изменена createContract";
+    //if (!fileload_status) emit base_changed();
     return ct;
 }
 
@@ -61,11 +59,11 @@ void DataBase::purgeBase()
 
         for (int st = contract_size-1; st >= 0; st--)
         {
-            _contracts_base.at(c)->getStage(st)->deleteRequest();
+            _contracts_base.at(c)->getStage(st)->deleteStageRequestHandler();
         }
-         _contracts_base.at(c)->deleteRequest();
+         _contracts_base.at(c)->deleteContractRequestHandler();
     }
-    emit base_changed();
+    qDebug() << "База очищена: " << _contracts_base.size();
 }
 
 void DataBase::writeToFile()
@@ -132,6 +130,7 @@ void DataBase::writeToFile()
 
 void DataBase::readFromFile()
 {
+    purgeBase();
     if(!_file->open(QIODevice::ReadOnly))
     {
         qDebug() << "Ошибка открытия файла для чтения";
@@ -195,7 +194,7 @@ void DataBase::readFromFile()
 
     _file->close();
     fileload_status = false;
-    emit base_changed();
+   emit base_loaded();
 
 }
 
@@ -216,18 +215,17 @@ void DataBase::deleteContractByDelRequest()
     {
         qDebug() << "Ошибка при удалении контракта";
     }
-    qSort(_contracts_base.begin(), _contracts_base.end(), Contract::lessThan);
+    //qSort(_contracts_base.begin(), _contracts_base.end(), Contract::lessThan);
 
-    if (!fileload_status) emit base_changed();
-    qDebug() << "Сигнал: база изменена deleteContractByDelRequest";
-    //_stages.squeeze();
+    //if (!fileload_status) emit base_changed();
+   // qDebug() << "Сигнал: база изменена deleteContractByDelRequest";
 }
 
 
 void DataBase::childChanged()
 {
-    qSort(_contracts_base.begin(), _contracts_base.end(), Contract::lessThan);
-    if (!fileload_status) emit base_changed();
+   // qSort(_contracts_base.begin(), _contracts_base.end(), Contract::lessThan);
+    //if (!fileload_status) emit base_changed();
 
 }
 

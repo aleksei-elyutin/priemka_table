@@ -5,7 +5,8 @@ MonHeaderWidget::MonHeaderWidget(QWidget *parent) :   QWidget(parent)
 
       //setMaximumHeight(_wheight);
       setMinimumHeight(_wheight);
-      setStyleSheet("border: 1px solid black;");
+      /*setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 10px; "
+                              "color: rgb(255, 255, 255); border: 0px solid black;");*/
 
       for (int i=1; i <= 12; i++) //12
       {
