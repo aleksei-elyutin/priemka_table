@@ -14,11 +14,11 @@ class Stage: public QObject {
 private:
     QDate _start_date;
     QDate _finish_date;
-    QString _stage_name = QString("Этап без названия");
+    QString _stage_name;
     bool _is_done = false;
     bool _is_20_done = false;
     bool _is_10_done = false;
-    int priority = 0;
+    int priority;
     bool fileload_status = false;
 
 public:
@@ -91,7 +91,7 @@ public slots:
 
 signals:
     void deleteRequested();
-    void imChanged();
+    void stageChanged();
 
 };
 

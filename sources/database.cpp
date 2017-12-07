@@ -5,13 +5,6 @@ DataBase::DataBase(QObject *parent) : QObject(parent)
 
 }
 
-void DataBase::pushContract(Contract *contract)
-{
-    _contracts_base.push_back(contract);
-    //if (!fileload_status) emit base_changed();
-
-}
-
 
 int DataBase::getNumContracts()
 {
@@ -28,9 +21,8 @@ Contract *DataBase::createContract()
 {
     Contract *ct = new Contract(this);
     _contracts_base.push_back(ct);
-    connect(ct, &Contract::deleteRequested, this, &DataBase::deleteContractByDelRequest);
+    connect(ct, &Contract::deleteRequested, this, &DataBase::deleteContractRequestHandler);
     connect(ct, &Contract::imChanged, this, &DataBase::childChanged);
-    //if (!fileload_status) emit base_changed();
     return ct;
 }
 
@@ -194,13 +186,13 @@ void DataBase::readFromFile()
 
     _file->close();
     fileload_status = false;
-   emit base_loaded();
+   emit baseLoaded();
 
 }
 
 
 /*SLOTS*/
-void DataBase::deleteContractByDelRequest()
+void DataBase::deleteContractRequestHandler()
 {
     int i = _contracts_base.indexOf(qobject_cast<Contract*>( sender()) );
     qDebug() << "Попытка удаления контракта номер" << i << this->getNumContracts()

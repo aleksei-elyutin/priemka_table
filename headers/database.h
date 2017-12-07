@@ -35,7 +35,6 @@ public:
 
      bool getFileloadStatus() {return fileload_status;}
 
-     void pushContract(Contract *contract);
 
      /**
       * @brief getNumContracts Получить количество контрактов
@@ -64,13 +63,13 @@ public:
 
 
 public slots:
-     void deleteContractByDelRequest();/*SLOT*/
+     void deleteContractRequestHandler();/*SLOT*/
      void childChanged(); /*SLOT*/
 
 
 signals:
-     void base_loaded();
-     void base_changed();
+     void baseLoaded();
+     void baseChanged();
 
 };
 

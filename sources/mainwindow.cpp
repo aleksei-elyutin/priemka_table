@@ -66,7 +66,7 @@ void MainWindow::save()
         DleteDialog *rewrite_dialog = new DleteDialog(0);
         rewrite_dialog->setLabelText("Файл существует и не пуст. Перезаписать?");
 
-        file->
+        //file->
         connect(rewrite_dialog, &DleteDialog::accepted, base, &DataBase::writeToFile);
         connect(rewrite_dialog, &DleteDialog::accepted, rewrite_dialog, &DleteDialog::close);
         rewrite_dialog->show();

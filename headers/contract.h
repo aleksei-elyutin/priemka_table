@@ -87,8 +87,8 @@ public slots:
      * @brief deleteRequest Обработка запрос на удаление к этому этапу от ГУИ
      */
     void deleteContractRequestHandler();
-    void deleteStageByDelRequest(); /*SLOT*/
-    void childChanged(); /*SLOT*/
+    void deleteStageRequestHandler(); /*SLOT*/
+    void stageChangeHandler(); /*SLOT*/
 
 signals:
     void deleteRequested();

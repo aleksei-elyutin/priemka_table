@@ -14,8 +14,8 @@ Stage *Contract::createStage()
 {
     Stage *st = new Stage(this);
     pushStage(st);
-    connect(st, &Stage::deleteRequested, this, &Contract::deleteStageByDelRequest);
-    connect(st, &Stage::imChanged, this, &Contract::childChanged);
+    connect(st, &Stage::deleteRequested, this, &Contract::deleteStageRequestHandler);
+    connect(st, &Stage::stageChanged, this, &Contract::stageChangeHandler);
     //calculateContractPriority();
     if (!fileload_status) emit imChanged();
     return st;
@@ -71,7 +71,7 @@ int  Contract::calculateContractPriority()
 
 }*/
 
-void Contract::deleteStageByDelRequest()/*SLOT*/
+void Contract::deleteStageRequestHandler()/*SLOT*/
 {
 
     int i = _stages.indexOf(qobject_cast<Stage*>( sender()) );
@@ -96,7 +96,7 @@ void Contract::deleteContractRequestHandler()
    if (!fileload_status) emit this->deleteRequested();
 }
 
-void Contract::childChanged()
+void Contract::stageChangeHandler()
 {
     calculateContractPriority();
     if (!fileload_status) emit imChanged();

@@ -5,14 +5,20 @@ TableWidget::TableWidget(QFrame *parent) : QFrame(parent)
 {  
     setFrameStyle(QFrame::Panel | QFrame::Sunken);
     main_layout = new QVBoxLayout(this);
+    main_layout->setSpacing(0);
+
 
     header_dock = new QFrame(this);
+
     header_dock ->setStyleSheet("text-align: middle; background-color: rgb(20, 20, 20); width: 10px; "
                             "color: rgb(255, 255, 255); border: 0px solid grey;");
     header_dock_layout = new QHBoxLayout(header_dock);
+    header_dock_layout->setSpacing(3);
+
     int left_margin = 0, top_margin = 0, right_margin = 0, bottom_margin = 0;
     header_dock_layout->getContentsMargins(&left_margin, &top_margin, &right_margin, &bottom_margin);
-    header_dock_layout->setContentsMargins(left_margin, top_margin, 15, bottom_margin);
+    //header_dock_layout->setContentsMargins(left_margin, top_margin, 15, bottom_margin);
+
     createHeader();
     main_layout->addWidget(header_dock);
 
@@ -30,10 +36,15 @@ TableWidget::TableWidget(QFrame *parent) : QFrame(parent)
                               "color: rgb(255, 255, 255); border: 0px solid black;");;
    _scrollArea->setWidget(table_dock);
    _scrollArea->setWidgetResizable(true);
+   _scrollArea->setContentsMargins(0,0,0,0);
    main_layout->addWidget(_scrollArea);
    table_dock_layout = new QVBoxLayout(table_dock);
+   table_dock_layout->setSpacing(0);
 
-   table_dock->setLayout(table_dock_layout); //????
+
+
+   //table_dock->setLayout(table_dock_layout); //????
+   table_dock_layout->setContentsMargins(0, top_margin,  right_margin, bottom_margin);
 
    add_contract_button = new QPushButton(table_dock);
    table_dock_layout->addWidget(add_contract_button);
@@ -61,7 +72,7 @@ TableWidget::TableWidget(QFrame *parent) : QFrame(parent)
 void TableWidget::setContent(DataBase *base)
 {
     _base = base;
-    connect(_base, &DataBase::base_loaded, this, &TableWidget::reDrawAll);
+    connect(_base, &DataBase::baseLoaded, this, &TableWidget::reDrawAll);
     reDrawAll();
 }
 
@@ -142,7 +153,7 @@ void TableWidget::updateNumbers()
 void TableWidget::createHeader()
 {
     QLabel* num = new QLabel(QString("№ П/П"),header_dock);
-    num->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 10px; "
+    num->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 0px; "
                        "color: rgb(255, 255, 255); border: 1px solid grey;");
     num->setMinimumWidth(50);
     num->setMaximumWidth(50);
@@ -150,7 +161,7 @@ void TableWidget::createHeader()
     num->setMaximumHeight(50);
     header_dock_layout->addWidget(num);
     QLabel* name = new QLabel(QString("Наименование контракта"),header_dock); // \n
-    name->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 10px; "
+    name->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 0px; "
                         "color: rgb(255, 255, 255); border: 1px solid grey;");
     name->setWordWrap(true);
     name->setMinimumWidth(250);
@@ -158,13 +169,18 @@ void TableWidget::createHeader()
     name->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
     header_dock_layout->addWidget(name);
 
-    MonHeaderWidget* header = new MonHeaderWidget(header_dock);
+
+    QWidget* monthes_dock = new QWidget (header_dock);
+    QVBoxLayout* monthes_dock_layout = new QVBoxLayout(monthes_dock);
+    monthes_dock_layout->setContentsMargins(3,0,0,0);
+    MonHeaderWidget* header = new MonHeaderWidget(monthes_dock);
+    monthes_dock_layout->addWidget(header);
     header->setYear(2017); ///Изменить!!!
     header->setVerticalSize(50);
     header->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
-    header->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 10px; "
+    header->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 0px; "
                           "color: rgb(255, 255, 255); border: 1px solid grey;");
-    header_dock_layout->addWidget(header);
+    header_dock_layout->addWidget(monthes_dock);
 
 }
 

@@ -4,6 +4,14 @@
 Stage::Stage(QObject *parent) : QObject(parent)
 {
 
+    _start_date = QDate(QDate::currentDate().year(),1,1);
+    _finish_date = QDate(QDate::currentDate().year(),12,31);
+    _stage_name = QString("** Новый этап **");
+
+    _is_done = false;
+    _is_20_done = false;
+    _is_10_done = false;
+    priority = calculatePriority();
 
 }
 

@@ -7,11 +7,6 @@
 #include "extra_widgets/tablewidget.h"
 #include "headers/database.h"
 
-void purge_base_confirm()
-{
-
-
-}
 
 int main(int argc, char *argv[])
 {

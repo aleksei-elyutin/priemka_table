@@ -10,11 +10,7 @@ void stageRedactor::applyChanges()
         _stage->setFinishDate(ui->_finish_date_edit->date());
         _stage->setStageName(ui->textEdit->toPlainText());
     }
-
-
-
 }
-
 
 
 void stageRedactor::showDeleteDialog()
@@ -52,23 +48,6 @@ stageRedactor::stageRedactor(QWidget *parent) :
     connect(ui->pushButton, &QPushButton::clicked, this, &stageRedactor::showDeleteDialog);
 
 }
-
-//stageRedactor::stageRedactor(QWidget *parent, Stage *stage):
-//    QWidget(parent),
-//    ui(new Ui::stageRedactor)
-//{
-//   // setStyleSheet("text-align: middle; background-color: rgb(20, 20, 20); width: 10px; "
-//   //                         "color: rgb(255, 255, 255); border: 0px solid black;");
-//    ui->setupUi(this);
-//    setStage(stage);
-
-//    ui->_start_date_edit->setCalendarPopup(true);
-//    ui->_finish_date_edit->setCalendarPopup(true);
-//    ui->_finish_date_edit->clearMinimumDate();
-
-////    connect(this, change(), this, apply_changes());
-
-//}
 
 stageRedactor::~stageRedactor()
 {
