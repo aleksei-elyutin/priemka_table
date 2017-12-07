@@ -74,6 +74,10 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
                                   "color: rgb(255, 255, 255); border: 0px solid black;");
     chkBoxesContainerLayout->addWidget(_done_checkbox);
 
+
+    QSpacerItem *chkbox_spacer = new QSpacerItem(0,0,QSizePolicy::Expanding,QSizePolicy::Expanding);
+    chkBoxesContainerLayout->addItem(chkbox_spacer);
+
     _widget_layout->addWidget(chkBoxesContainer);
 
 
@@ -169,8 +173,9 @@ void StageProgressWidget::draw()
     }
 
 
-    QResizeEvent rse = QResizeEvent(QSize(),QSize());
-    resizeEvent(&rse);
+
+//    QResizeEvent rse = QResizeEvent(QSize(),QSize());
+//    resizeEvent(&rse);
     updateStartFinishLabels();
 
 }
