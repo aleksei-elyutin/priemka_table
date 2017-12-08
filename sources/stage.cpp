@@ -27,7 +27,7 @@ void Stage::setStartDate(QDate startdate)
 //        _start_date = QDate::currentDate();
 //        //qDebug() << "Invalid start_date. StartDate must be < finish_date:" <<  _finish_date.toString("yyyy.MMMM.dddd");
 //    }
- //  if (!fileload_status)  emit imChanged();
+   if (!fileload_status)  emit stageChanged();
 
 }
 void Stage::setFinishDate(QDate finishdate)
@@ -43,13 +43,13 @@ void Stage::setFinishDate(QDate finishdate)
 //        _finish_date = QDate::currentDate();
 //      // qDebug() << "Invalid start_date. StartDate must be < finish_date:" << _finish_date.toString("yyyy.MMMM.dddd");
 //    }
-  //  if (!fileload_status) emit imChanged();
+    if (!fileload_status) emit stageChanged();
 }
 
 void Stage::setStageName(QString name)
 {
     _stage_name = name;
- //  if (!fileload_status)  emit imChanged();
+   if (!fileload_status)  emit stageChanged();
 }
 
 void Stage::setDoneStatus(int status)
@@ -60,7 +60,7 @@ void Stage::setDoneStatus(int status)
     }
     else _is_done = false;
     calculatePriority();
- //   if (!fileload_status) emit imChanged();
+  //  if (!fileload_status) emit stageChanged();
 }
 
 void Stage::setLeft10Status(int status)
@@ -71,7 +71,7 @@ void Stage::setLeft10Status(int status)
     }
     else _is_10_done = false;
     calculatePriority();
- //   if (!fileload_status) emit imChanged();
+ //   if (!fileload_status) emit stageChanged();
 }
 
 void Stage::setLeft20Status(int status)
@@ -82,7 +82,7 @@ void Stage::setLeft20Status(int status)
     }
     else _is_20_done = false;
     calculatePriority();
-   // if (!fileload_status) emit imChanged();
+  //  if (!fileload_status) emit stageChanged();
 }
 
 
@@ -106,6 +106,36 @@ int Stage::calculatePriority()
     else priority = 0;
     return priority;
 }
+
+//int Stage::getDaysToNearestUncheckedControlPoint()
+//{
+//    int days_left_to_finish = QDate::currentDate().daysTo(_finish_date);
+
+
+//    if ((days_left_to_finish > 20)&(!_is_20_done))
+//        {
+//            priority = 1;
+//        }
+
+//    if ((days_left == 0)&(!_is_done))
+//    {
+//        int exp = _finish_date.daysTo(QDate::currentDate());
+
+//        priority = 10;
+//    }
+
+//    else if ((days_left <= 10)&(!_is_10_done))
+//    {
+//        priority = 2;
+//    }
+
+//    else i
+//    else priority = 0;
+//    return priority;
+//}
+
+
+
 
 
 void Stage::deleteStageRequestHandler()

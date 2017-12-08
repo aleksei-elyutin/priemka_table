@@ -83,6 +83,9 @@ public:
 
     int calculatePriority();
 
+
+    int getDaysToNearestUncheckedControlPoint();
+
 public slots:
     /**
      * @brief deleteRequest Обработка запрос на удаление к этому этапу от ГУИ

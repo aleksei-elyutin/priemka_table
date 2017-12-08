@@ -26,6 +26,7 @@ private:
     QDate _curr_finish_date;
     int _selected_year;
 
+    bool _locked;
 
     QProgressBar *_progress;
     MonHeaderWidget *_monheader;
@@ -57,9 +58,14 @@ private:
     QLabel *_start_date_label;
     QLabel *_finish_date_label;
 
+    QPushButton *decrease_year_button;
+    QPushButton *increase_year_button;
+    QPushButton *year_label_btn;
+
     void setCheckBoxesState();
     void updateStartFinishLabels();
     void updateProgress();
+    void selectYear(); //private SLOT for year selection
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -71,13 +77,14 @@ public:
 
     void setStage (Stage *stage);
 
-    void selectYear(int year);
-
     void draw();
 
     void setupStage();
 
     void showDeleteDialog();
+
+    void _lock();
+    void _unlock() {_locked = false;}
 
 
 signals:

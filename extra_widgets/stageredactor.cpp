@@ -10,6 +10,7 @@ void stageRedactor::applyChanges()
         _stage->setFinishDate(ui->_finish_date_edit->date());
         _stage->setStageName(ui->textEdit->toPlainText());
     }
+
 }
 
 

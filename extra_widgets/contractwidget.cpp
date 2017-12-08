@@ -65,29 +65,30 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
     add_stage_button = new QPushButton (QString("+"),this);
 //    add_stage_button->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 10px;"
 //                                  "color: rgb(255, 255, 255); border: 0px solid black;");
-    add_stage_button->setMinimumHeight(30);
-    add_stage_button->setMaximumHeight(30);
-    add_stage_button->setMinimumWidth(30);
-    add_stage_button->setMaximumWidth(30);
+    add_stage_button->setMinimumHeight(20);
+    add_stage_button->setMaximumHeight(20);
+    add_stage_button->setMinimumWidth(20);
+    add_stage_button->setMaximumWidth(20);
     button_box_layout->addWidget(add_stage_button);
 
     setup_contract_button = new QPushButton (QString("..."),this);
 //    setup_contract_button->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 10px;"
 //                              "color: rgb(255, 255, 255); border: 0px solid black;");
-    setup_contract_button->setMinimumHeight(30);
-    setup_contract_button->setMaximumHeight(30);
-    setup_contract_button->setMinimumWidth(30);
-    setup_contract_button->setMaximumWidth(30);
+    setup_contract_button->setStyleSheet("QPushButton:hover{background-color: rgb(80, 80, 80);}");
+    setup_contract_button->setMinimumHeight(20);
+    setup_contract_button->setMaximumHeight(20);
+    setup_contract_button->setMinimumWidth(20);
+    setup_contract_button->setMaximumWidth(20);
     button_box_layout->addWidget(setup_contract_button);
 
 
     delete_contract_button = new QPushButton (QString("X"),this);
 //    delete_contract_button->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 10px;"
 //                              "color: rgb(255, 255, 255); border: 0px solid black;");
-    delete_contract_button->setMinimumHeight(30);
-    delete_contract_button->setMaximumHeight(30);
-    delete_contract_button->setMinimumWidth(30);
-    delete_contract_button->setMaximumWidth(30);
+    delete_contract_button->setMinimumHeight(20);
+    delete_contract_button->setMaximumHeight(20);
+    delete_contract_button->setMinimumWidth(20);
+    delete_contract_button->setMaximumWidth(20);
 
 
     button_box_layout->addWidget(delete_contract_button);
