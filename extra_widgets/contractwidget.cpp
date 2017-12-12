@@ -11,6 +11,7 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
      main_layout->setStretch(1,0);
      main_layout->setStretch(2,1);
      main_layout->setSpacing(3);
+     main_layout->setContentsMargins(main_layout->contentsMargins().left(),0, main_layout->contentsMargins().right(),0);
 
      num = new QLCDNumber(this);
      num->setObjectName("number");
@@ -62,7 +63,11 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
     QSpacerItem *hspacer = new QSpacerItem(50,30,QSizePolicy::Expanding,QSizePolicy::Expanding);
     button_box_layout->addItem(hspacer);
 
-    add_stage_button = new QPushButton (QString("+"),this);
+    add_stage_button = new QPushButton (this);
+    QPixmap add_pixmap("://resources/button_grey_add.png");
+    QIcon add_icon(add_pixmap);
+    add_stage_button->setIcon(add_icon);
+    add_stage_button->setIconSize(QSize(20,20));
 //    add_stage_button->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 10px;"
 //                                  "color: rgb(255, 255, 255); border: 0px solid black;");
     add_stage_button->setMinimumHeight(20);
@@ -71,7 +76,11 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
     add_stage_button->setMaximumWidth(20);
     button_box_layout->addWidget(add_stage_button);
 
-    setup_contract_button = new QPushButton (QString("..."),this);
+    setup_contract_button = new QPushButton (this);
+    QPixmap pen_pixmap("://resources/pen.png");
+    QIcon pen_icon(pen_pixmap);
+    setup_contract_button->setIcon(pen_icon);
+    setup_contract_button->setIconSize(QSize(20,20));
 //    setup_contract_button->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 10px;"
 //                              "color: rgb(255, 255, 255); border: 0px solid black;");
     setup_contract_button->setStyleSheet("QPushButton:hover{background-color: rgb(80, 80, 80);}");
@@ -82,7 +91,11 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
     button_box_layout->addWidget(setup_contract_button);
 
 
-    delete_contract_button = new QPushButton (QString("X"),this);
+    delete_contract_button = new QPushButton (this);
+    QPixmap delete_pixmap(":/resources/gnome_edit_delete.png");
+    QIcon delete_icon(delete_pixmap);
+    delete_contract_button->setIcon(delete_icon);
+    delete_contract_button->setIconSize(QSize(20,20));
 //    delete_contract_button->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 10px;"
 //                              "color: rgb(255, 255, 255); border: 0px solid black;");
     delete_contract_button->setMinimumHeight(20);

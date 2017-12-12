@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/pen.png</file>
+        <file>resources/erase.png</file>
+        <file>resources/gnome_edit_delete.png</file>
+        <file>resources/key.png</file>
+        <file>resources/left_grey.png</file>
+        <file>resources/right_grey.png</file>
+        <file>resources/button_grey_add.png</file>
+    </qresource>
+</RCC>

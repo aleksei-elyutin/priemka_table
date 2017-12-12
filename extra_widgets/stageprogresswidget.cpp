@@ -47,7 +47,14 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     QSpacerItem *hspacer = new QSpacerItem(50,20,QSizePolicy::Expanding,QSizePolicy::Expanding);
     hLayout->addItem(hspacer);
 
-    setup_stage_button = new QPushButton (QString("..."),_name_button_box);
+    setup_stage_button = new QPushButton (_name_button_box); //QString("..."),
+
+    QPixmap pen_pixmap("://resources/pen.png");
+    QIcon pen_icon(pen_pixmap);
+    setup_stage_button->setIcon(pen_icon);
+    setup_stage_button->setIconSize(QSize(20,20));
+    setup_stage_button->setStyleSheet("QPushButton:hover{background-color: rgb(80, 80, 80);}");
+
     setup_stage_button->setMinimumHeight(20);
     setup_stage_button->setMaximumHeight(20);
     setup_stage_button->setMinimumWidth(20);
@@ -58,7 +65,12 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     hLayout->addWidget(setup_stage_button);
     connect(setup_stage_button, &QPushButton::clicked, this, &StageProgressWidget::setupStage);
 
-    delete_stage_button = new QPushButton (QString("X"),_name_button_box);
+    delete_stage_button = new QPushButton (_name_button_box); //QString("X"),
+    QPixmap delete_pixmap(":/resources/gnome_edit_delete.png");
+    QIcon delete_icon(delete_pixmap);
+    delete_stage_button->setIcon(delete_icon);
+    delete_stage_button->setIconSize(QSize(20,20));
+    delete_stage_button->setStyleSheet("QPushButton:hover{background-color: rgb(80, 80, 80);}");
     delete_stage_button->setMinimumHeight(20);
     delete_stage_button->setMaximumHeight(20);
     delete_stage_button->setMinimumWidth(20);
@@ -109,7 +121,11 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     QHBoxLayout *year_selector_box_Layout = new QHBoxLayout(year_selector_box);
     year_selector_box_Layout->setContentsMargins(0,0,0,0);
     year_selector_box_Layout->setSpacing(0);
-    decrease_year_button = new QPushButton (QString("<"),year_selector_box);
+    decrease_year_button = new QPushButton (year_selector_box);
+    QPixmap decrease_pixmap(":/resources/left_grey.png");
+    QIcon decrease_icon(decrease_pixmap);
+    decrease_year_button->setIcon(decrease_icon);
+    decrease_year_button->setIconSize(QSize(20,20));
     decrease_year_button->setMinimumHeight(20);
     decrease_year_button->setMaximumHeight(20);
     decrease_year_button->setMinimumWidth(20);
@@ -117,6 +133,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     decrease_year_button->setObjectName("decrease");
     year_selector_box_Layout ->addWidget(decrease_year_button);
     connect(decrease_year_button, &QPushButton::clicked, this, &StageProgressWidget::selectYear);
+
     year_label_btn = new QPushButton (QString::number(_selected_year),year_selector_box);
     year_label_btn->setMinimumHeight(20);
     year_label_btn->setMaximumHeight(20);
@@ -124,9 +141,13 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     year_label_btn->setMaximumWidth(40);
     year_label_btn->setObjectName("restore");
     connect(year_label_btn, &QPushButton::clicked, this, &StageProgressWidget::selectYear);
-
     year_selector_box_Layout ->addWidget(year_label_btn);
-    increase_year_button = new QPushButton (QString(">"),year_selector_box);
+
+    increase_year_button = new QPushButton (year_selector_box);
+    QPixmap increase_pixmap(":/resources/right_grey.png");
+    QIcon increase_icon(increase_pixmap);
+    increase_year_button->setIcon(increase_icon);
+    increase_year_button->setIconSize(QSize(20,20));
     increase_year_button->setMinimumHeight(20);
     increase_year_button->setMaximumHeight(20);
     increase_year_button->setMinimumWidth(20);
@@ -248,14 +269,23 @@ void StageProgressWidget::updateStartFinishLabels()
     /** Обновление лейблов даты начала и конца этапа */
     double _size_factor =  _monheader->getSizeFactor();
 
+    int maximum = _monheader->width();
+    int label_width = 75;
+
+    int _start_label_x_position = (_curr_start_date.dayOfYear()-1)*_size_factor;
+    if ((_start_label_x_position + label_width)>(maximum-label_width) ) _start_label_x_position = _start_label_x_position-2*label_width;
+
+    int _finish_label_x_position = (_curr_finish_date.dayOfYear()-1)*_size_factor;
+    if (_finish_label_x_position  > (maximum-label_width))  _finish_label_x_position = maximum-label_width;
+
     _start_date_label->setText(_stage->getStartDate().toString("dd.MM.yyyy"));
-    _start_date_label->setGeometry((_curr_start_date.dayOfYear()-1)*_size_factor, 0,100,20);
+    _start_date_label->setGeometry(_start_label_x_position, 0,label_width,20);
 //    _start_date_label->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
 //                                     "color: rgb(255, 255, 255); border: 0px solid black;");
 
 
     _finish_date_label->setText(_stage->getFinishDate().toString("d.MM.yyyy"));
-    _finish_date_label->setGeometry((_curr_finish_date.dayOfYear()-1)*_size_factor, 0, 100,20);
+    _finish_date_label->setGeometry(_finish_label_x_position, 0, label_width,20);
 //    _finish_date_label->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
 //                                      "color: rgb(255, 255, 255); border: 0px solid black;");
 
@@ -311,8 +341,9 @@ void StageProgressWidget::resizeEvent(QResizeEvent *event)
     int length = _size_factor*(_curr_start_date.daysTo(_curr_finish_date));
 
     _progress->setGeometry((_curr_start_date.dayOfYear()-1)*_size_factor, 0, length, _vert_size);
-    _start_date_label->setGeometry((_curr_start_date.dayOfYear()-1)*_size_factor, 0,100,20);
-    _finish_date_label->setGeometry((_curr_finish_date.dayOfYear()-1)*_size_factor, 0, 100,20);
+    //_start_date_label->setGeometry((_curr_start_date.dayOfYear()-1)*_size_factor, 0,100,20);
+    //_finish_date_label->setGeometry((_curr_finish_date.dayOfYear()-1)*_size_factor, 0, 100,20);
+    updateStartFinishLabels();
 }
 
 void StageProgressWidget::selectYear()

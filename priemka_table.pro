@@ -48,3 +48,8 @@ FORMS    += ./forms/mainwindow.ui \
     extra_widgets/dletedialog.ui
    # ./extra_widgets/forms/monheaderwidget.ui \
     #extra_widgets/stagewidget.ui
+
+DISTFILES +=
+
+RESOURCES += \
+    resources.qrc

@@ -39,7 +39,7 @@ TableWidget::TableWidget(QFrame *parent) : QFrame(parent)
    _scrollArea->setContentsMargins(0,0,0,0);
    main_layout->addWidget(_scrollArea);
    table_dock_layout = new QVBoxLayout(table_dock);
-   table_dock_layout->setSpacing(0);
+   table_dock_layout->setSpacing(3);
 
 
 
@@ -49,8 +49,10 @@ TableWidget::TableWidget(QFrame *parent) : QFrame(parent)
    add_contract_button = new QPushButton(table_dock);
    table_dock_layout->addWidget(add_contract_button);
    add_contract_button->setText("Добавить контракт...");
-   add_contract_button->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 10px; "
-                                      "color: rgb(255, 255, 255); border: 0px solid black;");
+   add_contract_button->setStyleSheet("text-align: middle; background-color: rgb(20, 20, 20); width: 10px; "
+                                      "color: rgb(50, 50, 50); border: 0px solid black; ");
+   add_contract_button->setStyleSheet("QPushButton:hover{background-color: rgb(80, 80, 80); color: rgb(255, 255, 255);}");
+   add_contract_button->setMinimumHeight(50);
    connect(add_contract_button, &QPushButton::clicked, this, &TableWidget::createContractWidgetRequestHandler);
 
    QSpacerItem *vspacer = new QSpacerItem(20,50,QSizePolicy::Expanding,QSizePolicy::Expanding);
