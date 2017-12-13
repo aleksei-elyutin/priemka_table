@@ -122,17 +122,19 @@ void ContractWidget::setupContract()
     dial->linkContract(_contract);
     dial->draw();
     dial->show();
-    connect(dial, &contractRedactorDialog::accepted, _contract, &Contract::imChanged);
+    connect(dial, &contractRedactorDialog::accepted, _contract, &Contract::contractChanged);
 
 }
 
 void ContractWidget::setContract(Contract *contract)
 {
     _contract = contract;
-    name->setText(_contract->getContractName());
+
     connect(add_stage_button, &QPushButton::clicked, this, &ContractWidget::createStageWidgetRequestHandler);
     connect(setup_contract_button, &QPushButton::clicked, this, &ContractWidget::setupContract);
     connect(delete_contract_button, &QPushButton::clicked, this, &ContractWidget::showDeleteDialog);
+    connect(_contract, &Contract::contractChanged, this, &ContractWidget::reDrawAll);
+
     reDrawAll();
 
 }
@@ -148,7 +150,7 @@ void ContractWidget::reDrawAll()
     {
          addStageWidget(_contract->getStage(i));
     }
-
+    name->setText(_contract->getContractName());
 }
 
 void ContractWidget::clearContractWidget()
@@ -159,6 +161,12 @@ void ContractWidget::clearContractWidget()
         {
             delete stages_box_layout->itemAt(i)->widget();
         }
+}
+
+void ContractWidget::setUnlock(bool l)
+{
+
+    emit unlockStateChanged();
 }
 
 void ContractWidget::createStageWidgetRequestHandler()

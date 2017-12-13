@@ -39,6 +39,8 @@ private:
     QPushButton *setup_contract_button;
 
     int _alpha;
+    bool _unlocked;
+
 
     void showDeleteDialog();
     void setupContract();
@@ -56,9 +58,11 @@ public:
     void reDrawAll();
     void clearContractWidget();
 
+    void setUnlock(bool l);
 
 signals:
     void deleteRequested();
+    void unlockStateChanged();
 
 public slots:
 };

@@ -26,7 +26,7 @@ private:
     QDate _curr_finish_date;
     int _selected_year;
 
-    bool _locked;
+    bool _unlocked;
 
     QProgressBar *_progress;
     MonHeaderWidget *_monheader;
@@ -50,7 +50,6 @@ private:
     QCheckBox *_done10_checkbox;
     QCheckBox *_done20_checkbox;
 
-    QPushButton *add_stage_button;
     QPushButton *delete_stage_button;
     QPushButton *setup_stage_button;
 
@@ -83,8 +82,8 @@ public:
 
     void showDeleteDialog();
 
-    void _lock();
-    void _unlock() {_locked = false;}
+    void setUnlock(bool l);
+
 
 
 signals:

@@ -29,7 +29,7 @@ public:
      * @brief setContractName Задать имя договора
      * @param name
      */
-    void setContractName(QString name) {_contract_name = name;}
+    void setContractName(QString name);
 
     /**
      * @brief getContractName Получить имя договора
@@ -92,7 +92,7 @@ public slots:
 
 signals:
     void deleteRequested();
-    void imChanged();
+    void contractChanged();
 
 
 

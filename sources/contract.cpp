@@ -5,6 +5,12 @@ Contract::Contract(QObject *parent) : QObject(parent)
 
 }
 
+void Contract::setContractName(QString name)
+{
+    _contract_name = name;
+    if (!fileload_status)  emit contractChanged();
+}
+
 void Contract::pushStage(Stage *stage)
 {
     _stages.push_back(stage);
@@ -17,7 +23,7 @@ Stage *Contract::createStage()
     connect(st, &Stage::deleteRequested, this, &Contract::deleteStageRequestHandler);
     connect(st, &Stage::stageChanged, this, &Contract::stageChangeHandler);
     //calculateContractPriority();
-    if (!fileload_status) emit imChanged();
+    if (!fileload_status) emit contractChanged();
     return st;
 }
 
@@ -87,7 +93,7 @@ void Contract::deleteStageRequestHandler()/*SLOT*/
         qDebug() << "Ошибка при удалении этапа";
     }
     //calculateContractPriority();
-   if (!fileload_status)  emit imChanged();
+   if (!fileload_status)  emit contractChanged();
 }
 
   /*SLOTS*/
@@ -99,7 +105,7 @@ void Contract::deleteContractRequestHandler()
 void Contract::stageChangeHandler()
 {
     calculateContractPriority();
-    if (!fileload_status) emit imChanged();
+    if (!fileload_status) emit contractChanged();
 }
 
 

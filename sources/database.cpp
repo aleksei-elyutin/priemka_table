@@ -22,7 +22,7 @@ Contract *DataBase::createContract()
     Contract *ct = new Contract(this);
     _contracts_base.push_back(ct);
     connect(ct, &Contract::deleteRequested, this, &DataBase::deleteContractRequestHandler);
-    connect(ct, &Contract::imChanged, this, &DataBase::childChanged);
+    connect(ct, &Contract::contractChanged, this, &DataBase::childChanged);
     return ct;
 }
 
