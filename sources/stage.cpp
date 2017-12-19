@@ -4,45 +4,28 @@
 Stage::Stage(QObject *parent) : QObject(parent)
 {
 
-    _start_date = QDate(QDate::currentDate().year(),1,1);
-    _finish_date = QDate(QDate::currentDate().year(),12,31);
+//    _start_date = QDate(QDate::currentDate().year(),1,1);
+    _start_date = QDate(2000,1,1);
+//    _finish_date = QDate(QDate::currentDate().year(),12,31);
+    _finish_date = QDate(2020,12,31);
     _stage_name = QString("** Новый этап **");
 
     _is_done = false;
     _is_20_done = false;
     _is_10_done = false;
-    priority = calculatePriority();
 
+    priority = calculatePriority();
 }
 
 void Stage::setStartDate(QDate startdate)
 {
-   // if (startdate < _finish_date )
-    {
-        _start_date = startdate;
-        //qDebug() << "stardate:" << start_date; //TODO: use metadata for object name dbg
-    }
-   // else
-//    {
-//        _start_date = QDate::currentDate();
-//        //qDebug() << "Invalid start_date. StartDate must be < finish_date:" <<  _finish_date.toString("yyyy.MMMM.dddd");
-//    }
-   if (!fileload_status)  emit stageChanged();
+    _start_date = startdate;
+    if (!fileload_status)  emit stageChanged();
 
 }
 void Stage::setFinishDate(QDate finishdate)
 {
-//    if (finishdate > _start_date)
-     {
-        qDebug() << "Date chnged from " << _finish_date.toString("yyyy.MMMM.dddd") << "to" << finishdate.toString("yyyy.MMMM.dddd");
-            _finish_date=finishdate;
-     }
-
-//    else
-//    {
-//        _finish_date = QDate::currentDate();
-//      // qDebug() << "Invalid start_date. StartDate must be < finish_date:" << _finish_date.toString("yyyy.MMMM.dddd");
-//    }
+    _finish_date=finishdate;
     if (!fileload_status) emit stageChanged();
 }
 
@@ -107,35 +90,28 @@ int Stage::calculatePriority()
     return priority;
 }
 
-//int Stage::getDaysToNearestUncheckedControlPoint()
-//{
-//    int days_left_to_finish = QDate::currentDate().daysTo(_finish_date);
+int Stage::calculateDaysToNearestUncheckedCheckPoint()
+{
+    QDate checkpoint_10 = _finish_date.fromJulianDay(QDate::toJulianDay()-10);
+    QDate checkpoint_20 = _finish_date.fromJulianDay(QDate::toJulianDay()-20);
 
+    if (!_is_20_done)
+    {
+        _days_to_checkpoint = QDate::currentDate().daysTo(checkpoint_20);
+    }
 
-//    if ((days_left_to_finish > 20)&(!_is_20_done))
-//        {
-//            priority = 1;
-//        }
+    else if (!_is_10_done)
+    {
+        _days_to_checkpoint = QDate::currentDate().daysTo(checkpoint_10);
+    }
 
-//    if ((days_left == 0)&(!_is_done))
-//    {
-//        int exp = _finish_date.daysTo(QDate::currentDate());
+    else if (!_is_done)
+    {
+        _days_to_checkpoint = QDate::currentDate().daysTo(_finish_date);
+    }
 
-//        priority = 10;
-//    }
-
-//    else if ((days_left <= 10)&(!_is_10_done))
-//    {
-//        priority = 2;
-//    }
-
-//    else i
-//    else priority = 0;
-//    return priority;
-//}
-
-
-
+    return _days_to_checkpoint;
+}
 
 
 void Stage::deleteStageRequestHandler()

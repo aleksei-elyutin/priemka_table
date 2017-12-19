@@ -288,10 +288,7 @@ void StageProgressWidget::updateStartFinishLabels()
 //    _finish_date_label->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
 //                                      "color: rgb(255, 255, 255); border: 0px solid black;");
 
-
-
 }
-
 
 
 void StageProgressWidget::setupStage()

@@ -133,16 +133,16 @@ void ContractWidget::setContract(Contract *contract)
     connect(add_stage_button, &QPushButton::clicked, this, &ContractWidget::createStageWidgetRequestHandler);
     connect(setup_contract_button, &QPushButton::clicked, this, &ContractWidget::setupContract);
     connect(delete_contract_button, &QPushButton::clicked, this, &ContractWidget::showDeleteDialog);
-    connect(_contract, &Contract::contractChanged, this, &ContractWidget::reDrawAll);
+    connect(_contract, &Contract::contractChanged, this, &ContractWidget::draw);
 
-    reDrawAll();
+    draw();
 
 }
 
-void ContractWidget::reDrawAll()
+void ContractWidget::draw()
 {
     int number_of_layout_entries = stages_box_layout->count();
-    if (number_of_layout_entries > 1) clearContractWidget();
+    if (number_of_layout_entries > 1) clear();
     if (number_of_layout_entries < 1) qDebug() << "Some shit happened... No button 'add stage' ";
 
     int num_stages = _contract->getNumStages();
@@ -151,9 +151,10 @@ void ContractWidget::reDrawAll()
          addStageWidget(_contract->getStage(i));
     }
     name->setText(_contract->getContractName());
+
 }
 
-void ContractWidget::clearContractWidget()
+void ContractWidget::clear()
 {
     int number_of_layout_entries = stages_box_layout->count();
 
@@ -165,6 +166,11 @@ void ContractWidget::clearContractWidget()
 
 void ContractWidget::setUnlock(bool l)
 {
+    _unlocked = l;
+
+    setup_contract_button->setVisible(_unlocked);
+    delete_contract_button->setVisible(_unlocked);
+    setup_contract_button->setVisible(_unlocked);
 
     emit unlockStateChanged();
 }

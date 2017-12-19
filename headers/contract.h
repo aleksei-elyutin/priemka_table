@@ -38,11 +38,6 @@ public:
     QString getContractName() {return _contract_name;}
 
     /**
-     * @brief pushStage Добавить существующий этап
-     */
-    void pushStage(Stage *stage);
-
-    /**
      * @brief createStageСоздать новый этап
      * @return Указатель на созданный объект Stage
      */

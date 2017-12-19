@@ -55,8 +55,8 @@ public:
     explicit ContractWidget(QWidget *parent = 0);
     void setContract (Contract* contract);
     ~ContractWidget();
-    void reDrawAll();
-    void clearContractWidget();
+    void draw();
+    void clear();
 
     void setUnlock(bool l);
 

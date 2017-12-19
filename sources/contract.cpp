@@ -11,15 +11,10 @@ void Contract::setContractName(QString name)
     if (!fileload_status)  emit contractChanged();
 }
 
-void Contract::pushStage(Stage *stage)
-{
-    _stages.push_back(stage);
-}
-
 Stage *Contract::createStage()
 {
     Stage *st = new Stage(this);
-    pushStage(st);
+     _stages.push_back(st);
     connect(st, &Stage::deleteRequested, this, &Contract::deleteStageRequestHandler);
     connect(st, &Stage::stageChanged, this, &Contract::stageChangeHandler);
     //calculateContractPriority();
