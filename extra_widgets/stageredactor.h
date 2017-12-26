@@ -45,21 +45,7 @@ signals:
     void deleteStageRequest();
     void setNameRequest(QString name);
 
-
-
 };
-/*class StageDeleteDialog : public QDialog
-{
-    QVBoxLayout *vlayout;
-    QHBoxLayout *hlayout;
-    QLabel *msg_label;
-    QPushButton *ok_button;
-    QPushButton *cancel_button;
-public:
-    explicit StageDeleteDialog(QWidget *parent=0);
-     ~StageDeleteDialog();
 
-
-};*/
 
 #endif // STAGEREDACTOR_H

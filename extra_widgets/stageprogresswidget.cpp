@@ -283,7 +283,7 @@ void StageProgressWidget::updateStartFinishLabels()
 //                                     "color: rgb(255, 255, 255); border: 0px solid black;");
 
 
-    _finish_date_label->setText(_stage->getFinishDate().toString("d.MM.yyyy"));
+    _finish_date_label->setText(_stage->getFinishDate().toString("dd.MM.yyyy"));
     _finish_date_label->setGeometry(_finish_label_x_position, 0, label_width,20);
 //    _finish_date_label->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
 //                                      "color: rgb(255, 255, 255); border: 0px solid black;");

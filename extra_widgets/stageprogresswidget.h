@@ -39,12 +39,8 @@ private:
 
     QVBoxLayout *_widget_layout;
 
-    //QWidget* _progress_box;
     QWidget* _startfinish_labels_box;
     QWidget *_name_button_box;
-
-
-
 
     QCheckBox *_done_checkbox;
     QCheckBox *_done10_checkbox;

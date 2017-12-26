@@ -35,26 +35,12 @@ public:
 
      bool getFileloadStatus() {return fileload_status;}
 
-
-     /**
-      * @brief getNumContracts Получить количество контрактов
-      * @return
-      */
      int getNumContracts();
 
-     /**
-      * @brief getStage Получить указатель на экземпляр контракта по номеру
-      * @param contract_num
-      * @return
-      */
      Contract *getContract(int contract_num);
 
      Contract *createContract();
 
-     /**
-      * @brief deleteContract Удалить указатель контракт с номером contract_num и очистиь память по нему
-      * @param contract_num
-      */
 
      bool deleteContract(int contract_num);
 

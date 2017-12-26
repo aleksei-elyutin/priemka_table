@@ -62,7 +62,7 @@ public:
     int calculatePriority();
 
 
-    int getDaysToNearestUncheckedControlPoint();
+    int calculateDaysToNearestUncheckedCheckPoint();
 
 public slots:
 

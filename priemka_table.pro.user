@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 3.5.1, 2017-12-18T15:32:49. -->
+<!-- Written by QtCreator 3.5.1, 2017-12-21T11:19:24. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -208,8 +208,8 @@
     <value type="bool" key="Analyzer.Valgrind.Callgrind.EnableBranchSim">false</value>
     <value type="bool" key="Analyzer.Valgrind.Callgrind.EnableCacheSim">false</value>
     <value type="bool" key="Analyzer.Valgrind.Callgrind.EnableEventToolTips">true</value>
-    <value type="double" key="Analyzer.Valgrind.Callgrind.MinimumCostRatio">0.01</value>
-    <value type="double" key="Analyzer.Valgrind.Callgrind.VisualisationMinimumCostRatio">10</value>
+    <value type="double" key="Analyzer.Valgrind.Callgrind.MinimumCostRatio">0</value>
+    <value type="double" key="Analyzer.Valgrind.Callgrind.VisualisationMinimumCostRatio">0</value>
     <value type="bool" key="Analyzer.Valgrind.FilterExternalIssues">true</value>
     <value type="int" key="Analyzer.Valgrind.LeakCheckOnFinish">1</value>
     <value type="int" key="Analyzer.Valgrind.NumCallers">25</value>
@@ -239,8 +239,8 @@
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">priemka_table</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/aleksey/qt_projects/priemka_table/priemka_table.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">priemka_table2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/aleksey/priemka_table/priemka_table.pro</value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments"></value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">priemka_table.pro</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseDyldImageSuffix">false</value>
