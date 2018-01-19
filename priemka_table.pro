@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = priemka_table
 TEMPLATE = app
-#QMAKE_LFLAGS_RELEASE += -static -static-libgcc
+QMAKE_LFLAGS_RELEASE += -static -static-libgcc
 
 
 SOURCES += ./sources/main.cpp\

@@ -90,10 +90,10 @@ int Stage::calculatePriority()
     return priority;
 }
 
-int Stage::calculateDaysToNearestUncheckedCheckPoint()
+/*int Stage::calculateDaysToNearestUncheckedCheckPoint()
 {
-    QDate checkpoint_10 = _finish_date.fromJulianDay(QDate::toJulianDay()-10);
-    QDate checkpoint_20 = _finish_date.fromJulianDay(QDate::toJulianDay()-20);
+   QDate checkpoint_10 = _finish_date.fromJulianDay(QDate::toJulianDay()-10);
+   QDate checkpoint_20 = _finish_date.fromJulianDay(QDate::toJulianDay()-20);
 
     if (!_is_20_done)
     {
@@ -112,7 +112,7 @@ int Stage::calculateDaysToNearestUncheckedCheckPoint()
 
     return _days_to_checkpoint;
 }
-
+*/
 
 void Stage::deleteStageRequestHandler()
 {

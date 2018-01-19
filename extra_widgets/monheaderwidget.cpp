@@ -14,7 +14,7 @@ MonHeaderWidget::MonHeaderWidget(QWidget *parent) :   QWidget(parent)
 
           month->setObjectName("month_" + i);
 
-        //  month->setStyleSheet("border: 1px solid black;");
+          month->setStyleSheet("alignment: AlignCenter;");
           month->setText(QDate::longMonthName(i,QDate::StandaloneFormat));
           //qDebug() << QDate::longMonthName(i,QDate::StandaloneFormat);
           mons.push_back(month);

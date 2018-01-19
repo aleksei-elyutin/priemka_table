@@ -49,7 +49,7 @@ TableWidget::TableWidget(QFrame *parent) : QFrame(parent)
    add_contract_button = new QPushButton(table_dock);
    table_dock_layout->addWidget(add_contract_button);
    add_contract_button->setText("Добавить контракт...");
-   add_contract_button->setStyleSheet("text-align: middle; background-color: rgb(20, 20, 20); width: 10px; "
+   add_contract_button->setStyleSheet("text-align: middle; qproperty-alignment: AlignCenter; background-color: rgb(20, 20, 20); width: 10px; "
                                       "color: rgb(50, 50, 50); border: 0px solid black; ");
    add_contract_button->setStyleSheet("QPushButton:hover{background-color: rgb(80, 80, 80); color: rgb(255, 255, 255);}");
    add_contract_button->setMinimumHeight(50);
@@ -155,7 +155,8 @@ void TableWidget::updateNumbers()
 void TableWidget::createHeader()
 {
     QLabel* num = new QLabel(QString("№ П/П"),header_dock);
-    num->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 0px; "
+    num->setStyleSheet("text-align: middle; qproperty-alignment: AlignCenter;"
+                       " background-color: rgb(50, 50, 50); width: 0px; "
                        "color: rgb(255, 255, 255); border: 1px solid grey;");
     num->setMinimumWidth(50);
     num->setMaximumWidth(50);
@@ -163,7 +164,8 @@ void TableWidget::createHeader()
     num->setMaximumHeight(50);
     header_dock_layout->addWidget(num);
     QLabel* name = new QLabel(QString("Наименование контракта"),header_dock); // \n
-    name->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 0px; "
+    name->setStyleSheet("text-align: middle; qproperty-alignment: AlignCenter;"
+                        " background-color: rgb(50, 50, 50); width: 0px; "
                         "color: rgb(255, 255, 255); border: 1px solid grey;");
     name->setWordWrap(true);
     name->setMinimumWidth(250);
@@ -180,7 +182,8 @@ void TableWidget::createHeader()
     header->setYear(2017); ///Изменить!!!
     header->setVerticalSize(50);
     header->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
-    header->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 0px; "
+    header->setStyleSheet("text-align: middle; qproperty-alignment: AlignCenter;"
+                          "background-color: rgb(50, 50, 50); width: 0px; "
                           "color: rgb(255, 255, 255); border: 1px solid grey;");
     header_dock_layout->addWidget(monthes_dock);
 
