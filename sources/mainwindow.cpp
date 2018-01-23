@@ -8,31 +8,94 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->setupUi(this);
     file = new QFile("base.dat");
 
-    setStyleSheet("background-color: rgb(0, 0, 0);");
+    setStyleSheet("background-color: rgb(20, 20, 20);");
 
     base = new DataBase(this);
     base->setFile(file);
 
-    QVBoxLayout *main_window_layout = new QVBoxLayout(this);
+    main_window_layout = new QVBoxLayout(this);
+    main_window_layout->setSpacing(1);
+    main_window_layout->setContentsMargins(2,2,2,7);
+
+
     main_table = new TableWidget();
     main_table->setContent(base);
     main_window_layout->addWidget(main_table);
 
+    menu_box = new QWidget(this);
+    menu_box_layout = new QHBoxLayout(menu_box);
+    menu_box_layout->setSpacing(5);
+    menu_box_layout->setContentsMargins(10,0,10,0);
+    main_window_layout->addWidget(menu_box);
 
-    QPushButton *read = new QPushButton(this);
-    read->setText("Загрузить из файла");
-    read->setStyleSheet("text-align: middle; background-color: rgb(20, 20, 20); width: 10px; "
-                                "color: rgb(255, 255, 255); border: 0px solid black;");
-    QObject::connect (read, &QPushButton::clicked, this, &MainWindow::load);
 
 
-    main_window_layout->addWidget(read);
-    QPushButton *write = new QPushButton(this);
-    write->setText("Сохранить в файл");
-    write->setStyleSheet("text-align: middle; background-color: rgb(20, 20, 20); width: 10px; "
-                                "color: rgb(255, 255, 255); border: 0px solid black;");
-    QObject::connect (write, &QPushButton::clicked, this, &MainWindow::save);
-    main_window_layout->addWidget(write);
+
+    QPushButton *lock_button = new QPushButton(this);
+   // lock_button->setText("LOCK");
+    lock_button->setStyleSheet("QPushButton{text-align: middle; qproperty-alignment: AlignCenter;"
+                       " background-color: rgb(50, 50, 50); width: 0px; "
+                       "color: rgb(255, 255, 255); border: 0px solid grey; }"
+                       "QPushButton:hover{background-color: rgb(80, 80, 80); color: rgb(255, 255, 255);}");
+    lock_button->setMinimumWidth(50);
+    lock_button->setMaximumWidth(50);
+    lock_button->setMinimumHeight(50);
+    lock_button->setMaximumHeight(50);
+    QPixmap lock_pixmap("://resources/key.png");
+    QIcon lock_icon(lock_pixmap);
+    lock_button->setIcon(lock_icon);
+    lock_button->setIconSize(QSize(50,50));
+    menu_box_layout->addWidget(lock_button);
+    //QObject::connect (read_from_file_button, &QPushButton::clicked, this, &MainWindow::load);
+
+    QPushButton *read_from_file_button = new QPushButton(this);
+   // read_from_file_button->setText("LOAD");
+    read_from_file_button->setStyleSheet("QPushButton{text-align: middle; qproperty-alignment: AlignCenter;"
+                                         " background-color: rgb(50, 50, 50); width: 0px; "
+                                         "color: rgb(255, 255, 255); border: 0px solid grey; }"
+                                         "QPushButton:hover{background-color: rgb(80, 80, 80); color: rgb(255, 255, 255);}");
+    read_from_file_button->setMinimumWidth(50);
+    read_from_file_button->setMaximumWidth(50);
+    read_from_file_button->setMinimumHeight(50);
+    read_from_file_button->setMaximumHeight(50);
+    menu_box_layout->addWidget(read_from_file_button);
+    QPixmap read_pixmap("://resources/disk_up_arrow.png");
+    QIcon read_icon(read_pixmap);
+    read_from_file_button->setIcon(read_icon);
+    read_from_file_button->setIconSize(QSize(50,50));
+    QObject::connect (read_from_file_button, &QPushButton::clicked, this, &MainWindow::load);
+
+
+    QPushButton *write_to_file_button = new QPushButton(this);
+    //write_to_file_button->setText("SAVE");
+    write_to_file_button->setStyleSheet("QPushButton{text-align: middle; qproperty-alignment: AlignCenter;"
+                                        " background-color: rgb(50, 50, 50); width: 0px; "
+                                        "color: rgb(255, 255, 255); border: 0px solid grey; }"
+                                        "QPushButton:hover{background-color: rgb(80, 80, 80); color: rgb(255, 255, 255);}");
+    write_to_file_button->setMinimumWidth(50);
+    write_to_file_button->setMaximumWidth(50);
+    write_to_file_button->setMinimumHeight(50);
+    write_to_file_button->setMaximumHeight(50);
+    QObject::connect (write_to_file_button, &QPushButton::clicked, this, &MainWindow::save);
+    menu_box_layout->addWidget(write_to_file_button);
+    QPixmap write_pixmap("://resources/disk_down_arrow.png");
+    QIcon write_icon(write_pixmap);
+    write_to_file_button->setIcon(write_icon);
+    write_to_file_button->setIconSize(QSize(50,50));
+
+
+//    QSpacerItem *hspacer = new QSpacerItem(0,0,QSizePolicy::Expanding,QSizePolicy::Maximum);
+//    menu_box_layout->addItem(hspacer);
+    QLabel *panel = new QLabel(menu_box);
+    panel->setText("-- Строка состояния --");
+    menu_box_layout->addWidget(panel);
+    panel->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
+    panel->setMaximumHeight(50);
+    panel->setStyleSheet("background-color: rgb(50, 50, 50); width: 0px; "
+                          "color: rgb(255, 255, 255); border: 0px solid grey; }");
+
+
+
 
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, base, &DataBase::childChanged);

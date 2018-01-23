@@ -19,6 +19,12 @@ private:
     TableWidget *main_table;
     QFile *file;
 
+    QVBoxLayout *main_window_layout;
+
+    QWidget *menu_box;
+    QHBoxLayout *menu_box_layout;
+
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();

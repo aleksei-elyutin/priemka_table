@@ -113,6 +113,7 @@ void TableWidget::addContractWidget(Contract *contract)
     contractWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
     table_dock_layout->insertWidget(table_dock_layout->count()-2, contractWidget);
     connect(contractWidget, &ContractWidget::deleteRequested, this, &TableWidget::deleteContractWidgetRequestHandler);
+   // connect(this, &TableWidget::unlocked, contractWidget, &ContractWidget::setUnlock)
   //  table_dock_layout->setRowStretch(_last_entry,1); ///???
     updateNumbers();
 

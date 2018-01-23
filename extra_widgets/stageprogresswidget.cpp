@@ -5,7 +5,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
 {
 
     _selected_year = QDate::currentDate().year();
-    _unlocked = false; ///!!!!
+    _unlocked = true; ///!!!!
 
     setFrameStyle(QFrame::WinPanel | QFrame::Raised);
     setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "

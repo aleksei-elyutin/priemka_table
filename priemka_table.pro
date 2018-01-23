@@ -25,7 +25,9 @@ SOURCES += ./sources/main.cpp\
     ./extra_widgets/stageredactor.cpp \
     ./extra_widgets/tablewidget.cpp \
     ./extra_widgets/contractredactordialog.cpp \
-    extra_widgets/dletedialog.cpp
+    extra_widgets/dletedialog.cpp \
+    extra_widgets/authform.cpp \
+    sources/simplecrypt.cpp
 
 
 #INCLUDEPATH += $$PWD/ $$PWD/headers/ $$PWD/extra_widgets/
@@ -39,7 +41,9 @@ HEADERS  += ./headers/mainwindow.h \
     ./extra_widgets/stageredactor.h \
     ./extra_widgets/tablewidget.h \
     ./extra_widgets/contractredactordialog.h \
-    extra_widgets/dletedialog.h
+    extra_widgets/dletedialog.h \
+    extra_widgets/authform.h \
+    headers/simplecrypt.h
 
 
 FORMS    += ./forms/mainwindow.ui \

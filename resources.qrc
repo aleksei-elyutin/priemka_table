@@ -7,5 +7,13 @@
         <file>resources/left_grey.png</file>
         <file>resources/right_grey.png</file>
         <file>resources/button_grey_add.png</file>
+        <file>resources/disk_down_arrow.png</file>
+        <file>resources/disk_up_arrow.png</file>
+        <file>resources/floppy_black.png</file>
+        <file>resources/floppy_grey.png</file>
+        <file>resources/folder_down_arrow.png</file>
+        <file>resources/lock_icon.png</file>
+        <file>resources/save_to_disk.png</file>
+        <file>resources/unlock_icon.png</file>
     </qresource>
 </RCC>

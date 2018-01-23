@@ -56,6 +56,7 @@ public:
 
 
 signals:
+    unlocked(bool);
 
 public slots:
     void reDrawAll();
