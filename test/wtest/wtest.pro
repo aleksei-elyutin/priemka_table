@@ -24,7 +24,7 @@ SOURCES += \
 #    ../../extra_widgets/monheaderwidget.cpp \
 #     ../../extra_widgets/tablewidget.cpp
     mywidget.cpp \
-    mywidgetbox.cpp
+ #   mywidgetbox.cpp
 
 
 HEADERS  += \
@@ -36,4 +36,9 @@ HEADERS  += \
 #    ../../extra_widgets/monheaderwidget.h \
 #     ../../extra_widgets/tablewidget.h
     mywidget.h \
-    mywidgetbox.h
+
+# mywidgetbox.h
+
+FORMS += \
+    form2.ui \
+    form1.ui
