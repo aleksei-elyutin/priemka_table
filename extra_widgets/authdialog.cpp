@@ -2,31 +2,43 @@
 #include "ui_authdialog.h"
 
 AuthDialog::AuthDialog(QWidget *parent, QString hash) :
-    QWidget(parent),
-    ui(new Ui::AuthDialog)
+    QWidget(parent)//,ui(new Ui::AuthDialog)
 {
-    crypto.setKey(Q_UINT64_C(0x412773C61A177E9F)); //Ключ шифрования сгенерирован вот так: ващпрвап
+    crypto = new SimpleCrypt();
+    crypto->setKey(Q_UINT64_C(0x412773C61A177E9F)); //Ключ шифрования сгенерирован вот так: ващпрвап
     local_hash = hash;
+
+    if (hash == QString(""))
+    {
+
+        local_hash = crypto->encryptToString(QString(""));
+    }
+
+    ui = new Ui::AuthDialog();
     ui->setupUi(this);
+
 
     ui->status_label->setText("");
 
-    connect(ui->ok_button, &QPushButton::clicked, this, &AuthDialog.on_ok_button_clicked);
-    connect(ui->cancel_button, &QPushButton::clicked, this, &AuthDialog.on_cancel_button_clicked);
-    connect(ui->change_pass_button, &QPushButton::clicked, this,  &AuthDialog::on_change_pass_button_clicked);
+    connect(ui->ok_button, &QPushButton::clicked, this, &AuthDialog::on_ok_button_clicked);
+    connect(ui->cancel_button, &QPushButton::clicked, this, &AuthDialog::on_cancel_button_clicked);
+    connect(ui->change_pass_button, &QPushButton::clicked, this, &AuthDialog::on_change_button_clicked);
+
+    show();
+
 }
 
 AuthDialog::~AuthDialog()
 {
     delete ui;
-    delete change_pass_ui;
 }
 
 
 void AuthDialog::on_ok_button_clicked()
 {
-
-    if (local_hash == crypto.encryptToString(entered_password))
+   // qDebug()<<"NOT ENCRYPTED: " << "В поле: " << ui->lineEdit->text() << "хеш: " << crypto->decryptToString(local_hash);
+   // qDebug()<<"ENCRYPTED: " << "В поле: " << crypto->encryptToString(ui->lineEdit->text()) << "хеш: " << local_hash;
+    if (ui->lineEdit->text() == crypto->decryptToString(local_hash))
     {
         emit accessGranted();
         this->close();
@@ -39,15 +51,19 @@ void AuthDialog::on_ok_button_clicked()
 
 void AuthDialog::on_cancel_button_clicked()
 {
-    this->close();
+    close();
 }
 
-void AuthDialog::on_change_pass_button_clicked()
+void AuthDialog::on_change_button_clicked()
 {
-    changepass_widget = new QWidget(0);
-    change_pass_ui->setupUi(cp);
-    connect(change_pass_ui->changepass_change_button, &QPushButton::clicked, this, &AuthDialog.on_changepass_change_button_clicked);
-    connect(change_pass_ui->changepass_close_button, &QPushButton::clicked, this, &AuthDialog.on_changepass_close_button_clicked);
+    changepass_widget = new QDialog(this);
+
+    change_pass_ui = new Ui::ChangePassDialog();
+    change_pass_ui->setupUi(changepass_widget);
+
+    connect(change_pass_ui->changepass_change_button, &QPushButton::clicked, this, &AuthDialog::on_changepass_change_button_clicked);
+    connect(change_pass_ui->changepass_close_button, &QPushButton::clicked, this, &AuthDialog::on_changepass_close_button_clicked);
+    changepass_widget->show();
 }
 
 
@@ -56,11 +72,12 @@ void AuthDialog::on_change_pass_button_clicked()
 
 void AuthDialog::on_changepass_change_button_clicked()
 {
-    if (local_hash == crypto.encryptToString(change_pass_ui->lineEdit->text()))
+
+    if (change_pass_ui->lineEdit->text() == crypto->decryptToString(local_hash))
     {
         if (change_pass_ui->lineEdit_2->text()==change_pass_ui->lineEdit_3->text())
         {
-            local_hash = crypto.encryptToString(change_pass_ui->lineEdit_2->text());
+            local_hash = crypto->encryptToString(change_pass_ui->lineEdit_2->text());
             ui->status_label->setText("Пароль успешно изменен");
             emit passwordChanged();
             changepass_widget->close();
@@ -70,7 +87,7 @@ void AuthDialog::on_changepass_change_button_clicked()
     }
     else
     {
-        ui->status_label->setText("Неверный пароль!");
+        change_pass_ui->label_4->setText("Неверный пароль!");
     }
 
 }
@@ -78,4 +95,5 @@ void AuthDialog::on_changepass_change_button_clicked()
 void AuthDialog::on_changepass_close_button_clicked()
 {
     changepass_widget->close();
+    delete change_pass_ui;
 }

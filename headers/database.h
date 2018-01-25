@@ -15,6 +15,8 @@ private:
      QDate _lastInFile;
      QFile *_file;
 
+     QString secure_hash;
+
      bool fileload_status = false; //Флаг - Производится чтение из файла
 
      struct stage_structure{
@@ -45,6 +47,9 @@ public:
      bool deleteContract(int contract_num);
 
      void purgeBase();
+
+     QString getSecureHash() {return secure_hash;}
+     void setSecureHash(QString sh) {secure_hash = sh;}
 
 
 

@@ -53,6 +53,7 @@ TableWidget::TableWidget(QFrame *parent) : QFrame(parent)
                                       "color: rgb(50, 50, 50); border: 0px solid black; ");
    add_contract_button->setStyleSheet("QPushButton:hover{background-color: rgb(80, 80, 80); color: rgb(255, 255, 255);}");
    add_contract_button->setMinimumHeight(50);
+   add_contract_button->setVisible(false);
    connect(add_contract_button, &QPushButton::clicked, this, &TableWidget::createContractWidgetRequestHandler);
 
    QSpacerItem *vspacer = new QSpacerItem(20,50,QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -113,7 +114,7 @@ void TableWidget::addContractWidget(Contract *contract)
     contractWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
     table_dock_layout->insertWidget(table_dock_layout->count()-2, contractWidget);
     connect(contractWidget, &ContractWidget::deleteRequested, this, &TableWidget::deleteContractWidgetRequestHandler);
-   // connect(this, &TableWidget::unlocked, contractWidget, &ContractWidget::setUnlock)
+    connect(this, &TableWidget::unlocked, contractWidget, &ContractWidget::setUnlock);
   //  table_dock_layout->setRowStretch(_last_entry,1); ///???
     updateNumbers();
 
@@ -138,6 +139,12 @@ void TableWidget::deleteContractWidgetRequestHandler()
 {
     delete sender();
     updateNumbers();
+}
+
+void TableWidget::unlock()
+{
+    add_contract_button->setVisible(true);
+    emit unlocked();
 }
 
 

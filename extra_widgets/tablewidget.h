@@ -54,9 +54,11 @@ public:
 
     void deleteContractWidgetRequestHandler(); //SLOT
 
+    void unlock();
+
 
 signals:
-    unlocked(bool);
+    void unlocked();
 
 public slots:
     void reDrawAll();

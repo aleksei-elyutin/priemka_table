@@ -76,6 +76,7 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
     add_stage_button->setMaximumHeight(30);
     add_stage_button->setMinimumWidth(30);
     add_stage_button->setMaximumWidth(30);
+    add_stage_button->setVisible(_unlocked);
     button_box_layout->addWidget(add_stage_button);
 
     setup_contract_button = new QPushButton (this);
@@ -90,6 +91,7 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
     setup_contract_button->setMaximumHeight(30);
     setup_contract_button->setMinimumWidth(30);
     setup_contract_button->setMaximumWidth(30);
+    setup_contract_button->setVisible(_unlocked);
     button_box_layout->addWidget(setup_contract_button);
 
 
@@ -105,8 +107,7 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
     delete_contract_button->setMaximumHeight(30);
     delete_contract_button->setMinimumWidth(30);
     delete_contract_button->setMaximumWidth(30);
-
-
+    delete_contract_button->setVisible(_unlocked);
     button_box_layout->addWidget(delete_contract_button);
 
     stages_box_layout->addWidget(button_box);
@@ -167,11 +168,11 @@ void ContractWidget::clear()
         }
 }
 
-void ContractWidget::setUnlock(bool l)
+void ContractWidget::setUnlock()
 {
-    _unlocked = l;
+    _unlocked = true;
 
-    setup_contract_button->setVisible(_unlocked);
+    add_stage_button->setVisible(_unlocked);
     delete_contract_button->setVisible(_unlocked);
     setup_contract_button->setVisible(_unlocked);
 

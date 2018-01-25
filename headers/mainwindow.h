@@ -6,10 +6,7 @@
 #include <QTimer>
 #include "extra_widgets/tablewidget.h"
 #include "headers/database.h"
-
-//namespace Ui {
-//class MainWindow;
-//}
+#include "extra_widgets/authdialog.h"
 
 class MainWindow : public QWidget
 {
@@ -24,6 +21,8 @@ private:
     QWidget *menu_box;
     QHBoxLayout *menu_box_layout;
 
+    AuthDialog *auth_dial;
+
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -36,6 +35,9 @@ public:
 
 private:
     //Ui::MainWindow *ui;
+    void on_lock_button_clicked();
+    void on_action_accessGranted();
+    void on_action_passwordChanged();
 };
 
 #endif // MAINWINDOW_H

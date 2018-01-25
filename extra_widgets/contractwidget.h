@@ -39,7 +39,7 @@ private:
     QPushButton *setup_contract_button;
 
     int _alpha;
-    bool _unlocked = true;
+    bool _unlocked = false;
 
 
     void showDeleteDialog();
@@ -58,7 +58,7 @@ public:
     void draw();
     void clear();
 
-    void setUnlock(bool l);
+    void setUnlock();
 
 signals:
     void deleteRequested();

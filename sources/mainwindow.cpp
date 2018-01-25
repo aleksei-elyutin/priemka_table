@@ -46,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
     lock_button->setIcon(lock_icon);
     lock_button->setIconSize(QSize(50,50));
     menu_box_layout->addWidget(lock_button);
-    //QObject::connect (read_from_file_button, &QPushButton::clicked, this, &MainWindow::load);
+    connect (lock_button, &QPushButton::clicked, this, &MainWindow::on_lock_button_clicked);
 
     QPushButton *read_from_file_button = new QPushButton(this);
    // read_from_file_button->setText("LOAD");
@@ -148,6 +148,22 @@ void MainWindow::updateControl()
     connect(timer, &QTimer::timeout, timer, &QTimer::stop);
     timer->start(2000);
 
+}
+
+void MainWindow::on_lock_button_clicked()
+{
+    auth_dial = new AuthDialog(0, base->getSecureHash());
+    connect(auth_dial, &AuthDialog::accessGranted, this, on_action_accessGranted);
+    connect(auth_dial, &AuthDialog::passwordChanged, this, on_action_passwordChanged);
+}
+
+void MainWindow::on_action_accessGranted()
+{
+    main_table->unlock();
+}
+void MainWindow::on_action_passwordChanged()
+{
+    base->setSecureHash(auth_dial->getHash());
 }
 
 

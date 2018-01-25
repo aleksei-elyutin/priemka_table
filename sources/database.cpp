@@ -66,7 +66,15 @@ void DataBase::writeToFile()
     }
 
     /**Запись заголовка базы **/
-    /*TODO : добавить magicword */
+    QByteArray hash_8bit = secure_hash.toLocal8Bit();
+    int hash_8bit_length = hash_8bit.size()+1;
+    _file->write((char*)&hash_8bit_length,sizeof(int)); //Запись размера имени хеша пароля
+    char *hash_char = new char[hash_8bit_length];
+    strcpy(hash_char, hash_8bit.data());
+    _file->write((const char*)hash_char,hash_8bit_length); //Запись  хеша пароля
+    delete [] hash_char;
+    hash_char = NULL;
+
     qint64 creation_date_Julian = QDate::currentDate().toJulianDay(); //Дата создания
     int creation_time_msecs = QTime::currentTime().msecsSinceStartOfDay(); //Время создания
     _file->write((const char*)&creation_date_Julian,sizeof(qint64)); //Запись даты создания
@@ -130,7 +138,15 @@ void DataBase::readFromFile()
     fileload_status = true;
 
     /**Чтение заголовка базы **/
-    /*TODO : добавить magicword */
+    int hash_8bit_length = 0;
+    _file->read((char*)&hash_8bit_length,sizeof(int)); //Чтение размера хеша пароля
+    char *hash_char = new char[hash_8bit_length];
+    _file->read((char*)hash_char,hash_8bit_length); //Чтение хеша пароля
+    QByteArray hash_8bit(hash_char, hash_8bit_length);
+    secure_hash = QString::fromLocal8Bit(hash_8bit);
+    delete [] hash_char;
+    hash_char = NULL;
+
     qint64 creation_date_Julian;
     int creation_time_msecs;
     _file->read((char*)&creation_date_Julian,sizeof(qint64)); //Чтение даты создания
