@@ -26,7 +26,7 @@ private:
     QDate _curr_finish_date;
     int _selected_year;
 
-    bool _unlocked;
+    bool islocked = true;
 
     QProgressBar *_progress;
     MonHeaderWidget *_monheader;
@@ -78,9 +78,8 @@ public:
 
     void showDeleteDialog();
 
-    void setUnlock(bool l);
-
-
+    void lock();
+    void unlock();
 
 signals:
     void deleteRequested();

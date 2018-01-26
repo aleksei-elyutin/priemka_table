@@ -76,7 +76,6 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
     add_stage_button->setMaximumHeight(30);
     add_stage_button->setMinimumWidth(30);
     add_stage_button->setMaximumWidth(30);
-    add_stage_button->setVisible(_unlocked);
     button_box_layout->addWidget(add_stage_button);
 
     setup_contract_button = new QPushButton (this);
@@ -91,7 +90,6 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
     setup_contract_button->setMaximumHeight(30);
     setup_contract_button->setMinimumWidth(30);
     setup_contract_button->setMaximumWidth(30);
-    setup_contract_button->setVisible(_unlocked);
     button_box_layout->addWidget(setup_contract_button);
 
 
@@ -107,7 +105,6 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
     delete_contract_button->setMaximumHeight(30);
     delete_contract_button->setMinimumWidth(30);
     delete_contract_button->setMaximumWidth(30);
-    delete_contract_button->setVisible(_unlocked);
     button_box_layout->addWidget(delete_contract_button);
 
     stages_box_layout->addWidget(button_box);
@@ -116,6 +113,7 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
 
     stages_box_layout->setSpacing(3);
     main_layout->addWidget(stages_box);
+
 
 }
 
@@ -168,16 +166,26 @@ void ContractWidget::clear()
         }
 }
 
-void ContractWidget::setUnlock()
+void ContractWidget::unlock()
 {
-    _unlocked = true;
-
-    add_stage_button->setVisible(_unlocked);
-    delete_contract_button->setVisible(_unlocked);
-    setup_contract_button->setVisible(_unlocked);
-
-    emit unlockStateChanged();
+    islocked = false;
+    add_stage_button->setVisible(true);
+    delete_contract_button->setVisible(true);
+    setup_contract_button->setVisible(true);
+    emit unlocked();
 }
+void ContractWidget::lock()
+{
+    islocked = true;
+   // if (add_stage_button->isVisible())
+        add_stage_button->setVisible(false);
+  //  if (delete_contract_button->isVisible())
+        delete_contract_button->setVisible(false);
+ //   if (setup_contract_button->isVisible())
+        setup_contract_button->setVisible(false);
+    emit locked();
+}
+
 
 void ContractWidget::createStageWidgetRequestHandler()
 {
@@ -199,6 +207,18 @@ void ContractWidget::addStageWidget(Stage *stage)
       stage_widget->setStage(stage);
       stages_box_layout->addWidget(stage_widget);
       connect(stage_widget, &StageProgressWidget::deleteRequested, this, &ContractWidget::deleteStageWidgetRequestHandler);
+
+      if (islocked == true)
+      {
+          stage_widget->lock();
+      }
+      else
+      {
+          stage_widget->unlock();
+      }
+
+      connect(this, &ContractWidget::locked, stage_widget, &StageProgressWidget::lock);
+      connect(this, &ContractWidget::unlocked, stage_widget, &StageProgressWidget::unlock);
 }
 
 void ContractWidget::showDeleteDialog()

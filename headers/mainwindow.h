@@ -16,6 +16,8 @@ private:
     TableWidget *main_table;
     QFile *file;
 
+    QPushButton *lock_button;
+
     QVBoxLayout *main_window_layout;
 
     QWidget *menu_box;

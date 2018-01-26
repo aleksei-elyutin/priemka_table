@@ -5,7 +5,6 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
 {
 
     _selected_year = QDate::currentDate().year();
-    _unlocked = true; ///!!!!
 
     setFrameStyle(QFrame::WinPanel | QFrame::Raised);
     setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
@@ -255,8 +254,6 @@ void StageProgressWidget::draw()
         QProgressBar::chunk {background-color: rgba(0, 255, 0, 50); width: 3px; margin: 0px;}");  //Устанавливаем зеленые chunk'и  и серую заливу
     }
 
-    setUnlock(_unlocked);
-
     QResizeEvent rse = QResizeEvent(QSize(),QSize());
     resizeEvent(&rse);
     updateStartFinishLabels();
@@ -324,19 +321,29 @@ void StageProgressWidget::showDeleteDialog()
     dleteDialog->show();
 }
 
-void StageProgressWidget::setUnlock(bool l)
+void StageProgressWidget::lock()
 {
-    _unlocked = l;
+    islocked = true;
 
-    _done_checkbox->setVisible(_unlocked);
-    _done10_checkbox->setVisible(_unlocked);
-    _done20_checkbox->setVisible(_unlocked);
+    _done_checkbox->setVisible(false);
+    _done10_checkbox->setVisible(false);
+    _done20_checkbox->setVisible(false);
 
-    delete_stage_button->setVisible(_unlocked);
-    setup_stage_button->setVisible(_unlocked);
-
-    //draw();
+    delete_stage_button->setVisible(false);
+    setup_stage_button->setVisible(false);
 }
+void StageProgressWidget::unlock()
+{
+    islocked = false;
+
+    _done_checkbox->setVisible(true);
+    _done10_checkbox->setVisible(true);
+    _done20_checkbox->setVisible(true);
+
+    delete_stage_button->setVisible(true);
+    setup_stage_button->setVisible(true);
+}
+
 
 
 void StageProgressWidget::resizeEvent(QResizeEvent *event)

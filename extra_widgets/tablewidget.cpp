@@ -114,8 +114,19 @@ void TableWidget::addContractWidget(Contract *contract)
     contractWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
     table_dock_layout->insertWidget(table_dock_layout->count()-2, contractWidget);
     connect(contractWidget, &ContractWidget::deleteRequested, this, &TableWidget::deleteContractWidgetRequestHandler);
-    connect(this, &TableWidget::unlocked, contractWidget, &ContractWidget::setUnlock);
-  //  table_dock_layout->setRowStretch(_last_entry,1); ///???
+
+    if (islocked == true)
+    {
+        contractWidget->lock();
+
+    }
+    else
+    {
+        contractWidget->unlock();
+    }
+
+    connect(this, &TableWidget::unlocked, contractWidget, &ContractWidget::unlock);
+    connect(this, &TableWidget::locked, contractWidget, &ContractWidget::lock);
     updateNumbers();
 
     connect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
@@ -143,9 +154,17 @@ void TableWidget::deleteContractWidgetRequestHandler()
 
 void TableWidget::unlock()
 {
+    islocked = false;
     add_contract_button->setVisible(true);
     emit unlocked();
 }
+void TableWidget::lock()
+{
+    islocked = true;
+    add_contract_button->setVisible(false);
+    emit locked();
+}
+
 
 
 void TableWidget::updateNumbers()

@@ -36,6 +36,7 @@ private:
 
     void createHeader();
 
+    bool islocked = true;
 
 public:
     explicit TableWidget(QFrame *parent = 0);
@@ -55,10 +56,14 @@ public:
     void deleteContractWidgetRequestHandler(); //SLOT
 
     void unlock();
+    void lock();
+
+    bool isLocked() {return islocked;}
 
 
 signals:
     void unlocked();
+    void locked();
 
 public slots:
     void reDrawAll();

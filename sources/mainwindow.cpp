@@ -5,13 +5,13 @@
 MainWindow::MainWindow(QWidget *parent) :
     QWidget(parent)//, ui(new Ui::MainWindow)
 {
-    //ui->setupUi(this);
     file = new QFile("base.dat");
 
     setStyleSheet("background-color: rgb(20, 20, 20);");
 
     base = new DataBase(this);
     base->setFile(file);
+   // connect(base, &DataBase::loadedFromFile, )
 
     main_window_layout = new QVBoxLayout(this);
     main_window_layout->setSpacing(1);
@@ -31,8 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-    QPushButton *lock_button = new QPushButton(this);
-   // lock_button->setText("LOCK");
+    lock_button = new QPushButton(this);
     lock_button->setStyleSheet("QPushButton{text-align: middle; qproperty-alignment: AlignCenter;"
                        " background-color: rgb(50, 50, 50); width: 0px; "
                        "color: rgb(255, 255, 255); border: 0px solid grey; }"
@@ -41,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     lock_button->setMaximumWidth(50);
     lock_button->setMinimumHeight(50);
     lock_button->setMaximumHeight(50);
-    QPixmap lock_pixmap("://resources/key.png");
+    QPixmap lock_pixmap("://resources/lock_icon.png");
     QIcon lock_icon(lock_pixmap);
     lock_button->setIcon(lock_icon);
     lock_button->setIconSize(QSize(50,50));
@@ -49,7 +48,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (lock_button, &QPushButton::clicked, this, &MainWindow::on_lock_button_clicked);
 
     QPushButton *read_from_file_button = new QPushButton(this);
-   // read_from_file_button->setText("LOAD");
     read_from_file_button->setStyleSheet("QPushButton{text-align: middle; qproperty-alignment: AlignCenter;"
                                          " background-color: rgb(50, 50, 50); width: 0px; "
                                          "color: rgb(255, 255, 255); border: 0px solid grey; }"
@@ -67,7 +65,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     QPushButton *write_to_file_button = new QPushButton(this);
-    //write_to_file_button->setText("SAVE");
     write_to_file_button->setStyleSheet("QPushButton{text-align: middle; qproperty-alignment: AlignCenter;"
                                         " background-color: rgb(50, 50, 50); width: 0px; "
                                         "color: rgb(255, 255, 255); border: 0px solid grey; }"
@@ -84,8 +81,6 @@ MainWindow::MainWindow(QWidget *parent) :
     write_to_file_button->setIconSize(QSize(50,50));
 
 
-//    QSpacerItem *hspacer = new QSpacerItem(0,0,QSizePolicy::Expanding,QSizePolicy::Maximum);
-//    menu_box_layout->addItem(hspacer);
     QLabel *panel = new QLabel(menu_box);
     panel->setText("-- Строка состояния --");
     menu_box_layout->addWidget(panel);
@@ -102,6 +97,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timer, &QTimer::timeout, this, &MainWindow::updateControl);
 
     timer->start(1000*60*30);
+
+    load();
 
 }
 void MainWindow::load()
@@ -152,18 +149,33 @@ void MainWindow::updateControl()
 
 void MainWindow::on_lock_button_clicked()
 {
-    auth_dial = new AuthDialog(0, base->getSecureHash());
-    connect(auth_dial, &AuthDialog::accessGranted, this, on_action_accessGranted);
-    connect(auth_dial, &AuthDialog::passwordChanged, this, on_action_passwordChanged);
+    if (main_table->isLocked())
+    {
+          auth_dial = new AuthDialog(0, base->getSecureHash());
+          connect(auth_dial, &AuthDialog::accessGranted, this, on_action_accessGranted);
+          connect(auth_dial, &AuthDialog::passwordChanged, this, on_action_passwordChanged);
+    }
+    else
+    {
+        main_table->lock();
+        QPixmap lock_pixmap("://resources/lock_icon.png");
+        QIcon lock_icon(lock_pixmap);
+        lock_button->setIcon(lock_icon);
+    }
 }
 
 void MainWindow::on_action_accessGranted()
 {
     main_table->unlock();
+    QPixmap lock_pixmap("://resources/unlock_icon.png");
+    QIcon lock_icon(lock_pixmap);
+    lock_button->setIcon(lock_icon);
+
 }
 void MainWindow::on_action_passwordChanged()
 {
     base->setSecureHash(auth_dial->getHash());
+    base->writeToFile();
 }
 
 

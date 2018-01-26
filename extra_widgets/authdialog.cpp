@@ -18,6 +18,7 @@ AuthDialog::AuthDialog(QWidget *parent, QString hash) :
     ui->setupUi(this);
 
 
+
     ui->status_label->setText("");
 
     connect(ui->ok_button, &QPushButton::clicked, this, &AuthDialog::on_ok_button_clicked);

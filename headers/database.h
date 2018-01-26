@@ -53,6 +53,7 @@ public:
 
 
 
+
 public slots:
      void deleteContractRequestHandler();/*SLOT*/
      void childChanged(); /*SLOT*/
@@ -61,6 +62,9 @@ public slots:
 signals:
      void baseLoaded();
      void baseChanged();
+
+     void storedToFile(QDateTime);
+     void loadedFromFile(QDateTime);
 
 };
 

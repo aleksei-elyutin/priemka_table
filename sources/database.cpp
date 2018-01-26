@@ -123,7 +123,7 @@ void DataBase::writeToFile()
         }
     }
 
-
+    emit storedToFile(QDateTime::currentDateTime());
     _file->close();
 
 }
@@ -202,8 +202,8 @@ void DataBase::readFromFile()
 
     _file->close();
     fileload_status = false;
-   emit baseLoaded();
-
+    emit baseLoaded();
+    emit loadedFromFile(QDateTime::currentDateTime());
 }
 
 
