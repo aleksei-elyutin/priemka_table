@@ -4,11 +4,10 @@
 Stage::Stage(QObject *parent) : QObject(parent)
 {
 
-//    _start_date = QDate(QDate::currentDate().year(),1,1);
-    _start_date = QDate(2000,1,1);
-//    _finish_date = QDate(QDate::currentDate().year(),12,31);
-    _finish_date = QDate(2020,12,31);
-    _stage_name = QString("** Новый этап **");
+    _start_date = QDate(QDate::currentDate());
+    _finish_date = QDate(QDate::currentDate().year(),12,31);
+
+    _stage_name = QString("Этап без названия");
 
     _is_done = false;
     _is_20_done = false;

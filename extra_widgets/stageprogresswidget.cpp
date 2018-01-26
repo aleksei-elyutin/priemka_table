@@ -209,6 +209,13 @@ void StageProgressWidget::setStage(Stage *stage)
 void StageProgressWidget::draw()
 {
 
+    /******    ПЕРЕПИСАТЬ НАХУЙ ВСЕ  В ЭТОМ МЕТОДЕ   *****/
+    /*****************************************************/
+     /*****************************************************/
+     /*****************************************************/
+     /*****************************************************/
+
+
      _stage_name->setText(_stage->getStageName());
 
     QDate _today = QDate::currentDate();
@@ -240,18 +247,18 @@ void StageProgressWidget::draw()
 
     if ((_today.daysTo(_stage->getFinishDate()) <= 10)&(!_stage->getLeft10DoneStatus()))
     {
-        _progress->setStyleSheet("QProgressBar { border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
-        QProgressBar::chunk {background-color: rgba(255, 0, 0, 50); width: 3px; margin: 0px;}");  //Устанавливаем красные chunk'и  и серую заливу
+        _progress->setStyleSheet("QProgressBar {border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
+        QProgressBar::chunk {background-color: rgba(255, 0, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем красные chunk'и  и серую заливу
 
 
     } else if ((_today.daysTo(_stage->getFinishDate()) <= 20)&(!_stage->getLeft20DoneStatus()))
     {
         _progress->setStyleSheet("QProgressBar { border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
-        QProgressBar::chunk {background-color: rgba(255, 255, 0, 50); width: 3px; margin: 0px;}");  //Устанавливаем желтые chunk'и  и серую заливу
+        QProgressBar::chunk {background-color: rgba(255, 255, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем желтые chunk'и  и серую заливу
     } else
     {
-        _progress->setStyleSheet("QProgressBar { border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
-        QProgressBar::chunk {background-color: rgba(0, 255, 0, 50); width: 3px; margin: 0px;}");  //Устанавливаем зеленые chunk'и  и серую заливу
+        _progress->setStyleSheet("QProgressBar {  border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
+        QProgressBar::chunk {background-color: rgba(0, 255, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем зеленые chunk'и  и серую заливу
     }
 
     QResizeEvent rse = QResizeEvent(QSize(),QSize());
@@ -266,7 +273,7 @@ void StageProgressWidget::updateStartFinishLabels()
     double _size_factor =  _monheader->getSizeFactor();
 
     int maximum = _monheader->width();
-    int label_width = 75;
+    int label_width = 65;
 
     int _start_label_x_position = (_curr_start_date.dayOfYear()-1)*_size_factor;
     if ((_start_label_x_position + label_width)>(maximum-label_width) ) _start_label_x_position = _start_label_x_position-2*label_width;
@@ -276,8 +283,8 @@ void StageProgressWidget::updateStartFinishLabels()
 
     _start_date_label->setText(_stage->getStartDate().toString("dd.MM.yyyy"));
     _start_date_label->setGeometry(_start_label_x_position, 0,label_width,20);
-//    _start_date_label->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
-//                                     "color: rgb(255, 255, 255); border: 0px solid black;");
+    _start_date_label->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
+                                     "color: rgb(255, 255, 255); border: 1px solid black;");
 
 
     _finish_date_label->setText(_stage->getFinishDate().toString("dd.MM.yyyy"));

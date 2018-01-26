@@ -160,7 +160,7 @@ void ContractWidget::clear()
 {
     int number_of_layout_entries = stages_box_layout->count();
 
-        for (int i = number_of_layout_entries-2; i>=0; i--)
+        for (int i = number_of_layout_entries-1; i>0; i--)
         {
             delete stages_box_layout->itemAt(i)->widget();
         }
@@ -177,12 +177,9 @@ void ContractWidget::unlock()
 void ContractWidget::lock()
 {
     islocked = true;
-   // if (add_stage_button->isVisible())
-        add_stage_button->setVisible(false);
-  //  if (delete_contract_button->isVisible())
-        delete_contract_button->setVisible(false);
- //   if (setup_contract_button->isVisible())
-        setup_contract_button->setVisible(false);
+    add_stage_button->setVisible(false);
+    delete_contract_button->setVisible(false);
+    setup_contract_button->setVisible(false);
     emit locked();
 }
 
