@@ -56,7 +56,7 @@ public:
 
 public slots:
      void deleteContractRequestHandler();/*SLOT*/
-     void childChanged(); /*SLOT*/
+     void contractChangeHandler(); /*SLOT*/
 
 
 signals:

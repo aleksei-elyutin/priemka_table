@@ -17,7 +17,7 @@ private:
     QString _contract_name = "Контракт без названия";
     QVector <Stage *> _stages;
 
-    int _priority = 0;
+    int _priority;
     bool fileload_status = false;
 
 
@@ -40,11 +40,11 @@ public:
 
     void deleteThisContract();
 
-    int calculateContractPriority();
+    void calculateContractPriority();
 
     void setFileloadStatus(bool status) {fileload_status = status;}
 
-
+    int getPriority() {return _priority;}
 
 
 public slots:

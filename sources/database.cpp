@@ -22,7 +22,7 @@ Contract *DataBase::createContract()
     Contract *ct = new Contract(this);
     _contracts_base.push_back(ct);
     connect(ct, &Contract::deleteRequested, this, &DataBase::deleteContractRequestHandler);
-    connect(ct, &Contract::contractChanged, this, &DataBase::childChanged);
+    connect(ct, &Contract::contractChanged, this, &DataBase::contractChangeHandler);
     return ct;
 }
 
@@ -230,10 +230,9 @@ void DataBase::deleteContractRequestHandler()
 }
 
 
-void DataBase::childChanged()
+void DataBase::contractChangeHandler()
 {
    // qSort(_contracts_base.begin(), _contracts_base.end(), Contract::lessThan);
-    //if (!fileload_status) emit base_changed();
-
+   if (!fileload_status) emit baseChanged();
 }
 

@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     base->setFile(file);
    // connect(base, &DataBase::loadedFromFile, )
 
+
     main_window_layout = new QVBoxLayout(this);
     main_window_layout->setSpacing(1);
     main_window_layout->setContentsMargins(2,2,2,7);
@@ -21,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     main_table = new TableWidget();
     main_table->setContent(base);
     main_window_layout->addWidget(main_table);
+    connect (base, &DataBase::baseChanged, main_table, TableWidget::sort);
 
     menu_box = new QWidget(this);
     menu_box_layout = new QHBoxLayout(menu_box);
@@ -93,7 +95,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, base, &DataBase::childChanged);
+    connect(timer, &QTimer::timeout, base, &DataBase::contractChangeHandler);
     connect(timer, &QTimer::timeout, this, &MainWindow::updateControl);
 
     timer->start(1000*60*30);

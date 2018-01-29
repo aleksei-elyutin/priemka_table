@@ -143,6 +143,7 @@ void ContractWidget::setContract(Contract *contract)
 
 void ContractWidget::draw()
 {
+
     int number_of_layout_entries = stages_box_layout->count();
     if (number_of_layout_entries > 1) clear();
     if (number_of_layout_entries < 1) qDebug() << "Some shit happened... No button 'add stage' ";
@@ -193,10 +194,7 @@ void ContractWidget::createStageWidgetRequestHandler()
 void ContractWidget::deleteStageWidgetRequestHandler()
 {
     delete sender();
-    //Добавить сигнал о необходимости пересчета приоритета
 }
-
-
 
 void ContractWidget::addStageWidget(Stage *stage)
 {
@@ -205,17 +203,13 @@ void ContractWidget::addStageWidget(Stage *stage)
       stages_box_layout->addWidget(stage_widget);
       connect(stage_widget, &StageProgressWidget::deleteRequested, this, &ContractWidget::deleteStageWidgetRequestHandler);
 
-      if (islocked == true)
-      {
-          stage_widget->lock();
-      }
-      else
-      {
-          stage_widget->unlock();
-      }
+
+      if (islocked == true) stage_widget->lock();
+      else stage_widget->unlock();
 
       connect(this, &ContractWidget::locked, stage_widget, &StageProgressWidget::lock);
       connect(this, &ContractWidget::unlocked, stage_widget, &StageProgressWidget::unlock);
+
 }
 
 void ContractWidget::showDeleteDialog()

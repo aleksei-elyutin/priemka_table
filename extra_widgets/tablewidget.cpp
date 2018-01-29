@@ -61,21 +61,13 @@ TableWidget::TableWidget(QFrame *parent) : QFrame(parent)
 
    pa = new QPropertyAnimation(this);
    loop = new QEventLoop(this);
-
-
-
-   /*QGraphicsDropShadowEffect* shadowEffect = new QGraphicsDropShadowEffect(this);
-       shadowEffect -> setBlurRadius(9.0);
-       shadowEffect -> setColor(QColor(90, 200, 40, 80));
-       shadowEffect -> setOffset(4.0);
-   setGraphicsEffect(shadowEffect);*/
-
 }
 
 void TableWidget::setContent(DataBase *base)
 {
     _base = base;
     connect(_base, &DataBase::baseLoaded, this, &TableWidget::reDrawAll);
+    //connect(_base, &DataBase::baseChanged, this, &TableWidget::reDrawAll); //!!!!!
     reDrawAll();
 }
 
@@ -90,8 +82,6 @@ void TableWidget::reDrawAll()
     for (int i = 0; i < num_contracts; i++)
     {
             addContractWidget(_base->getContract(i));
-         /*   qDebug() << "Отрисован контракт "<<_base->getContract(i)->getContractName() << " с приритетом " <<
-                        _base->getContract(i)->calculateContractPriority();*/
     }
 
 }
@@ -107,6 +97,7 @@ void TableWidget::clearTable()
 
 
 
+
 void TableWidget::addContractWidget(Contract *contract)
 {
     ContractWidget *contractWidget = new ContractWidget(table_dock);
@@ -115,15 +106,8 @@ void TableWidget::addContractWidget(Contract *contract)
     table_dock_layout->insertWidget(table_dock_layout->count()-2, contractWidget);
     connect(contractWidget, &ContractWidget::deleteRequested, this, &TableWidget::deleteContractWidgetRequestHandler);
 
-    if (islocked == true)
-    {
-        contractWidget->lock();
-
-    }
-    else
-    {
-        contractWidget->unlock();
-    }
+    if (islocked == true) contractWidget->lock();
+    else contractWidget->unlock();
 
     connect(this, &TableWidget::unlocked, contractWidget, &ContractWidget::unlock);
     connect(this, &TableWidget::locked, contractWidget, &ContractWidget::lock);
@@ -132,7 +116,7 @@ void TableWidget::addContractWidget(Contract *contract)
     connect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
     pa->setPropertyName("alpha");
     pa->setTargetObject(contractWidget);
-    pa->setDuration(100);
+    pa->setDuration(50);
     pa->setStartValue(0);
     pa->setEndValue(255);
     pa->start();
@@ -170,13 +154,74 @@ void TableWidget::lock()
 void TableWidget::updateNumbers()
 {
     int num_entries = table_dock_layout->count();
-    for (int i=0; i < num_entries-2; i ++) {
+    for (int i=0; i < num_entries-2; i ++)
+    {
         QWidget* _widget =(table_dock_layout->itemAt(i)->widget());
         QLCDNumber* lbl = _widget->findChild<QLCDNumber*>("number");
-       // qDebug() << lbl->text();
         lbl->display(QString::number(table_dock_layout->indexOf(qobject_cast<QWidget*>(_widget))));
     }
+}
 
+void TableWidget::sort()
+{
+     Contract *tmp1, *tmp2;
+    bool stopFlag = true;
+
+     int num_entries = table_dock_layout->count();
+     for (int i=0; (i < num_entries-2)&stopFlag ; i ++)
+     {
+
+       tmp1 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(i)->widget())->getContract();
+       stopFlag = true;
+       int max_priority_pos = i;
+       int max_priority = tmp1->getPriority();
+        for (int k=i; k < num_entries-2; k ++)
+        {
+            tmp2 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->getContract();
+            if (tmp2->getPriority() > max_priority)
+            {
+                stopFlag = false;
+                max_priority = tmp2->getPriority();
+                max_priority_pos = k;
+            }
+            popEntry(qobject_cast<QWidget*>(tmp2),i);
+        }
+     }
+}
+
+void TableWidget::popEntry(QWidget* _widget, int pos)
+{
+    if (table_dock_layout->indexOf(_widget)!=pos)
+    {
+        float duration_factor = 4.4;
+
+        if (pos < 0) pos = 0;
+        if (pos >= table_dock_layout->count()) pos = table_dock_layout->count()-1;
+
+        QRect current_widget_geometry = _widget->geometry();
+        QRect new_widget_geometry = table_dock_layout->itemAt(pos)->geometry();
+        new_widget_geometry.setWidth(table_dock_layout->itemAt(pos)->geometry().width());
+        new_widget_geometry.setHeight(table_dock_layout->itemAt(pos)->geometry().height());
+        _widget->raise();
+
+        table_dock_layout->removeWidget(_widget);
+
+        pa->setPropertyName("geometry");
+        pa->setDuration((int) ((float) abs(new_widget_geometry.top()-current_widget_geometry.top())*duration_factor));
+
+        pa->setTargetObject(_widget);
+        pa->setStartValue(current_widget_geometry);
+       // qDebug() << "startValue:"<< pa->startValue();
+        pa->setEndValue(new_widget_geometry);
+       // qDebug() << "endValue:"<< pa->endValue();
+
+         pa->start();
+        loop->exec();
+
+        table_dock_layout->insertWidget(pos,_widget);
+        table_dock_layout->update();
+
+    }
 }
 
 void TableWidget::createHeader()

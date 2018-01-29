@@ -17,7 +17,7 @@ private:
     bool _is_done = false;
     bool _is_20_done = false;
     bool _is_10_done = false;
-    int priority;
+    int _priority;
     int _days_to_checkpoint;
     bool fileload_status = false;
 
@@ -59,10 +59,12 @@ public:
     void setFileloadStatus(bool status) {fileload_status = status;} //inline impl
 
 
-    int calculatePriority();
+    void calculatePriority();
 
 
     int calculateDaysToNearestUncheckedCheckPoint();
+
+    int getPriority() {return _priority;}
 
 public slots:
 

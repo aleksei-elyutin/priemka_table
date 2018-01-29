@@ -61,6 +61,8 @@ public:
     bool isLocked() {return islocked;}
 
 
+    void sort();
+    void popEntry(QWidget* _widget, int pos);
 signals:
     void unlocked();
     void locked();

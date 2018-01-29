@@ -54,6 +54,7 @@ private:
 public:
     explicit ContractWidget(QWidget *parent = 0);
     void setContract (Contract* contract);
+    Contract *getContract () {return _contract;}
     ~ContractWidget();
     void draw();
     void clear();

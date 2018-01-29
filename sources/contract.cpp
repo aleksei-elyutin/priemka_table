@@ -2,7 +2,7 @@
 
 Contract::Contract(QObject *parent) : QObject(parent)
 {
-
+    _priority = 0;
 }
 
 void Contract::setContractName(QString name)
@@ -14,10 +14,10 @@ void Contract::setContractName(QString name)
 Stage *Contract::createStage()
 {
     Stage *st = new Stage(this);
-     _stages.push_back(st);
+    _stages.push_back(st);
     connect(st, &Stage::deleteRequested, this, &Contract::deleteStageRequestHandler);
     connect(st, &Stage::stageChanged, this, &Contract::stageChangeHandler);
-    //calculateContractPriority();
+    calculateContractPriority();
    // if (!fileload_status) emit contractChanged();
     return st;
 }
@@ -51,17 +51,19 @@ bool Contract::deleteStage(int stage_num)
     }
 }
 
-int  Contract::calculateContractPriority()
+void  Contract::calculateContractPriority()
 {
-    _priority = 0;
+    int new_priority = 0;
     int num_stages = _stages.size();
     for (int i=0; i< num_stages; i++)
     {
-         _priority += _stages.at(i)->calculatePriority();
-        // qDebug() << "Рассчитан приоретет контракта " << this->getContractName() << " : " << _priority;
-
+         new_priority += _stages.at(i)->getPriority();
     }
-    return _priority;
+    if (new_priority != _priority)
+    {
+        _priority = new_priority;
+        if (!fileload_status) emit contractChanged();
+    }
 }
 
 
@@ -76,18 +78,15 @@ void Contract::deleteStageRequestHandler()/*SLOT*/
 {
 
     int i = _stages.indexOf(qobject_cast<Stage*>( sender()) );
-   // qDebug() << "Попытка удаления этапа номер" << i << " из " << this->getNumStages() << " (имя: " << this->getStage(i)->getStageName() << ") контракта " << this->getContractName() ;
-
-    if (deleteStage(i)){
-
+    if (deleteStage(i))
+    {
         delete sender();
-      //  qDebug() << "Этап удален.";
-     }
-     else
+    }
+    else
     {
         qDebug() << "Ошибка при удалении этапа";
     }
-    //calculateContractPriority();
+   calculateContractPriority();
    if (!fileload_status)  emit contractChanged();
 }
 
@@ -100,7 +99,6 @@ void Contract::deleteContractRequestHandler()
 void Contract::stageChangeHandler()
 {
     calculateContractPriority();
-    if (!fileload_status) emit contractChanged();
 }
 
 
