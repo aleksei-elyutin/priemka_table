@@ -100,7 +100,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     timer->start(1000*60*30);
 
-    load();
+    //load();
 
 }
 void MainWindow::load()

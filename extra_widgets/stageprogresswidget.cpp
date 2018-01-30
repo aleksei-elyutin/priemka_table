@@ -167,7 +167,11 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
                               "color: rgb(255, 255, 255); border: 1px solid grey;");
     _monheader->setVerticalSize(30);
     _progress = new QProgressBar(_monheader);
+    _days_left_label = new QLabel(_monheader);
+    _days_left_label->setStyleSheet("text-align: middle; background-color: rgba(0, 0, 0,0); width: 10px; "
+                                         "color: rgb(255, 255, 255); border: 0px solid black;");
     _widget_layout->addWidget(_monheader);
+
 
     /*Создание меток*/
     _startfinish_labels_box = new QWidget(this);
@@ -241,7 +245,19 @@ void StageProgressWidget::draw()
 
     _progress->setValue(_today.dayOfYear());
 
-    _progress->setFormat("Осталось дней:"+QString::number(_today.daysTo(_stage->getFinishDate())));
+    int days_left_int = _today.daysTo(_stage->getFinishDate());
+    if (days_left_int >=0 )
+    {
+         _days_left_label->setText("Осталось дней: "+QString::number(days_left_int));
+    }
+    else
+    {
+        _days_left_label->setText("Просрочено дней: "+QString::number(abs(days_left_int)));
+    }
+
+
+   // _progress->setFormat("Осталось дней:"+QString::number(_today.daysTo(_stage->getFinishDate())));
+   _progress->setFormat("");
 
     //qDebug() << _today.daysTo(_stage->getFinishDate());
 
@@ -273,10 +289,12 @@ void StageProgressWidget::updateStartFinishLabels()
     double _size_factor =  _monheader->getSizeFactor();
 
     int maximum = _monheader->width();
+    int minimum = 0;
     int label_width = 65;
 
-    int _start_label_x_position = (_curr_start_date.dayOfYear()-1)*_size_factor;
+    int _start_label_x_position = (_curr_start_date.dayOfYear()-1)*_size_factor-label_width;
     if ((_start_label_x_position + label_width)>(maximum-label_width) ) _start_label_x_position = _start_label_x_position-2*label_width;
+    if ((_start_label_x_position)<(minimum)) _start_label_x_position = minimum;
 
     int _finish_label_x_position = (_curr_finish_date.dayOfYear()-1)*_size_factor;
     if (_finish_label_x_position  > (maximum-label_width))  _finish_label_x_position = maximum-label_width;
@@ -360,8 +378,7 @@ void StageProgressWidget::resizeEvent(QResizeEvent *event)
     int length = _size_factor*(_curr_start_date.daysTo(_curr_finish_date));
 
     _progress->setGeometry((_curr_start_date.dayOfYear()-1)*_size_factor, 0, length, _vert_size);
-    //_start_date_label->setGeometry((_curr_start_date.dayOfYear()-1)*_size_factor, 0,100,20);
-    //_finish_date_label->setGeometry((_curr_finish_date.dayOfYear()-1)*_size_factor, 0, 100,20);
+    _days_left_label->setGeometry(_monheader->geometry().width()/2-50,_monheader->geometry().height()/2-10,120,20);
     updateStartFinishLabels();
 }
 

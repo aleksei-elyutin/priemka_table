@@ -164,7 +164,7 @@ void TableWidget::updateNumbers()
 
 void TableWidget::sort()
 {
-     Contract *tmp1, *tmp2;
+    Contract *tmp1, *tmp2;
     bool stopFlag = true;
 
      int num_entries = table_dock_layout->count();
@@ -175,7 +175,7 @@ void TableWidget::sort()
        stopFlag = true;
        int max_priority_pos = i;
        int max_priority = tmp1->getPriority();
-        for (int k=i; k < num_entries-2; k ++)
+        for (int k=i+1; k < num_entries-2; k ++)
         {
             tmp2 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->getContract();
             if (tmp2->getPriority() > max_priority)
@@ -184,16 +184,17 @@ void TableWidget::sort()
                 max_priority = tmp2->getPriority();
                 max_priority_pos = k;
             }
-            popEntry(qobject_cast<QWidget*>(tmp2),i);
+            if (!stopFlag) popEntry(qobject_cast<ContractWidget*>(table_dock_layout->itemAt(max_priority_pos)->widget()),i);
         }
      }
+
 }
 
 void TableWidget::popEntry(QWidget* _widget, int pos)
 {
     if (table_dock_layout->indexOf(_widget)!=pos)
     {
-        float duration_factor = 4.4;
+        float duration_factor = 2.4;
 
         if (pos < 0) pos = 0;
         if (pos >= table_dock_layout->count()) pos = table_dock_layout->count()-1;

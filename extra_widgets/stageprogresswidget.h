@@ -30,6 +30,7 @@ private:
 
     QProgressBar *_progress;
     MonHeaderWidget *_monheader;
+    QLabel *_days_left_label;
 
     int _start_progress_bar_position = 0;
     int _end_progress_bar_position = 0;
