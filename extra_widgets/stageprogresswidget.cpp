@@ -213,13 +213,6 @@ void StageProgressWidget::setStage(Stage *stage)
 void StageProgressWidget::draw()
 {
 
-    /******    ПЕРЕПИСАТЬ НАХУЙ ВСЕ  В ЭТОМ МЕТОДЕ   *****/
-    /*****************************************************/
-     /*****************************************************/
-     /*****************************************************/
-     /*****************************************************/
-
-
      _stage_name->setText(_stage->getStageName());
 
     QDate _today = QDate::currentDate();
@@ -271,16 +264,19 @@ void StageProgressWidget::draw()
     {
         _progress->setStyleSheet("QProgressBar {border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
         QProgressBar::chunk {background-color: rgba(255, 0, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем красные chunk'и  и серую заливу
+        setStyleSheet("QWidget:hover{background-color: rgba(255, 0, 0, 50);}");
 
 
     } else if ((days_left_int <= 20)&(!_stage->getLeft20DoneStatus())&(!_stage->getLeft10DoneStatus()))
     {
         _progress->setStyleSheet("QProgressBar { border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
         QProgressBar::chunk {background-color: rgba(255, 255, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем желтые chunk'и  и серую заливу
+       setStyleSheet("QWidget:hover{background-color: rgba(255, 255, 0, 50);}");
     } else
     {
         _progress->setStyleSheet("QProgressBar {  border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
         QProgressBar::chunk {background-color: rgba(0, 255, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем зеленые chunk'и  и серую заливу
+
     }
 
     QResizeEvent rse = QResizeEvent(QSize(),QSize());
