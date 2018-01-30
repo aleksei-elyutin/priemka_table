@@ -144,9 +144,10 @@ void ContractWidget::setContract(Contract *contract)
 void ContractWidget::draw()
 {
 
-    int number_of_layout_entries = stages_box_layout->count();
-    if (number_of_layout_entries > 1) clear();
-    if (number_of_layout_entries < 1) qDebug() << "Some shit happened... No button 'add stage' ";
+    clear();
+//    int number_of_layout_entries = stages_box_layout->count();
+//    if (number_of_layout_entries > 1)
+//    if (number_of_layout_entries < 1) qDebug() << "Some shit happened... No button 'add stage' ";
 
     int num_stages = _contract->getNumStages();
     for (int i=0; i< num_stages; i++)
@@ -209,6 +210,7 @@ void ContractWidget::addStageWidget(Stage *stage)
 
       connect(this, &ContractWidget::locked, stage_widget, &StageProgressWidget::lock);
       connect(this, &ContractWidget::unlocked, stage_widget, &StageProgressWidget::unlock);
+      //   draw();
 
 }
 

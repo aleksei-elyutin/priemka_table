@@ -19,19 +19,18 @@ Stage::Stage(QObject *parent) : QObject(parent)
 void Stage::setStartDate(QDate startdate)
 {
     _start_date = startdate;
-    if (!fileload_status)  emit stageChanged();
+    calculatePriority();
 
 }
 void Stage::setFinishDate(QDate finishdate)
 {
     _finish_date=finishdate;
-    if (!fileload_status) emit stageChanged();
+    calculatePriority();
 }
 
 void Stage::setStageName(QString name)
 {
     _stage_name = name;
-   if (!fileload_status)  emit stageChanged();
 }
 
 void Stage::setDoneStatus(int status)

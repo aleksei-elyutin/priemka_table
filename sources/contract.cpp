@@ -18,7 +18,7 @@ Stage *Contract::createStage()
     connect(st, &Stage::deleteRequested, this, &Contract::deleteStageRequestHandler);
     connect(st, &Stage::stageChanged, this, &Contract::stageChangeHandler);
     calculateContractPriority();
-   // if (!fileload_status) emit contractChanged();
+    if (!fileload_status) emit contractChanged();
     return st;
 }
 

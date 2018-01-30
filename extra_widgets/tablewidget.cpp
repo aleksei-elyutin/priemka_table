@@ -163,8 +163,10 @@ void TableWidget::updateNumbers()
 }
 
 void TableWidget::sort()
-{
-    Contract *tmp1, *tmp2;
+{   
+    /*** ЗАГЛУШЕНО  **/
+
+  /*  Contract *tmp1, *tmp2;
     bool stopFlag = true;
 
      int num_entries = table_dock_layout->count();
@@ -175,7 +177,7 @@ void TableWidget::sort()
        stopFlag = true;
        int max_priority_pos = i;
        int max_priority = tmp1->getPriority();
-        for (int k=i+1; k < num_entries-2; k ++)
+        for (int k=i; k < num_entries-2; k ++)
         {
             tmp2 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->getContract();
             if (tmp2->getPriority() > max_priority)
@@ -184,9 +186,10 @@ void TableWidget::sort()
                 max_priority = tmp2->getPriority();
                 max_priority_pos = k;
             }
-            if (!stopFlag) popEntry(qobject_cast<ContractWidget*>(table_dock_layout->itemAt(max_priority_pos)->widget()),i);
+            if (!stopFlag) popEntry(qobject_cast<QWidget*>(table_dock_layout->itemAt(max_priority_pos)->widget()),i);
+            qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->draw();
         }
-     }
+     }*/
 
 }
 
@@ -194,13 +197,13 @@ void TableWidget::popEntry(QWidget* _widget, int pos)
 {
     if (table_dock_layout->indexOf(_widget)!=pos)
     {
-        float duration_factor = 2.4;
+        float duration_factor = 1.0;
 
         if (pos < 0) pos = 0;
-        if (pos >= table_dock_layout->count()) pos = table_dock_layout->count()-1;
+       // if (pos >= table_dock_layout->count()) pos = table_dock_layout->count()-1;
 
         QRect current_widget_geometry = _widget->geometry();
-        QRect new_widget_geometry = table_dock_layout->itemAt(pos)->geometry();
+        QRect new_widget_geometry = table_dock_layout->itemAt(0)->geometry();
         new_widget_geometry.setWidth(table_dock_layout->itemAt(pos)->geometry().width());
         new_widget_geometry.setHeight(table_dock_layout->itemAt(pos)->geometry().height());
         _widget->raise();
@@ -219,7 +222,7 @@ void TableWidget::popEntry(QWidget* _widget, int pos)
          pa->start();
         loop->exec();
 
-        table_dock_layout->insertWidget(pos,_widget);
+        table_dock_layout->insertWidget(0,_widget);
         table_dock_layout->update();
 
     }

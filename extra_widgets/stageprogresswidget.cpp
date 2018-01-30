@@ -235,17 +235,27 @@ void StageProgressWidget::draw()
     {
         _curr_start_date.setDate(_selected_year, 1, 1);
     }
-
     int length = _size_factor*(_curr_start_date.daysTo(_curr_finish_date));
-
     _progress->setGeometry((_curr_start_date.dayOfYear()-1)*_size_factor, 0, length, _vert_size);
-
     _progress->setMinimum(_curr_start_date.dayOfYear()); //!!!!
     _progress->setMaximum(_curr_finish_date.dayOfYear()); //!!!!
 
-    _progress->setValue(_today.dayOfYear());
 
-    int days_left_int = _today.daysTo(_stage->getFinishDate());
+    if (_selected_year < QDate::currentDate().year())
+    {
+         //_today = QDate( _selected_year, 12, 31);
+         _progress->setValue(_progress->maximum());
+    }
+    else if (_selected_year > QDate::currentDate().year())
+    {
+         //_today = QDate( _selected_year, 1, 1);
+         _progress->setValue(_progress->minimum());
+    }
+    else _progress->setValue(_today.dayOfYear());
+
+
+    _progress->setFormat("");
+    int days_left_int = QDate::currentDate().daysTo(_stage->getFinishDate());
     if (days_left_int >=0 )
     {
          _days_left_label->setText("Осталось дней: "+QString::number(days_left_int));
@@ -256,18 +266,14 @@ void StageProgressWidget::draw()
     }
 
 
-   // _progress->setFormat("Осталось дней:"+QString::number(_today.daysTo(_stage->getFinishDate())));
-   _progress->setFormat("");
 
-    //qDebug() << _today.daysTo(_stage->getFinishDate());
-
-    if ((_today.daysTo(_stage->getFinishDate()) <= 10)&(!_stage->getLeft10DoneStatus()))
+    if ((days_left_int <= 10)&(!_stage->getLeft10DoneStatus()))
     {
         _progress->setStyleSheet("QProgressBar {border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
         QProgressBar::chunk {background-color: rgba(255, 0, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем красные chunk'и  и серую заливу
 
 
-    } else if ((_today.daysTo(_stage->getFinishDate()) <= 20)&(!_stage->getLeft20DoneStatus()))
+    } else if ((days_left_int <= 20)&(!_stage->getLeft20DoneStatus())&(!_stage->getLeft10DoneStatus()))
     {
         _progress->setStyleSheet("QProgressBar { border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
         QProgressBar::chunk {background-color: rgba(255, 255, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем желтые chunk'и  и серую заливу
@@ -301,8 +307,8 @@ void StageProgressWidget::updateStartFinishLabels()
 
     _start_date_label->setText(_stage->getStartDate().toString("dd.MM.yyyy"));
     _start_date_label->setGeometry(_start_label_x_position, 0,label_width,20);
-    _start_date_label->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
-                                     "color: rgb(255, 255, 255); border: 1px solid black;");
+//    _start_date_label->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
+//                                     "color: rgb(255, 255, 255); border: 0px solid black;");
 
 
     _finish_date_label->setText(_stage->getFinishDate().toString("dd.MM.yyyy"));
@@ -350,9 +356,9 @@ void StageProgressWidget::lock()
 {
     islocked = true;
 
-    _done_checkbox->setVisible(false);
-    _done10_checkbox->setVisible(false);
-    _done20_checkbox->setVisible(false);
+     _done_checkbox->setDisabled(true);
+    _done10_checkbox->setDisabled(true);
+    _done20_checkbox->setDisabled(true);
 
     delete_stage_button->setVisible(false);
     setup_stage_button->setVisible(false);
@@ -361,9 +367,9 @@ void StageProgressWidget::unlock()
 {
     islocked = false;
 
-    _done_checkbox->setVisible(true);
-    _done10_checkbox->setVisible(true);
-    _done20_checkbox->setVisible(true);
+    _done_checkbox->setDisabled(false);
+    _done10_checkbox->setDisabled(false);
+    _done20_checkbox->setDisabled(false);
 
     delete_stage_button->setVisible(true);
     setup_stage_button->setVisible(true);

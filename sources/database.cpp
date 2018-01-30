@@ -56,6 +56,7 @@ void DataBase::purgeBase()
          _contracts_base.at(c)->deleteContractRequestHandler();
     }
     qDebug() << "База очищена: " << _contracts_base.size();
+     if (!fileload_status) emit baseChanged();
 }
 
 void DataBase::writeToFile()
@@ -225,7 +226,7 @@ void DataBase::deleteContractRequestHandler()
     }
     //qSort(_contracts_base.begin(), _contracts_base.end(), Contract::lessThan);
 
-    //if (!fileload_status) emit base_changed();
+   if (!fileload_status) emit baseChanged();
    // qDebug() << "Сигнал: база изменена deleteContractByDelRequest";
 }
 

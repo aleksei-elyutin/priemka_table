@@ -83,8 +83,8 @@ MainWindow::MainWindow(QWidget *parent) :
     write_to_file_button->setIconSize(QSize(50,50));
 
 
-    QLabel *panel = new QLabel(menu_box);
-    panel->setText("-- Строка состояния --");
+    panel = new QLabel(menu_box);
+    panel->setText("");
     menu_box_layout->addWidget(panel);
     panel->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
     panel->setMaximumHeight(50);
@@ -97,10 +97,12 @@ MainWindow::MainWindow(QWidget *parent) :
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, base, &DataBase::contractChangeHandler);
     connect(timer, &QTimer::timeout, this, &MainWindow::updateControl);
+    connect(timer, &QTimer::timeout, base, &DataBase::writeToFile);
+    connect(timer, &QTimer::timeout, main_table, &TableWidget::sort);
 
-    timer->start(1000*60*30);
+    timer->start(1000*60);
 
-    //load();
+    load();
 
 }
 void MainWindow::load()
@@ -115,11 +117,14 @@ void MainWindow::load()
         connect(purge_dialog, &DleteDialog::accepted, purge_dialog, &DleteDialog::close);
        // connect(purge_dialog, &DleteDialog::accepted, main_table , &TableWidget::reDrawAll);
         purge_dialog->show();
+
     }
     else if ((file->exists())&(file->size()>0))
     {
               base->readFromFile();
+
     }
+     main_table->sort();
 }
 void MainWindow::save()
 {
@@ -139,13 +144,13 @@ void MainWindow::save()
 }
 void MainWindow::updateControl()
 {
-    QLabel *w = new QLabel("Обновлено "+ QDate::currentDate().toString(),0);
-    w->show();
-    QTimer *timer = new QTimer(this);
+    panel->setText("Обновлено и сохранено в файл. Дата: "+ QDate::currentDate().toString()+ " Время: " + QTime::currentTime().toString());
+
+  /*  QTimer *timer = new QTimer(this);
 
     connect(timer, &QTimer::timeout, w, &QWidget::close);
     connect(timer, &QTimer::timeout, timer, &QTimer::stop);
-    timer->start(2000);
+    timer->start(2000);*/
 
 }
 

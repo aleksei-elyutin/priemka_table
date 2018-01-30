@@ -15,7 +15,7 @@ private:
     DataBase *base;
     TableWidget *main_table;
     QFile *file;
-
+    QLabel *panel;
     QPushButton *lock_button;
 
     QVBoxLayout *main_window_layout;
