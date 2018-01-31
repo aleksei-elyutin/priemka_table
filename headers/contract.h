@@ -51,11 +51,12 @@ public slots:
 
     void deleteContractRequestHandler();
     void deleteStageRequestHandler(); /*SLOT*/
-    void stageChangeHandler(); /*SLOT*/
+   // void stageChangeHandler(); /*SLOT*/
 
 signals:
     void deleteRequested();
     void contractChanged();
+    void contractPriorityChanged();
 
 
 

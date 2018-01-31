@@ -22,7 +22,7 @@ Contract *DataBase::createContract()
     Contract *ct = new Contract(this);
     _contracts_base.push_back(ct);
     connect(ct, &Contract::deleteRequested, this, &DataBase::deleteContractRequestHandler);
-    connect(ct, &Contract::contractChanged, this, &DataBase::contractChangeHandler);
+    connect(ct, &Contract::contractPriorityChanged, this, &DataBase::contractChangeHandler);
     return ct;
 }
 
@@ -56,7 +56,7 @@ void DataBase::purgeBase()
          _contracts_base.at(c)->deleteContractRequestHandler();
     }
     qDebug() << "База очищена: " << _contracts_base.size();
-     if (!fileload_status) emit baseChanged();
+   //  if (!fileload_status) emit baseChanged();
 }
 
 void DataBase::writeToFile()
@@ -151,9 +151,9 @@ void DataBase::readFromFile()
     qint64 creation_date_Julian;
     int creation_time_msecs;
     _file->read((char*)&creation_date_Julian,sizeof(qint64)); //Чтение даты создания
-   qDebug() << QDate::fromJulianDay(creation_date_Julian);
+  // qDebug() << QDate::fromJulianDay(creation_date_Julian);
     _file->read((char*)&creation_time_msecs,sizeof(int)); //Чтение времени создания
-   qDebug() << QTime::fromMSecsSinceStartOfDay(creation_time_msecs);
+   //qDebug() << QTime::fromMSecsSinceStartOfDay(creation_time_msecs);
     int base_size;
     _file->read((char*)&base_size,sizeof(int)); //Чтение размеры базы (количество контрактов)
 
@@ -196,8 +196,10 @@ void DataBase::readFromFile()
                 tmp_stage_pointer->setLeft10Status(ss._10_done);
                 tmp_stage_pointer->setLeft20Status(ss._20_done);
                 tmp_stage_pointer->setDoneStatus(ss._done);
+                tmp_stage_pointer->calculatePriority();
                 tmp_stage_pointer->setFileloadStatus(false);
             }
+          tmp_contract_pointer->calculateContractPriority();
           tmp_contract_pointer->setFileloadStatus(false);
     }
 
@@ -212,28 +214,25 @@ void DataBase::readFromFile()
 void DataBase::deleteContractRequestHandler()
 {
     int i = _contracts_base.indexOf(qobject_cast<Contract*>( sender()) );
-    qDebug() << "Попытка удаления контракта номер" << i << this->getNumContracts()
-             << " (имя: " << this->_contracts_base.at(i)->getContractName()  << " )";
+   // qDebug() << "Попытка удаления контракта номер" << i << this->getNumContracts()
+   //          << " (имя: " << this->_contracts_base.at(i)->getContractName()  << " )";
 
     if (deleteContract(i)){
 
         delete sender();
-        qDebug() << "Контракт удален.";
+        //qDebug() << "Контракт удален.";
      }
      else
     {
         qDebug() << "Ошибка при удалении контракта";
     }
-    //qSort(_contracts_base.begin(), _contracts_base.end(), Contract::lessThan);
 
    if (!fileload_status) emit baseChanged();
-   // qDebug() << "Сигнал: база изменена deleteContractByDelRequest";
 }
 
 
 void DataBase::contractChangeHandler()
 {
-   // qSort(_contracts_base.begin(), _contracts_base.end(), Contract::lessThan);
    if (!fileload_status) emit baseChanged();
 }
 

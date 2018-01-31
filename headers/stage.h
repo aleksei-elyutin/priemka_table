@@ -74,6 +74,7 @@ signals:
 
     void deleteRequested();
     void stageChanged();
+    void priorityChanged();
 
 };
 

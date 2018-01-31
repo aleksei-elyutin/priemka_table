@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     base = new DataBase(this);
     base->setFile(file);
-   // connect(base, &DataBase::loadedFromFile, )
+   // connect(base, &DataBase::baseLoaded, main_table, &TableWidget::reDrawAll);
 
 
     main_window_layout = new QVBoxLayout(this);
@@ -21,16 +21,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     main_table = new TableWidget();
     main_table->setContent(base);
+    connect(base, &DataBase::loadedFromFile, this, &MainWindow::readState);
+    connect(base, &DataBase::storedToFile, this, &MainWindow::writeState);
+
     main_window_layout->addWidget(main_table);
-    connect (base, &DataBase::baseChanged, main_table, TableWidget::sort);
+    connect (base, &DataBase::baseChanged, main_table, &TableWidget::sort);
 
     menu_box = new QWidget(this);
     menu_box_layout = new QHBoxLayout(menu_box);
     menu_box_layout->setSpacing(5);
     menu_box_layout->setContentsMargins(10,0,10,0);
     main_window_layout->addWidget(menu_box);
-
-
 
 
     lock_button = new QPushButton(this);
@@ -95,16 +96,34 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, base, &DataBase::contractChangeHandler);
-    connect(timer, &QTimer::timeout, this, &MainWindow::updateControl);
-    connect(timer, &QTimer::timeout, base, &DataBase::writeToFile);
-    connect(timer, &QTimer::timeout, main_table, &TableWidget::sort);
+    connect(timer, &QTimer::timeout, this, &MainWindow::updateHandler);
+   // connect(timer, &QTimer::timeout, base, &DataBase::contractChangeHandler);
+   //  connect(timer, &QTimer::timeout, base, &DataBase::writeToFile);
+   // connect(timer, &QTimer::timeout, main_table, &TableWidget::sort);
 
-    timer->start(1000*60);
+    timer->start(1000*60*1);
 
     load();
 
 }
+void MainWindow::updateHandler()
+{
+    qDebug() << "updateHandler: " << update_counter;
+    if (update_counter < 5)
+    {
+        base->writeToFile();
+        main_table->sort();
+        update_counter++;
+    }
+    else
+    {
+        base->writeToFile();
+        base->readFromFile();
+        update_counter = 0;
+    }
+
+}
+
 void MainWindow::load()
 {
     if (base->getNumContracts())
@@ -124,7 +143,7 @@ void MainWindow::load()
               base->readFromFile();
 
     }
-     main_table->sort();
+     //main_table->sort();
 }
 void MainWindow::save()
 {
@@ -142,15 +161,16 @@ void MainWindow::save()
         base->writeToFile();
     }
 }
-void MainWindow::updateControl()
+
+void MainWindow::readState(QDateTime t)
 {
-    panel->setText("Обновлено и сохранено в файл. Дата: "+ QDate::currentDate().toString()+ " Время: " + QTime::currentTime().toString());
+     panel->setText("Содержимое загружено из файла. Последнее сохранение: "+ t.date().toString()+ " в " + t.time().toString());
+}
 
-  /*  QTimer *timer = new QTimer(this);
+void MainWindow::writeState(QDateTime)
+{
 
-    connect(timer, &QTimer::timeout, w, &QWidget::close);
-    connect(timer, &QTimer::timeout, timer, &QTimer::stop);
-    timer->start(2000);*/
+    panel->setText("Содержимое обновлено и сохранено в файл. Дата: "+ QDate::currentDate().toString()+ " Время: " + QTime::currentTime().toString());
 
 }
 
@@ -168,6 +188,8 @@ void MainWindow::on_lock_button_clicked()
         QPixmap lock_pixmap("://resources/lock_icon.png");
         QIcon lock_icon(lock_pixmap);
         lock_button->setIcon(lock_icon);
+        panel->setText("Запрещено редактирование. "
+                       "Дата: "+ QDate::currentDate().toString()+ " Время: " + QTime::currentTime().toString());
     }
 }
 
@@ -177,6 +199,9 @@ void MainWindow::on_action_accessGranted()
     QPixmap lock_pixmap("://resources/unlock_icon.png");
     QIcon lock_icon(lock_pixmap);
     lock_button->setIcon(lock_icon);
+     panel->setText("Разрешено редактирование. "
+                    "Дата: "+ QDate::currentDate().toString()+ " Время: " + QTime::currentTime().toString());
+
 
 }
 void MainWindow::on_action_passwordChanged()

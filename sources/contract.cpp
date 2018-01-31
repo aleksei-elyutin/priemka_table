@@ -16,9 +16,9 @@ Stage *Contract::createStage()
     Stage *st = new Stage(this);
     _stages.push_back(st);
     connect(st, &Stage::deleteRequested, this, &Contract::deleteStageRequestHandler);
-    connect(st, &Stage::stageChanged, this, &Contract::stageChangeHandler);
+    connect(st, &Stage::priorityChanged, this, &Contract::calculateContractPriority);
     calculateContractPriority();
-    if (!fileload_status) emit contractChanged();
+    //if (!fileload_status) emit contractChanged();
     return st;
 }
 
@@ -49,6 +49,7 @@ bool Contract::deleteStage(int stage_num)
         qDebug() << "Индекс вне границ массива";
         return false;
     }
+    calculateContractPriority();
 }
 
 void  Contract::calculateContractPriority()
@@ -59,11 +60,8 @@ void  Contract::calculateContractPriority()
     {
          new_priority += _stages.at(i)->getPriority();
     }
-    if (new_priority != _priority)
-    {
-        _priority = new_priority;
-        if (!fileload_status) emit contractChanged();
-    }
+    _priority = new_priority;
+    if (!fileload_status) emit contractPriorityChanged();
 }
 
 
@@ -96,9 +94,8 @@ void Contract::deleteContractRequestHandler()
    if (!fileload_status) emit this->deleteRequested();
 }
 
-void Contract::stageChangeHandler()
-{
-    calculateContractPriority();
-}
+
+
+
 
 

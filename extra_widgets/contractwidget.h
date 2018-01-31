@@ -68,8 +68,12 @@ signals:
 
     void unlocked();
     void locked();
+    void doubleClicked();
 
 public slots:
+
+protected:
+    void mouseDoubleClickEvent(QMouseEvent *event);
 };
 
 #endif // CONTRACTWIDGET_H

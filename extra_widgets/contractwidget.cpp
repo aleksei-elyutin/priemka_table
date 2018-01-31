@@ -107,6 +107,10 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
 
 }
 
+void ContractWidget::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    emit doubleClicked();
+}
 
 void ContractWidget::setupContract()
 {

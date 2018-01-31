@@ -7,12 +7,11 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     _selected_year = QDate::currentDate().year();
 
     setFrameStyle(QFrame::WinPanel | QFrame::Raised);
-    setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
+    setStyleSheet("text-align: middle; background-color: rgb(90, 90, 90); width: 10px; "
                        "color: rgb(255, 255, 255); border: 0px solid black;");
-    //setStyleSheet("border: 2px solid grey; background-color: rgb(250, 250, 250); ");
 
     _widget_layout = new QVBoxLayout(this);
-    _widget_layout->setSpacing ( 1);
+    _widget_layout->setSpacing (0);
 
     _widget_layout->setContentsMargins(3,1,3,1);
     _widget_layout->setStretch(0,1);
@@ -25,7 +24,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     _name_button_box  = new QWidget(this); //!!!!
     _name_button_box->setMinimumHeight(30);
     //_name_button_box->setMaximumHeight(30);
-    _name_button_box->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
+    _name_button_box->setStyleSheet("text-align: middle; background-color: rgba(70, 70, 70, 0); width: 10px; "
                                     "color: rgb(255, 255, 255); border: 0px solid black;");
     _name_button_box->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
     QHBoxLayout *hLayout = new QHBoxLayout(_name_button_box);
@@ -37,7 +36,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
 
     _stage_name = new QLabel(_name_button_box);
     _stage_name->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
-    _stage_name->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
+    _stage_name->setStyleSheet("text-align: middle; background-color: rgba(70, 70, 70, 0); width: 10px; "
                                "color: rgb(255, 255, 255); border: 0px solid black;");
     _stage_name->setWordWrap(true);
     hLayout->addWidget(_stage_name);
@@ -82,7 +81,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
      /** Создание чекбоксов "Выполнено..." и панели выбора года для отображения **/
 
     QWidget *chkBoxesContainer = new QWidget(this);
-    chkBoxesContainer->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
+    chkBoxesContainer->setStyleSheet("text-align: middle; background-color: rgba(70, 70, 70, 0); width: 10px; "
                                      "color: rgb(255, 255, 255); border: 0px solid black;");
     QHBoxLayout *chkBoxesContainerLayout = new QHBoxLayout(chkBoxesContainer);
     chkBoxesContainerLayout->setContentsMargins(0,0,0,0);
@@ -90,23 +89,25 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     _done20_checkbox = new QCheckBox (QString("20 дней осталось"),chkBoxesContainer);
    // _done20_checkbox->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Maximum);
      _done20_checkbox->setMinimumWidth(150);
-    _done20_checkbox->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
-                                    "color: rgb(255, 255, 255); border: 0px solid black;");
+//    _done20_checkbox->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
+//                                    "color: rgb(255, 255, 255); border: 0px solid black;");
     chkBoxesContainerLayout->addWidget(_done20_checkbox);
 
     _done10_checkbox = new QCheckBox (QString("10 дней осталось"),chkBoxesContainer);
     //_done10_checkbox->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Maximum);
     _done10_checkbox->setMinimumWidth(150);
-    _done10_checkbox->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
-                                    "color: rgb(255, 255, 255); border: 0px solid black;");
+//    _done10_checkbox->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
+//                                    "color: rgb(255, 255, 255); border: 0px solid black;");
     chkBoxesContainerLayout->addWidget(_done10_checkbox);
 
-    _done_checkbox = new QCheckBox (QString("Выполнено"),chkBoxesContainer);
+//    _done_checkbox = new QCheckBox (QString("Выполнено"),chkBoxesContainer);
     //_done_checkbox->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
-    _done_checkbox->setMinimumWidth(150);
-    _done_checkbox->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
-                                  "color: rgb(255, 255, 255); border: 0px solid black;");
-    chkBoxesContainerLayout->addWidget(_done_checkbox);
+//    _done_checkbox->setMinimumWidth(150);
+
+    //    _done_checkbox->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
+//                                  "color: rgb(255, 255, 255); border: 0px solid black;");
+
+    //chkBoxesContainerLayout->addWidget(_done_checkbox);
     chkBoxesContainerLayout->setStretch(0,0);
     chkBoxesContainerLayout->setStretch(1,0);
     chkBoxesContainerLayout->setStretch(2,0);
@@ -164,7 +165,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     _monheader = new MonHeaderWidget(this);
     _monheader->setNamesVisible(false);   ///Изменить на false
     _monheader->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
-                              "color: rgb(255, 255, 255); border: 1px solid grey;");
+                              "color: rgba(255, 255, 255); border: 1px solid grey;");
     _monheader->setVerticalSize(30);
     _progress = new QProgressBar(_monheader);
     _days_left_label = new QLabel(_monheader);
@@ -177,14 +178,14 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     _startfinish_labels_box = new QWidget(this);
     _startfinish_labels_box->setMinimumHeight(20);
     _startfinish_labels_box->setMaximumHeight(20);
-    _startfinish_labels_box->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
+    _startfinish_labels_box->setStyleSheet("text-align: middle; background-color: rgba(70, 70, 70, 0); width: 10px; "
                                            "color: rgb(255, 255, 255); border: 0px solid black;");
     _start_date_label = new QLabel(_startfinish_labels_box);
-     _start_date_label->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
-                                      "color: rgb(255, 255, 255); border: 0px solid black;");
+//     _start_date_label->setStyleSheet("text-align: middle; background-color: rgba(70, 70, 70, 0); width: 10px; "
+//                                      "color: rgb(255, 255, 255); border: 0px solid black;");
     _finish_date_label = new QLabel(_startfinish_labels_box);
-    _finish_date_label->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
-                                               "color: rgb(255, 255, 255); border: 0px solid black;");
+//    _finish_date_label->setStyleSheet("text-align: middle; background-color: rgba(70, 70, 70, 0); width: 10px; "
+//                                               "color: rgb(255, 255, 255); border: 0px solid black;");
 
     _widget_layout->addWidget(_startfinish_labels_box);
 
@@ -201,9 +202,9 @@ void StageProgressWidget::setStage(Stage *stage)
     _done10_checkbox->setChecked(_stage->getLeft10DoneStatus());
     connect (_done10_checkbox, &QCheckBox::stateChanged, _stage, &Stage::setLeft10Status);
     connect (_done10_checkbox, &QCheckBox::stateChanged, this, &StageProgressWidget::draw);
-    _done_checkbox->setChecked(_stage->getDoneStatus());
-    connect (_done_checkbox, &QCheckBox::stateChanged, _stage, &Stage::setDoneStatus);
-    connect (_done_checkbox, &QCheckBox::stateChanged, this, &StageProgressWidget::draw);
+   // _done_checkbox->setChecked(_stage->getDoneStatus());
+  //  connect (_done_checkbox, &QCheckBox::stateChanged, _stage, &Stage::setDoneStatus);
+  //  connect (_done_checkbox, &QCheckBox::stateChanged, this, &StageProgressWidget::draw);
 
     connect(_stage, &Stage::stageChanged, this, &StageProgressWidget::draw);
 
@@ -251,7 +252,9 @@ void StageProgressWidget::draw()
     int days_left_int = QDate::currentDate().daysTo(_stage->getFinishDate());
     if (days_left_int >=0 )
     {
-         _days_left_label->setText("Осталось дней: "+QString::number(days_left_int));
+        if (days_left_int == 0 ) _days_left_label->setText("Истекает сегодня!");
+        else _days_left_label->setText("Осталось дней: "+QString::number(days_left_int));
+
     }
     else
     {
@@ -276,7 +279,7 @@ void StageProgressWidget::draw()
     {
         _progress->setStyleSheet("QProgressBar {  border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
         QProgressBar::chunk {background-color: rgba(0, 255, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем зеленые chunk'и  и серую заливу
-
+        setStyleSheet("QWidget:hover{background-color: rgba(0, 255, 0, 50);}");
     }
 
     QResizeEvent rse = QResizeEvent(QSize(),QSize());
@@ -352,7 +355,7 @@ void StageProgressWidget::lock()
 {
     islocked = true;
 
-     _done_checkbox->setDisabled(true);
+   //  _done_checkbox->setDisabled(true);
     _done10_checkbox->setDisabled(true);
     _done20_checkbox->setDisabled(true);
 
@@ -363,7 +366,7 @@ void StageProgressWidget::unlock()
 {
     islocked = false;
 
-    _done_checkbox->setDisabled(false);
+  //  _done_checkbox->setDisabled(false);
     _done10_checkbox->setDisabled(false);
     _done20_checkbox->setDisabled(false);
 

@@ -12,6 +12,7 @@ class MainWindow : public QWidget
 {
     Q_OBJECT
 private:
+    int update_counter = 0;
     DataBase *base;
     TableWidget *main_table;
     QFile *file;
@@ -32,7 +33,6 @@ public:
 
     void load();
     void save();
-    void updateControl();
 
 
 private:
@@ -40,6 +40,9 @@ private:
     void on_lock_button_clicked();
     void on_action_accessGranted();
     void on_action_passwordChanged();
+    void readState(QDateTime t);
+    void writeState(QDateTime);
+    void updateHandler();
 };
 
 #endif // MAINWINDOW_H

@@ -19,18 +19,21 @@ Stage::Stage(QObject *parent) : QObject(parent)
 void Stage::setStartDate(QDate startdate)
 {
     _start_date = startdate;
+    if (!fileload_status) emit stageChanged();
     calculatePriority();
 
 }
 void Stage::setFinishDate(QDate finishdate)
 {
     _finish_date=finishdate;
+    if (!fileload_status) emit stageChanged();
     calculatePriority();
 }
 
 void Stage::setStageName(QString name)
 {
     _stage_name = name;
+    if (!fileload_status) emit stageChanged();
 }
 
 void Stage::setDoneStatus(int status)
@@ -40,6 +43,7 @@ void Stage::setDoneStatus(int status)
     _is_done = true;
     }
     else _is_done = false;
+    if (!fileload_status) emit stageChanged();
     calculatePriority();
 }
 
@@ -50,6 +54,7 @@ void Stage::setLeft10Status(int status)
          _is_10_done = true;
     }
     else _is_10_done = false;
+    if (!fileload_status) emit stageChanged();
     calculatePriority();
 }
 
@@ -60,6 +65,7 @@ void Stage::setLeft20Status(int status)
         _is_20_done = true;
     }
     else _is_20_done = false;
+    if (!fileload_status) emit stageChanged();
     calculatePriority();
 }
 
@@ -74,7 +80,7 @@ void Stage::calculatePriority()
         qDebug() << "Этап " << _stage_name <<  " просрочен на " << exp << " дней";
         new_priority = 10;
     }
-    else if ((days_left <= 10)&(!_is_10_done))
+    else if ((days_left <= 10)&(!_is_10_done)&(!_is_20_done))
     {
         new_priority = 2;
     }
@@ -84,11 +90,8 @@ void Stage::calculatePriority()
     }
     else new_priority = 0;
 
-    if ((!fileload_status)&(_priority != new_priority))
-    {
-        _priority = new_priority;
-        emit stageChanged();
-    }
+    _priority = new_priority;
+    if (!fileload_status) emit priorityChanged();
 }
 
 

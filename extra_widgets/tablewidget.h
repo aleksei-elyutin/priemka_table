@@ -7,6 +7,8 @@
 #include <QLCDNumber>
 #include <QGraphicsEffect>
 
+#include <QTimer>
+
 #include "contractwidget.h"
 #include "headers/contract.h"
 #include "headers/database.h"
@@ -38,6 +40,7 @@ private:
 
     bool islocked = true;
 
+    void popSelected();
 public:
     explicit TableWidget(QFrame *parent = 0);
 

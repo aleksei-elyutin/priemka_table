@@ -13,11 +13,11 @@ TableWidget::TableWidget(QFrame *parent) : QFrame(parent)
     header_dock ->setStyleSheet("text-align: middle; background-color: rgb(20, 20, 20); width: 10px; "
                             "color: rgb(255, 255, 255); border: 0px solid grey;");
     header_dock_layout = new QHBoxLayout(header_dock);
-    header_dock_layout->setSpacing(3);
+    header_dock_layout->setSpacing(1);
 
     int left_margin = 0, top_margin = 0, right_margin = 0, bottom_margin = 0;
     header_dock_layout->getContentsMargins(&left_margin, &top_margin, &right_margin, &bottom_margin);
-    //header_dock_layout->setContentsMargins(left_margin, top_margin, 15, bottom_margin);
+    header_dock_layout->setContentsMargins(left_margin, top_margin, 20, bottom_margin);
 
     createHeader();
     main_layout->addWidget(header_dock);
@@ -68,7 +68,7 @@ void TableWidget::setContent(DataBase *base)
     _base = base;
     connect(_base, &DataBase::baseLoaded, this, &TableWidget::reDrawAll);
     //connect(_base, &DataBase::baseChanged, this, &TableWidget::reDrawAll); //!!!!!
-    reDrawAll();
+    //reDrawAll();
 }
 
 
@@ -83,6 +83,7 @@ void TableWidget::reDrawAll()
     {
             addContractWidget(_base->getContract(i));
     }
+    sort();
 
 }
 
@@ -111,6 +112,9 @@ void TableWidget::addContractWidget(Contract *contract)
 
     connect(this, &TableWidget::unlocked, contractWidget, &ContractWidget::unlock);
     connect(this, &TableWidget::locked, contractWidget, &ContractWidget::lock);
+
+    connect(contractWidget, &ContractWidget::doubleClicked, this, &TableWidget::popSelected);
+
     updateNumbers();
 
     connect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
@@ -166,17 +170,19 @@ void TableWidget::sort()
 {   
     /*** ЗАГЛУШЕНО  **/
 
-  /*  Contract *tmp1, *tmp2;
+ /*   qDebug() << "СОРТИРОВКА";
+    Contract *tmp1, *tmp2;
     bool stopFlag = true;
 
      int num_entries = table_dock_layout->count();
      for (int i=0; (i < num_entries-2)&stopFlag ; i ++)
      {
-
+        qDebug() << "loop: " << i;
        tmp1 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(i)->widget())->getContract();
        stopFlag = true;
        int max_priority_pos = i;
        int max_priority = tmp1->getPriority();
+       qDebug() << "priority: " << tmp1->getPriority();
         for (int k=i; k < num_entries-2; k ++)
         {
             tmp2 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->getContract();
@@ -189,8 +195,42 @@ void TableWidget::sort()
             if (!stopFlag) popEntry(qobject_cast<QWidget*>(table_dock_layout->itemAt(max_priority_pos)->widget()),i);
             qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->draw();
         }
-     }*/
+     }
+     updateNumbers();
+*/
+    Contract *tmp1, *tmp2;
 
+ qDebug() << "СОРТИРОВКА";
+     int num_entries = table_dock_layout->count();
+     for (int i=0; (i < num_entries-2) ; i ++)
+     {
+         tmp1 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(i)->widget())->getContract();
+          qDebug() << "loop: " << i << " priority: " << tmp1->getPriority();
+     }
+
+
+
+//    qDebug() << "СОРТИРОВКА";
+
+//    QTimer tl(0);
+//    QLabel *l = new QLabel("СОРТИРОВКА",0);
+//    connect(&tl, &QTimer::timeout, l, &QLabel::close);
+//    //l->setGeometry(0,0, 150, 150);
+//    l->setStyleSheet("text-align: middle; qproperty-alignment: AlignCenter;"
+//                     " background-color: rgba(50, 50, 50, 50); width: 0px; "
+//                     "color: rgb(255, 255, 255); border: 0px solid grey;");
+//    tl.start(1000*2);
+
+}
+
+void TableWidget::popSelected()
+{
+   qDebug() << "Origin: "<<sender();
+   QWidget *s  = qobject_cast<QWidget*>(sender());
+    qDebug() << "Casted: "<< s;
+   int num = table_dock_layout->indexOf(s);
+    qDebug() << "Num: "<< num;
+   popEntry(s,0);
 }
 
 void TableWidget::popEntry(QWidget* _widget, int pos)
@@ -226,6 +266,7 @@ void TableWidget::popEntry(QWidget* _widget, int pos)
         table_dock_layout->update();
 
     }
+
 }
 
 void TableWidget::createHeader()
@@ -255,7 +296,7 @@ void TableWidget::createHeader()
     monthes_dock_layout->setContentsMargins(3,0,0,0);
     MonHeaderWidget* header = new MonHeaderWidget(monthes_dock);
     monthes_dock_layout->addWidget(header);
-    header->setYear(2017); ///Изменить!!!
+    header->setYear(QDate::currentDate().year());
     header->setVerticalSize(50);
     header->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
     header->setStyleSheet("text-align: middle; qproperty-alignment: AlignCenter;"
