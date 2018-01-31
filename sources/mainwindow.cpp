@@ -5,21 +5,21 @@
 MainWindow::MainWindow(QWidget *parent) :
     QWidget(parent)//, ui(new Ui::MainWindow)
 {
+
+
     file = new QFile("base.dat");
 
     setStyleSheet("background-color: rgb(20, 20, 20);");
 
     base = new DataBase(this);
     base->setFile(file);
-   // connect(base, &DataBase::baseLoaded, main_table, &TableWidget::reDrawAll);
-
 
     main_window_layout = new QVBoxLayout(this);
     main_window_layout->setSpacing(1);
     main_window_layout->setContentsMargins(2,2,2,7);
 
 
-    main_table = new TableWidget();
+    main_table = new TableWidget(this);
     main_table->setContent(base);
     connect(base, &DataBase::loadedFromFile, this, &MainWindow::readState);
     connect(base, &DataBase::storedToFile, this, &MainWindow::writeState);
@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     lock_button->setMaximumWidth(50);
     lock_button->setMinimumHeight(50);
     lock_button->setMaximumHeight(50);
+    lock_button->setToolTip("Разблокировать изменение");
     QPixmap lock_pixmap("://resources/lock_icon.png");
     QIcon lock_icon(lock_pixmap);
     lock_button->setIcon(lock_icon);
@@ -65,6 +66,7 @@ MainWindow::MainWindow(QWidget *parent) :
     read_from_file_button->setIcon(read_icon);
     read_from_file_button->setIconSize(QSize(50,50));
     QObject::connect (read_from_file_button, &QPushButton::clicked, this, &MainWindow::load);
+    read_from_file_button->setToolTip("Загрузить из файла");
 
 
     QPushButton *write_to_file_button = new QPushButton(this);
@@ -82,6 +84,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QIcon write_icon(write_pixmap);
     write_to_file_button->setIcon(write_icon);
     write_to_file_button->setIconSize(QSize(50,50));
+    write_to_file_button->setToolTip("Записать в файл");
 
 
     panel = new QLabel(menu_box);
@@ -101,40 +104,53 @@ MainWindow::MainWindow(QWidget *parent) :
    //  connect(timer, &QTimer::timeout, base, &DataBase::writeToFile);
    // connect(timer, &QTimer::timeout, main_table, &TableWidget::sort);
 
-    timer->start(1000*60*1);
+    //timer->start(1000*60*1); // одна минута
+    timer->start(1000*10);
 
     load();
 
 }
+void MainWindow::draw()
+{
+    main_table->reDrawAll();
+}
+
 void MainWindow::updateHandler()
 {
     qDebug() << "updateHandler: " << update_counter;
-    if (update_counter < 5)
+    if ((update_counter < 3)&(main_table->isLocked()))
+    //if (main_table->isLocked())
     {
         base->writeToFile();
-        main_table->sort();
+       // main_table->sort();
         update_counter++;
     }
-    else
+    else if (main_table->isLocked())
     {
         base->writeToFile();
         base->readFromFile();
         update_counter = 0;
+        draw();
     }
 
+}
+
+void MainWindow::closeEvent(QCloseEvent *)
+{
+    qDebug() << "Сохранение при закрытии";
+    base->writeToFile();
+    qDebug() << "Закрыт? - " << close();
 }
 
 void MainWindow::load()
 {
     if (base->getNumContracts())
     {
-        DleteDialog *purge_dialog = new DleteDialog(0);
+       DleteDialog *purge_dialog = new DleteDialog(0);
         purge_dialog->setLabelText("Текущие записи будут удалены. Продолжить?");
 
-       // connect(purge_dialog, &DleteDialog::accepted, base, &DataBase::purgeBase);
         connect(purge_dialog, &DleteDialog::accepted, base, &DataBase::readFromFile);
         connect(purge_dialog, &DleteDialog::accepted, purge_dialog, &DleteDialog::close);
-       // connect(purge_dialog, &DleteDialog::accepted, main_table , &TableWidget::reDrawAll);
         purge_dialog->show();
 
     }
@@ -143,7 +159,6 @@ void MainWindow::load()
               base->readFromFile();
 
     }
-     //main_table->sort();
 }
 void MainWindow::save()
 {
@@ -152,7 +167,6 @@ void MainWindow::save()
         DleteDialog *rewrite_dialog = new DleteDialog(0);
         rewrite_dialog->setLabelText("Файл существует и не пуст. Перезаписать?");
 
-        //file->
         connect(rewrite_dialog, &DleteDialog::accepted, base, &DataBase::writeToFile);
         connect(rewrite_dialog, &DleteDialog::accepted, rewrite_dialog, &DleteDialog::close);
         rewrite_dialog->show();
@@ -164,13 +178,17 @@ void MainWindow::save()
 
 void MainWindow::readState(QDateTime t)
 {
-     panel->setText("Содержимое загружено из файла. Последнее сохранение: "+ t.date().toString()+ " в " + t.time().toString());
+     panel->setText("Содержимое загружено из файла. Последнее сохранение: " + QDate::longDayName(t.date().dayOfWeek())
+                    + " " + t.date().toString("dd.MM.yyyy")
+                    + " в " + t.time().toString());
 }
 
 void MainWindow::writeState(QDateTime)
 {
 
-    panel->setText("Содержимое обновлено и сохранено в файл. Дата: "+ QDate::currentDate().toString()+ " Время: " + QTime::currentTime().toString());
+    panel->setText("Содержимое обновлено и сохранено в файл. Дата: "+ QDate::longDayName(QDate::currentDate().dayOfWeek())
+                   + " " + QDate::currentDate().toString("dd.MM.yyyy")
+                   + " Время: " + QTime::currentTime().toString());
 
 }
 
@@ -181,6 +199,7 @@ void MainWindow::on_lock_button_clicked()
           auth_dial = new AuthDialog(0, base->getSecureHash());
           connect(auth_dial, &AuthDialog::accessGranted, this, on_action_accessGranted);
           connect(auth_dial, &AuthDialog::passwordChanged, this, on_action_passwordChanged);
+          lock_button->setToolTip("Заблокировать изменение");
     }
     else
     {

@@ -1,9 +1,9 @@
 #include "tablewidget.h"
 
 
-TableWidget::TableWidget(QFrame *parent) : QFrame(parent)
+TableWidget::TableWidget(QWidget *parent) : QWidget(parent)
 {  
-    setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    //setFrameStyle(QFrame::Panel | QFrame::Sunken);
     main_layout = new QVBoxLayout(this);
     main_layout->setSpacing(0);
 
@@ -29,12 +29,6 @@ TableWidget::TableWidget(QFrame *parent) : QFrame(parent)
     _scrollArea = new QScrollArea();
     _scrollArea->setWidget(table_dock);
 
-
-
-   _scrollArea = new QScrollArea;
-   _scrollArea->setStyleSheet("text-align: middle; background-color: rgb(20, 20, 20); width: 10px; "
-                              "color: rgb(255, 255, 255); border: 0px solid black;");;
-   _scrollArea->setWidget(table_dock);
    _scrollArea->setWidgetResizable(true);
    _scrollArea->setContentsMargins(0,0,0,0);
    main_layout->addWidget(_scrollArea);
@@ -61,14 +55,17 @@ TableWidget::TableWidget(QFrame *parent) : QFrame(parent)
 
    pa = new QPropertyAnimation(this);
    loop = new QEventLoop(this);
+
+}
+
+TableWidget::~TableWidget()
+{
+    delete _scrollArea;
 }
 
 void TableWidget::setContent(DataBase *base)
 {
     _base = base;
-    connect(_base, &DataBase::baseLoaded, this, &TableWidget::reDrawAll);
-    //connect(_base, &DataBase::baseChanged, this, &TableWidget::reDrawAll); //!!!!!
-    //reDrawAll();
 }
 
 
@@ -117,15 +114,16 @@ void TableWidget::addContractWidget(Contract *contract)
 
     updateNumbers();
 
-    connect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
     pa->setPropertyName("alpha");
     pa->setTargetObject(contractWidget);
     pa->setDuration(50);
     pa->setStartValue(0);
     pa->setEndValue(255);
+
+    connect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
     pa->start();
     loop->exec();
-
+    disconnect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
 }
 
 void TableWidget::createContractWidgetRequestHandler()
@@ -162,112 +160,109 @@ void TableWidget::updateNumbers()
     {
         QWidget* _widget =(table_dock_layout->itemAt(i)->widget());
         QLCDNumber* lbl = _widget->findChild<QLCDNumber*>("number");
-        lbl->display(QString::number(table_dock_layout->indexOf(qobject_cast<QWidget*>(_widget))));
+        lbl->display(QString::number(table_dock_layout->indexOf(qobject_cast<QWidget*>(_widget))+1));
     }
 }
 
 void TableWidget::sort()
 {   
     /*** ЗАГЛУШЕНО  **/
+    qDebug() << "СОРТИРОВКА";
+    qDebug() << "Sender" << sender();
 
- /*   qDebug() << "СОРТИРОВКА";
     Contract *tmp1, *tmp2;
-    bool stopFlag = true;
+    int max_priority_pos = 0;
+    int max_priority = 0;
+
 
      int num_entries = table_dock_layout->count();
-     for (int i=0; (i < num_entries-2)&stopFlag ; i ++)
-     {
-        qDebug() << "loop: " << i;
-       tmp1 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(i)->widget())->getContract();
-       stopFlag = true;
-       int max_priority_pos = i;
-       int max_priority = tmp1->getPriority();
-       qDebug() << "priority: " << tmp1->getPriority();
-        for (int k=i; k < num_entries-2; k ++)
-        {
-            tmp2 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->getContract();
-            if (tmp2->getPriority() > max_priority)
-            {
-                stopFlag = false;
-                max_priority = tmp2->getPriority();
-                max_priority_pos = k;
-            }
-            if (!stopFlag) popEntry(qobject_cast<QWidget*>(table_dock_layout->itemAt(max_priority_pos)->widget()),i);
-            qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->draw();
-        }
-     }
-     updateNumbers();
-*/
-    Contract *tmp1, *tmp2;
-
- qDebug() << "СОРТИРОВКА";
-     int num_entries = table_dock_layout->count();
-     for (int i=0; (i < num_entries-2) ; i ++)
+     for (int i=0; (i < num_entries-3) ; i++)
      {
          tmp1 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(i)->widget())->getContract();
-          qDebug() << "loop: " << i << " priority: " << tmp1->getPriority();
+         max_priority_pos = i;
+         max_priority = tmp1->getPriority();
+
+         for (int k=i+1; k < num_entries-2; k++)
+         {
+             tmp2 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->getContract();
+             if (tmp2->getPriority() > max_priority)
+             {
+                 max_priority = tmp2->getPriority();
+                 max_priority_pos = k;
+             }
+
+             if ( max_priority_pos != i)
+             {
+                  qDebug() << "Moving: from pos. " << max_priority_pos << " to pos." << tmp1->getPriority();
+                // popEntryAnim(qobject_cast<QWidget*>(table_dock_layout->itemAt(max_priority_pos)->widget()),i);
+                   popEntry(k,i);
+                // qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->draw();
+             }
+         }
      }
-
-
-
-//    qDebug() << "СОРТИРОВКА";
-
-//    QTimer tl(0);
-//    QLabel *l = new QLabel("СОРТИРОВКА",0);
-//    connect(&tl, &QTimer::timeout, l, &QLabel::close);
-//    //l->setGeometry(0,0, 150, 150);
-//    l->setStyleSheet("text-align: middle; qproperty-alignment: AlignCenter;"
-//                     " background-color: rgba(50, 50, 50, 50); width: 0px; "
-//                     "color: rgb(255, 255, 255); border: 0px solid grey;");
-//    tl.start(1000*2);
+     updateNumbers();
 
 }
 
 void TableWidget::popSelected()
 {
-   qDebug() << "Origin: "<<sender();
+/*   qDebug() << "Origin: "<<sender();
    QWidget *s  = qobject_cast<QWidget*>(sender());
     qDebug() << "Casted: "<< s;
    int num = table_dock_layout->indexOf(s);
     qDebug() << "Num: "<< num;
-   popEntry(s,0);
+   popEntry(s,1);*/
 }
 
-void TableWidget::popEntry(QWidget* _widget, int pos)
+void TableWidget::popEntryAnim(QWidget* _widget, int pos)
 {
-    if (table_dock_layout->indexOf(_widget)!=pos)
+    /*if (table_dock_layout->indexOf(_widget)!=pos)
     {
         float duration_factor = 1.0;
-
         if (pos < 0) pos = 0;
-       // if (pos >= table_dock_layout->count()) pos = table_dock_layout->count()-1;
+        if (pos > table_dock_layout->count()-3) pos = table_dock_layout->count()-3;
 
         QRect current_widget_geometry = _widget->geometry();
-        QRect new_widget_geometry = table_dock_layout->itemAt(0)->geometry();
-        new_widget_geometry.setWidth(table_dock_layout->itemAt(pos)->geometry().width());
-        new_widget_geometry.setHeight(table_dock_layout->itemAt(pos)->geometry().height());
+        QRect new_widget_geometry = table_dock_layout->itemAt(pos)->geometry();
+       // new_widget_geometry.setWidth(table_dock_layout->itemAt(pos)->geometry().width());
+       // new_widget_geometry.setHeight(table_dock_layout->itemAt(pos)->geometry().height());
+        new_widget_geometry.setX(table_dock_layout->itemAt(pos)->geometry().x());
+        new_widget_geometry.setY(table_dock_layout->itemAt(pos)->geometry().y());
+        new_widget_geometry.setWidth(_widget->geometry().width());
+        new_widget_geometry.setHeight(_widget->geometry().height());
         _widget->raise();
-
-        table_dock_layout->removeWidget(_widget);
 
         pa->setPropertyName("geometry");
         pa->setDuration((int) ((float) abs(new_widget_geometry.top()-current_widget_geometry.top())*duration_factor));
 
         pa->setTargetObject(_widget);
         pa->setStartValue(current_widget_geometry);
-       // qDebug() << "startValue:"<< pa->startValue();
+        qDebug() << "startValue:"<< pa->startValue();
         pa->setEndValue(new_widget_geometry);
-       // qDebug() << "endValue:"<< pa->endValue();
+        qDebug() << "endValue:"<< pa->endValue();
 
-         pa->start();
+
+        connect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
+        pa->start();
         loop->exec();
+        disconnect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
 
-        table_dock_layout->insertWidget(0,_widget);
+        table_dock_layout->removeWidget(_widget);
+        table_dock_layout->insertWidget(pos,_widget);
         table_dock_layout->update();
-
-    }
+    }*/
 
 }
+
+void TableWidget::popEntry(int current_pos, int new_pos)
+{
+    QWidget *tmp = qobject_cast<QWidget*>(table_dock_layout->itemAt(current_pos)->widget());
+    table_dock_layout->removeWidget(tmp);
+    table_dock_layout->insertWidget(new_pos,tmp);
+    table_dock_layout->update();
+    qobject_cast<ContractWidget*>(table_dock_layout->itemAt(new_pos)->widget())->draw();
+}
+
 
 void TableWidget::createHeader()
 {

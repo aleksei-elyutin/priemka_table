@@ -24,7 +24,7 @@ private:
          qint64 finish_date_julian;
          char _20_done;
          char _10_done;
-         char _done;
+        // char _done;
      };
 
 

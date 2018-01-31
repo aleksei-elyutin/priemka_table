@@ -60,8 +60,12 @@ void  Contract::calculateContractPriority()
     {
          new_priority += _stages.at(i)->getPriority();
     }
-    _priority = new_priority;
-    if (!fileload_status) emit contractPriorityChanged();
+    if (_priority != new_priority)
+    {
+        _priority = new_priority;
+        if (!fileload_status) emit contractPriorityChanged();
+    }
+    _contract_name =  (QString::number(_priority));
 }
 
 

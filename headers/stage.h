@@ -40,9 +40,9 @@ public:
     QString getStageName() {return _stage_name;} //inline impl
 
 
-    void setDoneStatus(int status);
+   // void setDoneStatus(int status);
 
-    bool getDoneStatus() {return _is_done;} //inline impl
+  //  bool getDoneStatus() {return _is_done;} //inline impl
 
 
     void setLeft10Status(int status);
@@ -61,8 +61,6 @@ public:
 
     void calculatePriority();
 
-
-    int calculateDaysToNearestUncheckedCheckPoint();
 
     int getPriority() {return _priority;}
 

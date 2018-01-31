@@ -36,7 +36,7 @@ void Stage::setStageName(QString name)
     if (!fileload_status) emit stageChanged();
 }
 
-void Stage::setDoneStatus(int status)
+/*void Stage::setDoneStatus(int status)
 {
     if (status == Qt::Checked)
     {
@@ -45,7 +45,7 @@ void Stage::setDoneStatus(int status)
     else _is_done = false;
     if (!fileload_status) emit stageChanged();
     calculatePriority();
-}
+}*/
 
 void Stage::setLeft10Status(int status)
 {
@@ -67,30 +67,33 @@ void Stage::setLeft20Status(int status)
     else _is_20_done = false;
     if (!fileload_status) emit stageChanged();
     calculatePriority();
+
 }
 
 
 void Stage::calculatePriority()
 {
-    int new_priority;
+    int new_priority = 0;
     int days_left = QDate::currentDate().daysTo(_finish_date);
-    if ((days_left == 0)&(!_is_done))
+   /* if ((days_left == 0)&(!_is_done))
     {
         int exp = _finish_date.daysTo(QDate::currentDate());
         qDebug() << "Этап " << _stage_name <<  " просрочен на " << exp << " дней";
         new_priority = 10;
-    }
-    else if ((days_left <= 10)&(!_is_10_done)&(!_is_20_done))
-    {
-        new_priority = 2;
-    }
-    else if ((days_left <= 20)&(!_is_20_done))
+    } else*/
+
+    if ((days_left <= 20)&(!_is_20_done))
     {
         new_priority = 1;
     }
-    else new_priority = 0;
+    if ((days_left <= 10)&(!_is_10_done))
+    {
+        new_priority = 5;
+    }
+    if (days_left > 20) new_priority = 0;
 
     _priority = new_priority;
+    /*DEBUG*/ _stage_name= (QString::number(_priority));
     if (!fileload_status) emit priorityChanged();
 }
 

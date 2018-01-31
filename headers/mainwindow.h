@@ -32,8 +32,8 @@ public:
     ~MainWindow();
 
     void load();
-    void save();
-
+    void save();  
+    void draw();
 
 private:
     //Ui::MainWindow *ui;
@@ -43,6 +43,7 @@ private:
     void readState(QDateTime t);
     void writeState(QDateTime);
     void updateHandler();
+    void closeEvent(QCloseEvent *);
 };
 
 #endif // MAINWINDOW_H

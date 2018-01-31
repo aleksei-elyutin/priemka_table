@@ -57,6 +57,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     setup_stage_button->setMaximumHeight(20);
     setup_stage_button->setMinimumWidth(20);
     setup_stage_button->setMaximumWidth(20);
+    setup_stage_button->setToolTip("Изменить этап");
 
     //setup_stage_button->setVisible(false);
 
@@ -74,7 +75,9 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     delete_stage_button->setMinimumWidth(20);
     delete_stage_button->setMaximumWidth(20);
     hLayout->addWidget(delete_stage_button);
+    delete_stage_button->setToolTip("Удалить этап");
     connect(delete_stage_button, &QPushButton::clicked, this, &StageProgressWidget::showDeleteDialog);
+
 
     _widget_layout->addWidget(_name_button_box);
 
@@ -86,14 +89,17 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     QHBoxLayout *chkBoxesContainerLayout = new QHBoxLayout(chkBoxesContainer);
     chkBoxesContainerLayout->setContentsMargins(0,0,0,0);
 
-    _done20_checkbox = new QCheckBox (QString("20 дней осталось"),chkBoxesContainer);
+    QLabel *checkpoints_label = new QLabel("Контрольные точки: ", chkBoxesContainer);
+    chkBoxesContainerLayout->addWidget(checkpoints_label);
+
+    _done20_checkbox = new QCheckBox (QString( "осталось 20 дней "),chkBoxesContainer);
    // _done20_checkbox->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Maximum);
      _done20_checkbox->setMinimumWidth(150);
 //    _done20_checkbox->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
 //                                    "color: rgb(255, 255, 255); border: 0px solid black;");
     chkBoxesContainerLayout->addWidget(_done20_checkbox);
 
-    _done10_checkbox = new QCheckBox (QString("10 дней осталось"),chkBoxesContainer);
+    _done10_checkbox = new QCheckBox (QString("осталось 10 дней "),chkBoxesContainer);
     //_done10_checkbox->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Maximum);
     _done10_checkbox->setMinimumWidth(150);
 //    _done10_checkbox->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
@@ -196,12 +202,17 @@ void StageProgressWidget::setStage(Stage *stage)
 {
     _stage=stage;
 
-    _done20_checkbox->setChecked(_stage->getLeft20DoneStatus());
+
     connect (_done20_checkbox, &QCheckBox::stateChanged, _stage, &Stage::setLeft20Status);
     connect (_done20_checkbox, &QCheckBox::stateChanged, this, &StageProgressWidget::draw);
-    _done10_checkbox->setChecked(_stage->getLeft10DoneStatus());
+    //connect (_done20_checkbox, &QCheckBox::stateChanged, _done10_checkbox, &QCheckBox::setCheckable);
+
+
+
     connect (_done10_checkbox, &QCheckBox::stateChanged, _stage, &Stage::setLeft10Status);
     connect (_done10_checkbox, &QCheckBox::stateChanged, this, &StageProgressWidget::draw);
+
+
    // _done_checkbox->setChecked(_stage->getDoneStatus());
   //  connect (_done_checkbox, &QCheckBox::stateChanged, _stage, &Stage::setDoneStatus);
   //  connect (_done_checkbox, &QCheckBox::stateChanged, this, &StageProgressWidget::draw);
@@ -215,6 +226,26 @@ void StageProgressWidget::draw()
 {
 
      _stage_name->setText(_stage->getStageName());
+
+     if (QDate::currentDate().daysTo(_stage->getFinishDate()) > 20)
+     {
+         _done20_checkbox->setCheckable(false);
+     }
+     else
+     {
+         _done20_checkbox->setCheckable(true);
+         _done20_checkbox->setChecked(_stage->getLeft20DoneStatus());
+     }
+
+     if  ((QDate::currentDate().daysTo(_stage->getFinishDate()) > 10)|(!_done20_checkbox->isChecked()))
+     {
+         _done10_checkbox->setCheckable(false);
+     }
+     else //if  (_done20_checkbox->isChecked())
+     {
+          _done10_checkbox->setCheckable(true);
+          _done10_checkbox->setChecked(_stage->getLeft10DoneStatus());
+     }
 
     QDate _today = QDate::currentDate();
 
@@ -282,9 +313,10 @@ void StageProgressWidget::draw()
         setStyleSheet("QWidget:hover{background-color: rgba(0, 255, 0, 50);}");
     }
 
-    QResizeEvent rse = QResizeEvent(QSize(),QSize());
-    resizeEvent(&rse);
-    updateStartFinishLabels();
+   /* QResizeEvent rse = QResizeEvent(QSize(),QSize());
+    resizeEvent(&rse);*/
+    resize();
+
 }
 
 void StageProgressWidget::updateStartFinishLabels()
@@ -344,7 +376,7 @@ void StageProgressWidget::setupStage()
 void StageProgressWidget::showDeleteDialog()
 {
     DleteDialog *dleteDialog = new DleteDialog(0);
-    dleteDialog->setLabelText("Удалить контракт \"" + _stage->getStageName() + " \" ?");
+    dleteDialog->setLabelText("Удалить этап \"" + _stage->getStageName() + " \" ?");
 
     connect(dleteDialog, & DleteDialog::accepted, _stage, &Stage::deleteStageRequestHandler);
     connect(dleteDialog, & DleteDialog::accepted, this, &StageProgressWidget::deleteRequested);
@@ -378,7 +410,16 @@ void StageProgressWidget::unlock()
 
 void StageProgressWidget::resizeEvent(QResizeEvent *event)
 {
+    double _size_factor =  _monheader->getSizeFactor();
+    int length = _size_factor*(_curr_start_date.daysTo(_curr_finish_date));
 
+    _progress->setGeometry((_curr_start_date.dayOfYear()-1)*_size_factor, 0, length, _vert_size);
+    _days_left_label->setGeometry(_monheader->geometry().width()/2-50,_monheader->geometry().height()/2-10,120,20);
+    updateStartFinishLabels();
+}
+
+void StageProgressWidget::resize()
+{
     double _size_factor =  _monheader->getSizeFactor();
     int length = _size_factor*(_curr_start_date.daysTo(_curr_finish_date));
 

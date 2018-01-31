@@ -63,6 +63,7 @@ private:
     void updateProgress();
     void selectYear(); //private SLOT for year selection
 
+    void resize();
 protected:
     void resizeEvent(QResizeEvent *event) override;
 

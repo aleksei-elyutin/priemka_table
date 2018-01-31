@@ -14,7 +14,7 @@
 #include "headers/database.h"
 
 
-class TableWidget : public QFrame
+class TableWidget : public QWidget
 {
     Q_OBJECT
 private:
@@ -41,8 +41,11 @@ private:
     bool islocked = true;
 
     void popSelected();
+    void popEntryAnim(QWidget *_widget, int pos);
+    void popEntry(int current_pos, int new_pos);
+
 public:
-    explicit TableWidget(QFrame *parent = 0);
+    explicit TableWidget(QWidget *parent = 0);
 
     void addContractWidget (Contract *contract);
 
@@ -65,7 +68,8 @@ public:
 
 
     void sort();
-    void popEntry(QWidget* _widget, int pos);
+
+    ~TableWidget();
 signals:
     void unlocked();
     void locked();
