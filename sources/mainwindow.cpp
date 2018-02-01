@@ -35,8 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     lock_button = new QPushButton(this);
-    lock_button->setStyleSheet("QPushButton{text-align: middle; qproperty-alignment: AlignCenter;"
-                       " background-color: rgb(50, 50, 50); width: 0px; "
+    lock_button->setStyleSheet("QPushButton{text-align: middle;background-color: rgb(50, 50, 50); width: 0px; "
                        "color: rgb(255, 255, 255); border: 0px solid grey; }"
                        "QPushButton:hover{background-color: rgb(80, 80, 80); color: rgb(255, 255, 255);}");
     lock_button->setMinimumWidth(50);
@@ -52,8 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (lock_button, &QPushButton::clicked, this, &MainWindow::on_lock_button_clicked);
 
     QPushButton *read_from_file_button = new QPushButton(this);
-    read_from_file_button->setStyleSheet("QPushButton{text-align: middle; qproperty-alignment: AlignCenter;"
-                                         " background-color: rgb(50, 50, 50); width: 0px; "
+    read_from_file_button->setStyleSheet("QPushButton{text-align: middle; background-color: rgb(50, 50, 50); width: 0px; "
                                          "color: rgb(255, 255, 255); border: 0px solid grey; }"
                                          "QPushButton:hover{background-color: rgb(80, 80, 80); color: rgb(255, 255, 255);}");
     read_from_file_button->setMinimumWidth(50);
@@ -70,8 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     QPushButton *write_to_file_button = new QPushButton(this);
-    write_to_file_button->setStyleSheet("QPushButton{text-align: middle; qproperty-alignment: AlignCenter;"
-                                        " background-color: rgb(50, 50, 50); width: 0px; "
+    write_to_file_button->setStyleSheet("QPushButton{text-align: middle; background-color: rgb(50, 50, 50); width: 0px; "
                                         "color: rgb(255, 255, 255); border: 0px solid grey; }"
                                         "QPushButton:hover{background-color: rgb(80, 80, 80); color: rgb(255, 255, 255);}");
     write_to_file_button->setMinimumWidth(50);
@@ -118,12 +115,11 @@ void MainWindow::draw()
 void MainWindow::updateHandler()
 {
     qDebug() << "updateHandler: " << update_counter;
-    if ((update_counter < 3)&(main_table->isLocked()))
-    //if (main_table->isLocked())
+    if ((update_counter < 30)&(main_table->isLocked()))
     {
-        base->writeToFile();
-       // main_table->sort();
-        update_counter++;
+       main_table->sort();
+       update_counter++;
+       if ((update_counter%6 == 0)) base->writeToFile();
     }
     else if (main_table->isLocked())
     {
@@ -204,6 +200,7 @@ void MainWindow::on_lock_button_clicked()
     else
     {
         main_table->lock();
+        main_table->sort();
         QPixmap lock_pixmap("://resources/lock_icon.png");
         QIcon lock_icon(lock_pixmap);
         lock_button->setIcon(lock_icon);

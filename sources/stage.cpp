@@ -6,7 +6,7 @@ Stage::Stage(QObject *parent) : QObject(parent)
 
     _start_date = QDate(QDate::currentDate());
     _finish_date = QDate(QDate::currentDate().year(),12,31);
-
+    //_finish_date= QDate(QDate::currentDate().year(),);
     _stage_name = QString("Этап без названия");
 
     _is_done = false;
@@ -54,7 +54,7 @@ void Stage::setLeft10Status(int status)
          _is_10_done = true;
     }
     else _is_10_done = false;
-    if (!fileload_status) emit stageChanged();
+  //  if (!fileload_status) emit stageChanged();
     calculatePriority();
 }
 
@@ -65,7 +65,7 @@ void Stage::setLeft20Status(int status)
         _is_20_done = true;
     }
     else _is_20_done = false;
-    if (!fileload_status) emit stageChanged();
+ //   if (!fileload_status) emit stageChanged();
     calculatePriority();
 
 }
@@ -93,7 +93,7 @@ void Stage::calculatePriority()
     if (days_left > 20) new_priority = 0;
 
     _priority = new_priority;
-    /*DEBUG*/ _stage_name= (QString::number(_priority));
+   // /*DEBUG*/ _stage_name= (QString::number(_priority));
     if (!fileload_status) emit priorityChanged();
 }
 

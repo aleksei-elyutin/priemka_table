@@ -49,7 +49,7 @@ public:
      void purgeBase();
 
      QString getSecureHash() {return secure_hash;}
-     void setSecureHash(QString sh) {secure_hash = sh;}
+     void setSecureHash(QString sh);
 
 
 

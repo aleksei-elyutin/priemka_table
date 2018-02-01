@@ -205,12 +205,14 @@ void StageProgressWidget::setStage(Stage *stage)
 
     connect (_done20_checkbox, &QCheckBox::stateChanged, _stage, &Stage::setLeft20Status);
     connect (_done20_checkbox, &QCheckBox::stateChanged, this, &StageProgressWidget::draw);
-    //connect (_done20_checkbox, &QCheckBox::stateChanged, _done10_checkbox, &QCheckBox::setCheckable);
+    connect (_done20_checkbox, &QCheckBox::stateChanged, this, &StageProgressWidget::set20CheckBoxCHeckable);
+
 
 
 
     connect (_done10_checkbox, &QCheckBox::stateChanged, _stage, &Stage::setLeft10Status);
     connect (_done10_checkbox, &QCheckBox::stateChanged, this, &StageProgressWidget::draw);
+
 
 
    // _done_checkbox->setChecked(_stage->getDoneStatus());
@@ -220,6 +222,17 @@ void StageProgressWidget::setStage(Stage *stage)
     connect(_stage, &Stage::stageChanged, this, &StageProgressWidget::draw);
 
     draw();
+}
+
+void StageProgressWidget::set20CheckBoxCHeckable(int state)
+{
+     if ((state == Qt::Unchecked)&(_stage->getLeft10DoneStatus()))
+     {
+          _done10_checkbox->setChecked(false);
+          _stage->setLeft10Status(Qt::Unchecked);
+          _done10_checkbox->setCheckable(false);
+          draw();
+     }
 }
 
 void StageProgressWidget::draw()
@@ -246,6 +259,8 @@ void StageProgressWidget::draw()
           _done10_checkbox->setCheckable(true);
           _done10_checkbox->setChecked(_stage->getLeft10DoneStatus());
      }
+
+
 
     QDate _today = QDate::currentDate();
 

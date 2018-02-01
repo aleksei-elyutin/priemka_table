@@ -64,6 +64,7 @@ private:
     void selectYear(); //private SLOT for year selection
 
     void resize();
+    void set20CheckBoxCHeckable(int state);
 protected:
     void resizeEvent(QResizeEvent *event) override;
 

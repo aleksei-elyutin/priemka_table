@@ -43,7 +43,7 @@ TableWidget::TableWidget(QWidget *parent) : QWidget(parent)
    add_contract_button = new QPushButton(table_dock);
    table_dock_layout->addWidget(add_contract_button);
    add_contract_button->setText("Добавить контракт...");
-   add_contract_button->setStyleSheet("text-align: middle; qproperty-alignment: AlignCenter; background-color: rgb(20, 20, 20); width: 10px; "
+   add_contract_button->setStyleSheet("text-align: middle; background-color: rgb(20, 20, 20); width: 10px; "
                                       "color: rgb(50, 50, 50); border: 0px solid black; ");
    add_contract_button->setStyleSheet("QPushButton:hover{background-color: rgb(80, 80, 80); color: rgb(255, 255, 255);}");
    add_contract_button->setMinimumHeight(50);
@@ -166,57 +166,60 @@ void TableWidget::updateNumbers()
 
 void TableWidget::sort()
 {   
-    /*** ЗАГЛУШЕНО  **/
-    qDebug() << "СОРТИРОВКА";
-    qDebug() << "Sender" << sender();
+    if (islocked){
+        /*** ЗАГЛУШЕНО  **/
+        qDebug() << "СОРТИРОВКА";
+        qDebug() << "Sender" << sender();
 
-    Contract *tmp1, *tmp2;
-    int max_priority_pos = 0;
-    int max_priority = 0;
+        Contract *tmp1, *tmp2;
+        int max_priority_pos = 0;
+        int max_priority = 0;
 
 
-     int num_entries = table_dock_layout->count();
-     for (int i=0; (i < num_entries-3) ; i++)
-     {
-         tmp1 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(i)->widget())->getContract();
-         max_priority_pos = i;
-         max_priority = tmp1->getPriority();
-
-         for (int k=i+1; k < num_entries-2; k++)
+         int num_entries = table_dock_layout->count();
+         for (int i=0; (i < num_entries-3) ; i++)
          {
-             tmp2 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->getContract();
-             if (tmp2->getPriority() > max_priority)
-             {
-                 max_priority = tmp2->getPriority();
-                 max_priority_pos = k;
-             }
+             tmp1 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(i)->widget())->getContract();
+             max_priority_pos = i;
+             max_priority = tmp1->getPriority();
 
-             if ( max_priority_pos != i)
+             for (int k=i+1; k < num_entries-2; k++)
              {
-                  qDebug() << "Moving: from pos. " << max_priority_pos << " to pos." << tmp1->getPriority();
-                // popEntryAnim(qobject_cast<QWidget*>(table_dock_layout->itemAt(max_priority_pos)->widget()),i);
-                   popEntry(k,i);
-                // qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->draw();
+                 tmp2 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->getContract();
+                 if (tmp2->getPriority() > max_priority)
+                 {
+                     max_priority = tmp2->getPriority();
+                     max_priority_pos = k;
+                 }
+
+                 if ( max_priority_pos != i)
+                 {
+                      qDebug() << "Moving: from pos. " << max_priority_pos << " to pos." << tmp1->getPriority();
+                    // popEntryAnim(qobject_cast<QWidget*>(table_dock_layout->itemAt(max_priority_pos)->widget()),i);
+                       popEntry(k,i);
+                    // qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->draw();
+                 }
              }
          }
-     }
-     updateNumbers();
+         updateNumbers();
+    }
+    else qDebug() << "СОРТИРОВКА ПРОПУЩЕНА - таблица редактируется";
 
 }
 
 void TableWidget::popSelected()
 {
-/*   qDebug() << "Origin: "<<sender();
+   qDebug() << "Origin: "<<sender();
    QWidget *s  = qobject_cast<QWidget*>(sender());
     qDebug() << "Casted: "<< s;
    int num = table_dock_layout->indexOf(s);
     qDebug() << "Num: "<< num;
-   popEntry(s,1);*/
+   popEntryAnim(s,0);
 }
 
 void TableWidget::popEntryAnim(QWidget* _widget, int pos)
 {
-    /*if (table_dock_layout->indexOf(_widget)!=pos)
+    if (table_dock_layout->indexOf(_widget)!=pos)
     {
         float duration_factor = 1.0;
         if (pos < 0) pos = 0;
@@ -250,7 +253,7 @@ void TableWidget::popEntryAnim(QWidget* _widget, int pos)
         table_dock_layout->removeWidget(_widget);
         table_dock_layout->insertWidget(pos,_widget);
         table_dock_layout->update();
-    }*/
+    }
 
 }
 
@@ -294,7 +297,7 @@ void TableWidget::createHeader()
     header->setYear(QDate::currentDate().year());
     header->setVerticalSize(50);
     header->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
-    header->setStyleSheet("text-align: middle; qproperty-alignment: AlignCenter;"
+    header->setStyleSheet("text-align: middle; "
                           "background-color: rgb(50, 50, 50); width: 0px; "
                           "color: rgb(255, 255, 255); border: 1px solid grey;");
     header_dock_layout->addWidget(monthes_dock);

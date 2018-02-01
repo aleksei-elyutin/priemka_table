@@ -17,6 +17,7 @@ Stage *Contract::createStage()
     _stages.push_back(st);
     connect(st, &Stage::deleteRequested, this, &Contract::deleteStageRequestHandler);
     connect(st, &Stage::priorityChanged, this, &Contract::calculateContractPriority);
+    st->calculatePriority();
     calculateContractPriority();
     //if (!fileload_status) emit contractChanged();
     return st;
@@ -65,7 +66,7 @@ void  Contract::calculateContractPriority()
         _priority = new_priority;
         if (!fileload_status) emit contractPriorityChanged();
     }
-    _contract_name =  (QString::number(_priority));
+ // /*DEBUG*/  _contract_name =  (QString::number(_priority));
 }
 
 

@@ -49,8 +49,7 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
     button_box = new QWidget(this);  
     button_box->setMinimumHeight(20);
     button_box->setMaximumHeight(20);
-    button_box->setStyleSheet("text-align: middle; qproperty-alignment: AlignCenter; "
-                              "color: rgba(255, 255, 255, 255);"
+    button_box->setStyleSheet("text-align: middle; color: rgba(255, 255, 255, 255);"
                               " background-color: rgb(50, 50, 50); border: 0px solid black;");
     button_box_layout = new QHBoxLayout(button_box);
     button_box_layout->setMargin(0);

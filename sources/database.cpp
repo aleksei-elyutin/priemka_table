@@ -59,6 +59,11 @@ void DataBase::purgeBase()
    //  if (!fileload_status) emit baseChanged();
 }
 
+void DataBase::setSecureHash(QString sh)
+{
+    secure_hash = sh;
+}
+
 void DataBase::writeToFile()
 {
     if(!_file->open(QIODevice::WriteOnly))

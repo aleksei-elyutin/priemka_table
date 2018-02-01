@@ -13,6 +13,9 @@
     <height>254</height>
    </rect>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
   <property name="windowTitle">
    <string>Форма изменения пароля</string>
   </property>
@@ -25,7 +28,11 @@
     </widget>
    </item>
    <item>
-    <widget class="QLineEdit" name="lineEdit"/>
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="clearButtonEnabled">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QLabel" name="label_2">
@@ -35,7 +42,11 @@
     </widget>
    </item>
    <item>
-    <widget class="QLineEdit" name="lineEdit_2"/>
+    <widget class="QLineEdit" name="lineEdit_2">
+     <property name="clearButtonEnabled">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QLabel" name="label_3">
@@ -45,7 +56,18 @@
     </widget>
    </item>
    <item>
-    <widget class="QLineEdit" name="lineEdit_3"/>
+    <widget class="QLineEdit" name="lineEdit_3">
+     <property name="clearButtonEnabled">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="showpass_checkbox">
+     <property name="text">
+      <string>Показать пароль</string>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QLabel" name="label_4">

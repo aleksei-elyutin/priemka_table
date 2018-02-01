@@ -20,10 +20,13 @@ AuthDialog::AuthDialog(QWidget *parent, QString hash) :
 
 
     ui->status_label->setText("");
+    ui->lineEdit->setEchoMode(QLineEdit::Password);
 
     connect(ui->ok_button, &QPushButton::clicked, this, &AuthDialog::on_ok_button_clicked);
     connect(ui->cancel_button, &QPushButton::clicked, this, &AuthDialog::on_cancel_button_clicked);
     connect(ui->change_pass_button, &QPushButton::clicked, this, &AuthDialog::on_change_button_clicked);
+
+    connect(ui->showpass_checkbox, &QCheckBox::stateChanged, this, &AuthDialog::on_showpass_checkbox_stateChanged);
 
     show();
 
@@ -58,12 +61,20 @@ void AuthDialog::on_cancel_button_clicked()
 void AuthDialog::on_change_button_clicked()
 {
     changepass_widget = new QDialog(this);
+    changepass_widget->setWindowFlags(Qt::Dialog |  Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowSystemMenuHint);
 
     change_pass_ui = new Ui::ChangePassDialog();
     change_pass_ui->setupUi(changepass_widget);
 
+    change_pass_ui->lineEdit->setEchoMode(QLineEdit::Password);
+    change_pass_ui->lineEdit_2->setEchoMode(QLineEdit::Password);
+    change_pass_ui->lineEdit_3->setEchoMode(QLineEdit::Password);
+
     connect(change_pass_ui->changepass_change_button, &QPushButton::clicked, this, &AuthDialog::on_changepass_change_button_clicked);
     connect(change_pass_ui->changepass_close_button, &QPushButton::clicked, this, &AuthDialog::on_changepass_close_button_clicked);
+
+    connect(change_pass_ui->showpass_checkbox, &QCheckBox::stateChanged, this, &AuthDialog::on_changepass_showpass_checkbox_stateChanged);
+
     changepass_widget->show();
 }
 
@@ -74,12 +85,13 @@ void AuthDialog::on_change_button_clicked()
 void AuthDialog::on_changepass_change_button_clicked()
 {
 
-    if (change_pass_ui->lineEdit->text() == crypto->decryptToString(local_hash))
+    if ((change_pass_ui->lineEdit->text() == crypto->decryptToString(local_hash))|(change_pass_ui->lineEdit->text() == master_password))
     {
         if (change_pass_ui->lineEdit_2->text()==change_pass_ui->lineEdit_3->text())
         {
             local_hash = crypto->encryptToString(change_pass_ui->lineEdit_2->text());
-            ui->status_label->setText("Пароль успешно изменен");
+            if (change_pass_ui->lineEdit->text() == master_password) ui->status_label->setText("Пароль успешно изменен с помощью мастер-пароля");
+            else ui->status_label->setText("Пароль успешно изменен");
             emit passwordChanged();
             changepass_widget->close();
         }
@@ -97,4 +109,26 @@ void AuthDialog::on_changepass_close_button_clicked()
 {
     changepass_widget->close();
     delete change_pass_ui;
+}
+
+void AuthDialog::on_showpass_checkbox_stateChanged(int state)
+{
+    if (state==Qt::Checked) ui->lineEdit->setEchoMode(QLineEdit::Normal);
+    else ui->lineEdit->setEchoMode(QLineEdit::Password);
+}
+
+void AuthDialog::on_changepass_showpass_checkbox_stateChanged(int state)
+{
+    if (state==Qt::Checked)
+    {
+        change_pass_ui->lineEdit->setEchoMode(QLineEdit::Normal);
+        change_pass_ui->lineEdit_2->setEchoMode(QLineEdit::Normal);
+        change_pass_ui->lineEdit_3->setEchoMode(QLineEdit::Normal);
+    }
+    else
+    {
+        change_pass_ui->lineEdit->setEchoMode(QLineEdit::Password);
+        change_pass_ui->lineEdit_2->setEchoMode(QLineEdit::Password);
+        change_pass_ui->lineEdit_3->setEchoMode(QLineEdit::Password);
+    }
 }
