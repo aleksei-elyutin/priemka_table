@@ -102,7 +102,7 @@ MainWindow::MainWindow(QWidget *parent) :
    // connect(timer, &QTimer::timeout, main_table, &TableWidget::sort);
 
     //timer->start(1000*60*1); // одна минута
-    timer->start(1000*10);
+    timer->start(1000*3);
 
     load();
 

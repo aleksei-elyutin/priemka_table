@@ -2,7 +2,8 @@
 
 Contract::Contract(QObject *parent) : QObject(parent)
 {
-    _priority = 0;
+    _contract_name= "Контракт без названия";
+    _priority = Stage::Normal;
 }
 
 void Contract::setContractName(QString name)
@@ -19,7 +20,6 @@ Stage *Contract::createStage()
     connect(st, &Stage::priorityChanged, this, &Contract::calculateContractPriority);
     st->calculatePriority();
     calculateContractPriority();
-    //if (!fileload_status) emit contractChanged();
     return st;
 }
 
@@ -55,31 +55,23 @@ bool Contract::deleteStage(int stage_num)
 
 void  Contract::calculateContractPriority()
 {
-    int new_priority = 0;
+    int new_priority = Stage::Normal;
     int num_stages = _stages.size();
     for (int i=0; i< num_stages; i++)
     {
-         new_priority += _stages.at(i)->getPriority();
+        if  (_stages.at(i)->getPriority() > new_priority)
+        new_priority = _stages.at(i)->getPriority();
     }
     if (_priority != new_priority)
     {
         _priority = new_priority;
-        if (!fileload_status) emit contractPriorityChanged();
     }
  // /*DEBUG*/  _contract_name =  (QString::number(_priority));
 }
 
-
-/*bool Contract::lessThan( Contract* s1, Contract* s2 )
+void Contract::deleteStageRequestHandler()
 {
-    // qDebug() << "Вызван оператор сравнения";
-    return s1->calculateContractPriority() > s2->calculateContractPriority();
-
-}*/
-
-void Contract::deleteStageRequestHandler()/*SLOT*/
-{
-
+    /** Обработчик сигнала от Stage */
     int i = _stages.indexOf(qobject_cast<Stage*>( sender()) );
     if (deleteStage(i))
     {
@@ -90,13 +82,20 @@ void Contract::deleteStageRequestHandler()/*SLOT*/
         qDebug() << "Ошибка при удалении этапа";
     }
    calculateContractPriority();
-   if (!fileload_status)  emit contractChanged();
 }
 
-  /*SLOTS*/
+
 void Contract::deleteContractRequestHandler()
 {
-   if (!fileload_status) emit this->deleteRequested();
+   /** Обработчик события от GUI - Contractwidget */
+   //if (!fileload_status)
+    int num_stages = _stages.size();
+    for (int i=0; i< num_stages; i++)
+    {
+        delete _stages.at(i);
+    }
+    _stages.clear();
+    emit this->deleteRequested();
 }
 
 

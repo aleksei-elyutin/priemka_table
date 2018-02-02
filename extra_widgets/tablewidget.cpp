@@ -123,7 +123,7 @@ void TableWidget::addContractWidget(Contract *contract)
     connect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
     pa->start();
     loop->exec();
-    disconnect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
+
 }
 
 void TableWidget::createContractWidgetRequestHandler()
@@ -195,8 +195,8 @@ void TableWidget::sort()
                  if ( max_priority_pos != i)
                  {
                       qDebug() << "Moving: from pos. " << max_priority_pos << " to pos." << tmp1->getPriority();
-                    // popEntryAnim(qobject_cast<QWidget*>(table_dock_layout->itemAt(max_priority_pos)->widget()),i);
-                       popEntry(k,i);
+                     popEntryAnim(qobject_cast<QWidget*>(table_dock_layout->itemAt(max_priority_pos)->widget()),i);
+                    //   popEntry(k,i);
                     // qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->draw();
                  }
              }
@@ -245,10 +245,10 @@ void TableWidget::popEntryAnim(QWidget* _widget, int pos)
         qDebug() << "endValue:"<< pa->endValue();
 
 
-        connect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
+        //connect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
         pa->start();
         loop->exec();
-        disconnect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
+        //disconnect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
 
         table_dock_layout->removeWidget(_widget);
         table_dock_layout->insertWidget(pos,_widget);

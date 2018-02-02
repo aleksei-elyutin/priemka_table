@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QtGui>
+#include <QDebug>
 #include "ui_form1.h"
 #include "ui_form2.h"
 
@@ -12,9 +13,9 @@ class mywidget : public QWidget
 
 private:
 
-    Ui::Form1 form1;
-    Ui::Form2 form2;
+    Ui::Form2 progress_form;
 
+    void destoyedSignalMonitor(QObject *obj);
 public:
     explicit mywidget(QWidget *parent = 0);
 

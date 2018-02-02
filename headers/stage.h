@@ -10,6 +10,8 @@
 class Stage: public QObject {
 
     Q_OBJECT
+    //Q_ENUM(Priority)
+
 private:
     QDate _start_date;
     QDate _finish_date;
@@ -21,9 +23,12 @@ private:
     int _days_to_checkpoint;
     bool fileload_status = false;
 
+
+
 public:
     /*explicit*/ Stage(QObject *parent = 0);
 
+    enum Priority{Normal, Overdude_20, Overdude_10, Overdude};
 
     void setStartDate(QDate startdate);
 
@@ -36,22 +41,18 @@ public:
 
 
     void setStageName(QString name);
-
     QString getStageName() {return _stage_name;} //inline impl
 
 
-   // void setDoneStatus(int status);
+    bool setDoneStatus(int status);
+    bool getDoneStatus() {return _is_done;} //inline impl
 
-  //  bool getDoneStatus() {return _is_done;} //inline impl
 
-
-    void setLeft10Status(int status);
-
+    bool setLeft10Status(int status);
     bool getLeft10DoneStatus() {return _is_10_done;} //inline impl
 
 
-    void setLeft20Status(int status);
-
+    bool setLeft20Status(int status);
     bool getLeft20DoneStatus() {return _is_20_done;} //inline impl
 
 

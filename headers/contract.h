@@ -11,16 +11,17 @@
 class Contract : public QObject {
 
     Q_OBJECT
+  //  Q_ENUM(Priority)
 
 private:
 
-    QString _contract_name = "Контракт без названия";
+    QString _contract_name;
     QVector <Stage *> _stages;
 
     int _priority;
     bool fileload_status = false;
 
-
+   // enum Priority{Normal, Overdude_20, Overdude_10, Overdude};
 
 public:
 

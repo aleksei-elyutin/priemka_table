@@ -13,7 +13,7 @@ Stage::Stage(QObject *parent) : QObject(parent)
     _is_20_done = false;
     _is_10_done = false;
 
-    _priority = 0;
+    _priority = Normal;
 }
 
 void Stage::setStartDate(QDate startdate)
@@ -36,38 +36,79 @@ void Stage::setStageName(QString name)
     if (!fileload_status) emit stageChanged();
 }
 
-/*void Stage::setDoneStatus(int status)
-{
-    if (status == Qt::Checked)
-    {
-    _is_done = true;
-    }
-    else _is_done = false;
-    if (!fileload_status) emit stageChanged();
-    calculatePriority();
-}*/
 
-void Stage::setLeft10Status(int status)
+bool Stage::setDoneStatus(int status)
 {
-    if (status == Qt::Checked)
+    int days_left = QDate::currentDate().daysTo(_finish_date);
+    if ((_is_20_done & _is_10_done) & (days_left <= 0))
     {
-         _is_10_done = true;
+        if (status == Qt::Checked)
+        {
+            _is_done = true;
+        }
+        else _is_done = false;
+        return true;
+        calculatePriority();
     }
-    else _is_10_done = false;
-  //  if (!fileload_status) emit stageChanged();
-    calculatePriority();
+    else
+    {
+     qDebug() << "Недопустимая попытка поменять статус DoneStatus этапа " << _stage_name;
+     qDebug() << "(_is_20_done & _is_10_done):" << (_is_20_done & _is_10_done) << "    (days_left <= 0):" << (days_left <= 0);
+     return false;
+    }
 }
 
-void Stage::setLeft20Status(int status)
+bool Stage::setLeft10Status(int status)
 {
-    if (status == Qt::Checked)
+    int days_left = QDate::currentDate().daysTo(_finish_date);
+    if ((_is_20_done) & (days_left <= 10))
     {
-        _is_20_done = true;
+        if (status == Qt::Checked)
+        {
+             _is_10_done = true;
+        }
+        else
+        {
+            _is_done = false;
+            _is_10_done = false;
+        }
+        return true;
+        calculatePriority();
     }
-    else _is_20_done = false;
- //   if (!fileload_status) emit stageChanged();
-    calculatePriority();
+    else
+    {
+        qDebug() << "Недопустимая попытка поменять статус 10_DoneStatus этапа " << _stage_name;
+        qDebug() << "(_is_20_done):" << (_is_20_done & _is_10_done) << "    (days_left <= 10):" << (days_left <= 0);
+        return false;
+    }
+  //  if (!fileload_status) emit stageChanged();
 
+}
+
+bool Stage::setLeft20Status(int status)
+{
+    int days_left = QDate::currentDate().daysTo(_finish_date);
+    if (days_left <= 20)
+    {
+        if (status == Qt::Checked)
+        {
+            _is_20_done = true;
+        }
+        else
+        {
+            _is_done = false;
+            _is_10_done = false;
+            _is_20_done = false;
+        }
+        calculatePriority();
+        return true;
+    }
+    else
+    {
+        qDebug() << "Недопустимая попытка поменять статус 20_DoneStatus этапа " << _stage_name;
+        qDebug() << "(days_left <= 20):" << (days_left <= 20);
+        return false;
+    }
 }
 
 
@@ -75,33 +116,26 @@ void Stage::calculatePriority()
 {
     int new_priority = 0;
     int days_left = QDate::currentDate().daysTo(_finish_date);
-   /* if ((days_left == 0)&(!_is_done))
-    {
-        int exp = _finish_date.daysTo(QDate::currentDate());
-        qDebug() << "Этап " << _stage_name <<  " просрочен на " << exp << " дней";
-        new_priority = 10;
-    } else*/
 
-    if ((days_left <= 20)&(!_is_20_done))
-    {
-        new_priority = 1;
-    }
-    if ((days_left <= 10)&(!_is_10_done))
-    {
-        new_priority = 5;
-    }
-    if (days_left > 20) new_priority = 0;
+    if (days_left > 20) new_priority = Normal;
+    if ((days_left <= 20)&(!_is_20_done)) new_priority = Overdude_20;
+    if ((days_left <= 10)&(!_is_10_done)) new_priority = Overdude_10;
+    if ((days_left < 0)&(!_is_done)) new_priority = Overdude;
 
-    _priority = new_priority;
-   // /*DEBUG*/ _stage_name= (QString::number(_priority));
-    if (!fileload_status) emit priorityChanged();
+
+    if (new_priority != _priority)
+    {
+        _priority = new_priority;
+        if (!fileload_status) emit priorityChanged();
+    }
+   // /*DEBUG*/ _stage_name= (QString::number(_priority));    
 }
 
 
 
 void Stage::deleteStageRequestHandler()
 {
-    if (!fileload_status) emit this->deleteRequested();
+    emit this->deleteRequested();
 }
 
 

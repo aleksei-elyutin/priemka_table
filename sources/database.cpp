@@ -238,6 +238,6 @@ void DataBase::deleteContractRequestHandler()
 
 void DataBase::contractChangeHandler()
 {
-   if (!fileload_status) emit baseChanged();
+  // if (!fileload_status) emit baseChanged();
 }
 

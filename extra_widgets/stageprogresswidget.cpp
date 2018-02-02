@@ -93,6 +93,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     chkBoxesContainerLayout->addWidget(checkpoints_label);
 
     _done20_checkbox = new QCheckBox (QString( "осталось 20 дней "),chkBoxesContainer);
+    _done20_checkbox->setObjectName("_done20_checkbox");
    // _done20_checkbox->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Maximum);
      _done20_checkbox->setMinimumWidth(150);
 //    _done20_checkbox->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
@@ -100,20 +101,22 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     chkBoxesContainerLayout->addWidget(_done20_checkbox);
 
     _done10_checkbox = new QCheckBox (QString("осталось 10 дней "),chkBoxesContainer);
+    _done10_checkbox->setObjectName("_done10_checkbox");
     //_done10_checkbox->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Maximum);
     _done10_checkbox->setMinimumWidth(150);
 //    _done10_checkbox->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
 //                                    "color: rgb(255, 255, 255); border: 0px solid black;");
     chkBoxesContainerLayout->addWidget(_done10_checkbox);
 
-//    _done_checkbox = new QCheckBox (QString("Выполнено"),chkBoxesContainer);
+    _done_checkbox = new QCheckBox (QString("выполнено"),chkBoxesContainer);
+    _done_checkbox->setObjectName("_done_checkbox");
     //_done_checkbox->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
-//    _done_checkbox->setMinimumWidth(150);
-
-    //    _done_checkbox->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
+    _done_checkbox->setMinimumWidth(150);
+//   _done_checkbox->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
 //                                  "color: rgb(255, 255, 255); border: 0px solid black;");
 
-    //chkBoxesContainerLayout->addWidget(_done_checkbox);
+    chkBoxesContainerLayout->addWidget(_done_checkbox);
+
     chkBoxesContainerLayout->setStretch(0,0);
     chkBoxesContainerLayout->setStretch(1,0);
     chkBoxesContainerLayout->setStretch(2,0);
@@ -202,65 +205,86 @@ void StageProgressWidget::setStage(Stage *stage)
 {
     _stage=stage;
 
-
-    connect (_done20_checkbox, &QCheckBox::stateChanged, _stage, &Stage::setLeft20Status);
-    connect (_done20_checkbox, &QCheckBox::stateChanged, this, &StageProgressWidget::draw);
-    connect (_done20_checkbox, &QCheckBox::stateChanged, this, &StageProgressWidget::set20CheckBoxCHeckable);
-
-
-
-
-    connect (_done10_checkbox, &QCheckBox::stateChanged, _stage, &Stage::setLeft10Status);
-    connect (_done10_checkbox, &QCheckBox::stateChanged, this, &StageProgressWidget::draw);
-
-
-
-   // _done_checkbox->setChecked(_stage->getDoneStatus());
-  //  connect (_done_checkbox, &QCheckBox::stateChanged, _stage, &Stage::setDoneStatus);
-  //  connect (_done_checkbox, &QCheckBox::stateChanged, this, &StageProgressWidget::draw);
-
     connect(_stage, &Stage::stageChanged, this, &StageProgressWidget::draw);
+
+    _done20_checkbox->setChecked(_stage->getLeft20DoneStatus());
+    if (_stage->getLeft20DoneStatus() == Qt::Checked)
+    {
+        _done10_checkbox->setCheckable(true);
+        _done10_checkbox->setChecked(_stage->getLeft10DoneStatus());
+        if (_stage->getLeft10DoneStatus() == Qt::Checked)
+        {
+             _done_checkbox->setCheckable(true);
+             _done_checkbox->setChecked(_stage->getDoneStatus());
+        }
+        else _done_checkbox->setCheckable(false);
+    }
+    else
+    {
+         _done10_checkbox->setCheckable(false);
+    }
+
+    connect (_done20_checkbox, &QCheckBox::stateChanged, this, &StageProgressWidget::setCheckBoxHandler);
+    connect (_done10_checkbox, &QCheckBox::stateChanged, this, &StageProgressWidget::setCheckBoxHandler);
+    connect (_done_checkbox,  &QCheckBox::stateChanged, this, &StageProgressWidget::setCheckBoxHandler);
 
     draw();
 }
 
-void StageProgressWidget::set20CheckBoxCHeckable(int state)
+void StageProgressWidget::setCheckBoxHandler(int state)
 {
-     if ((state == Qt::Unchecked)&(_stage->getLeft10DoneStatus()))
-     {
-          _done10_checkbox->setChecked(false);
-          _stage->setLeft10Status(Qt::Unchecked);
-          _done10_checkbox->setCheckable(false);
-          draw();
-     }
+    /*Не отрабатывает ограничение по датам!*/
+    if (sender()->objectName() == "_done20_checkbox")
+    {
+        if (!_stage->setLeft20Status(state)) qDebug() << "setCheckBoxHandler: setLeft20Status state not set!";
+        else
+        {
+            if (_stage->getLeft20DoneStatus())
+            {
+                _done10_checkbox->setCheckable(true);
+                _done_checkbox->setCheckable(true);
+            }
+            else
+            {
+                _done10_checkbox->setChecked(false);
+                _done_checkbox->setChecked(false);
+                _done10_checkbox->setCheckable(false);
+                _done_checkbox->setCheckable(false);
+                if (!_stage->setLeft10Status(Qt::Unchecked)) qDebug() << "setCheckBoxHandler: setLeft10Status state not set!";
+                if (!_stage->setDoneStatus(Qt::Unchecked)) qDebug() << "setCheckBoxHandler: setDoneStatus state not set!";
+            }
+        }
+    }
+
+    else if (sender()->objectName() == "_done10_checkbox")
+    {
+        if (!_stage->setLeft10Status(state)) qDebug() << "setCheckBoxHandler: setLeft20Status state not set!";
+        else
+        {
+            if (_stage->getLeft10DoneStatus()) _done_checkbox->setCheckable(true);
+            else
+            {
+                 _done_checkbox->setChecked(false);
+                 _done_checkbox->setCheckable(false);
+                 if (!_stage->setDoneStatus(Qt::Unchecked)) qDebug() << "setCheckBoxHandler: setDoneStatus state not set!";
+            }
+
+        }
+    }
+    else if (sender()->objectName() == "_done_checkbox")
+    {
+         if (!_stage->setDoneStatus(state)) qDebug() << "setLeft20Status state not set!";
+    }
+    else qDebug() << "setCheckBoxHandler: Object name not responsed!";
+
+    draw();
+
 }
 
 void StageProgressWidget::draw()
 {
-
-     _stage_name->setText(_stage->getStageName());
-
-     if (QDate::currentDate().daysTo(_stage->getFinishDate()) > 20)
-     {
-         _done20_checkbox->setCheckable(false);
-     }
-     else
-     {
-         _done20_checkbox->setCheckable(true);
-         _done20_checkbox->setChecked(_stage->getLeft20DoneStatus());
-     }
-
-     if  ((QDate::currentDate().daysTo(_stage->getFinishDate()) > 10)|(!_done20_checkbox->isChecked()))
-     {
-         _done10_checkbox->setCheckable(false);
-     }
-     else //if  (_done20_checkbox->isChecked())
-     {
-          _done10_checkbox->setCheckable(true);
-          _done10_checkbox->setChecked(_stage->getLeft10DoneStatus());
-     }
-
-
+    /** Убрать проверку цвета по датам. Добавить проверку цвета по приоритету */
+    _stage_name->setText(_stage->getStageName());
 
     QDate _today = QDate::currentDate();
 
@@ -401,8 +425,7 @@ void StageProgressWidget::showDeleteDialog()
 void StageProgressWidget::lock()
 {
     islocked = true;
-
-   //  _done_checkbox->setDisabled(true);
+    _done_checkbox->setDisabled(true);
     _done10_checkbox->setDisabled(true);
     _done20_checkbox->setDisabled(true);
 
@@ -412,8 +435,7 @@ void StageProgressWidget::lock()
 void StageProgressWidget::unlock()
 {
     islocked = false;
-
-  //  _done_checkbox->setDisabled(false);
+    _done_checkbox->setDisabled(false);
     _done10_checkbox->setDisabled(false);
     _done20_checkbox->setDisabled(false);
 
@@ -453,8 +475,5 @@ void StageProgressWidget::selectYear()
     draw();
 }
 
-/*StageProgressWidget::StageProgressWidget(QWidget *parent, Stage &stage)
-{
 
-}*/
 
