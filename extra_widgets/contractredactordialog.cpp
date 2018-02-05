@@ -6,7 +6,7 @@ contractRedactorDialog::contractRedactorDialog(QWidget *parent) :
     ui(new Ui::contractRedactorDialog)
 {
     ui->setupUi(this);
-
+    connect(ui->buttonBox, QDialogButtonBox::rejected, this, QWidget::deleteLater);
 }
 
 void contractRedactorDialog::draw()
@@ -19,7 +19,7 @@ void contractRedactorDialog::draw()
     int num_stages=_contract->getNumStages();
     for (int i = 0; i < num_stages; i++)
     {
-        stageRedactor *sr = new stageRedactor(this);
+        stageRedactor *sr = new stageRedactor(stages_box);
         sr->setStage(_contract->getStage(i));
         vlayout->addWidget(sr);
 
@@ -29,7 +29,10 @@ void contractRedactorDialog::draw()
 
 contractRedactorDialog::~contractRedactorDialog()
 {
+    deleteLater();
+
     delete ui;
+
 }
 
 void contractRedactorDialog::linkContract(Contract *contract)
@@ -43,5 +46,6 @@ void contractRedactorDialog::linkContract(Contract *contract)
 void contractRedactorDialog::applyChanges()
 {
     _contract->setContractName(ui->textEdit->toPlainText());
+    deleteLater();
 
 }

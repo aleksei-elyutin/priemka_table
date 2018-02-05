@@ -45,7 +45,7 @@ void AuthDialog::on_ok_button_clicked()
     if (ui->lineEdit->text() == crypto->decryptToString(local_hash))
     {
         emit accessGranted();
-        this->close();
+        this->deleteLater();
     }
     else
     {
@@ -55,7 +55,7 @@ void AuthDialog::on_ok_button_clicked()
 
 void AuthDialog::on_cancel_button_clicked()
 {
-    close();
+    deleteLater();
 }
 
 void AuthDialog::on_change_button_clicked()
@@ -107,7 +107,7 @@ void AuthDialog::on_changepass_change_button_clicked()
 
 void AuthDialog::on_changepass_close_button_clicked()
 {
-    changepass_widget->close();
+    changepass_widget->deleteLater();
     delete change_pass_ui;
 }
 

@@ -6,6 +6,10 @@ DleteDialog::DleteDialog(QWidget *parent) :
     ui(new Ui::DleteDialog)
 {
     ui->setupUi(this);
+
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &QDialogButtonBox::deleteLater);
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialogButtonBox::deleteLater);
+
  //   setStyleSheet("background-color: rgb(20, 20, 20); color: rgb(255, 255, 255); border: 1px solid rgb(20, 20, 20);");
 
 //    ui->buttonBox->layout()->setSpacing(100);
@@ -15,6 +19,7 @@ DleteDialog::DleteDialog(QWidget *parent) :
 
 DleteDialog::~DleteDialog()
 {
+    //deleteLater();
     delete ui;
 }
 

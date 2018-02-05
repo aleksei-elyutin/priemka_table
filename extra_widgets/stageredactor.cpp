@@ -10,6 +10,7 @@ void stageRedactor::applyChanges()
         _stage->setFinishDate(ui->_finish_date_edit->date());
         _stage->setStageName(ui->textEdit->toPlainText());
     }
+    deleteLater();
 
 }
 
@@ -21,7 +22,7 @@ void stageRedactor::showDeleteDialog()
 
     connect(deleteDialog, & DleteDialog::accepted, _stage, &Stage::deleteStageRequestHandler);
     connect(deleteDialog, & DleteDialog::accepted, this, &stageRedactor::disconnectIfDeleted);
-    connect(deleteDialog, & DleteDialog::accepted, this, &stageRedactor::close);
+    connect(deleteDialog, & DleteDialog::accepted, this, &stageRedactor::deleteLater);
 
     deleteDialog->show();
 }
@@ -52,6 +53,7 @@ stageRedactor::stageRedactor(QWidget *parent) :
 
 stageRedactor::~stageRedactor()
 {
+    deleteLater();
     delete ui;
 }
 

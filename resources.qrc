@@ -15,5 +15,6 @@
         <file>resources/lock_icon.png</file>
         <file>resources/save_to_disk.png</file>
         <file>resources/unlock_icon.png</file>
+        <file>resources/app.png</file>
     </qresource>
 </RCC>

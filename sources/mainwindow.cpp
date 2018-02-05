@@ -6,6 +6,12 @@ MainWindow::MainWindow(QWidget *parent) :
     QWidget(parent)//, ui(new Ui::MainWindow)
 {
 
+    setWindowTitle("454 ВП МО РФ");
+
+    QPixmap app_pixmap(":/resources/app.png");
+    QIcon app_icon(app_pixmap);
+    setWindowIcon(app_icon);
+
 
     file = new QFile("base.dat");
 
@@ -138,7 +144,8 @@ void MainWindow::closeEvent(QCloseEvent *)
 {
     qDebug() << "Сохранение при закрытии";
     base->writeToFile();
-    qDebug() << "Закрыт? - " << close();
+   // qDebug() << "Закрыт? - " << close();
+    deleteLater();
 }
 
 void MainWindow::load()
@@ -149,7 +156,7 @@ void MainWindow::load()
         purge_dialog->setLabelText("Текущие записи будут удалены. Продолжить?");
 
         connect(purge_dialog, &DleteDialog::accepted, base, &DataBase::readFromFile);
-        connect(purge_dialog, &DleteDialog::accepted, purge_dialog, &DleteDialog::close);
+        connect(purge_dialog, &DleteDialog::accepted, purge_dialog, &DleteDialog::deleteLater);
         purge_dialog->show();
 
     }
@@ -167,7 +174,7 @@ void MainWindow::save()
         rewrite_dialog->setLabelText("Файл существует и не пуст. Перезаписать?");
 
         connect(rewrite_dialog, &DleteDialog::accepted, base, &DataBase::writeToFile);
-        connect(rewrite_dialog, &DleteDialog::accepted, rewrite_dialog, &DleteDialog::close);
+        connect(rewrite_dialog, &DleteDialog::accepted, rewrite_dialog, &DleteDialog::deleteLater);
         rewrite_dialog->show();
     } else
     {

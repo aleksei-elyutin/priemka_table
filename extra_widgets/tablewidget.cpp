@@ -181,7 +181,7 @@ void TableWidget::sort()
          int num_entries = table_dock_layout->count()-2;
           for (int j=0; (j < num_entries); j++)
          {
-             for (int i=0; (i < num_entries); i++)
+             for (int i=0; (i < num_entries-1); i++)
              {
                  tmp1 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(i)->widget())->getContract();
                  max_priority_pos = i;
