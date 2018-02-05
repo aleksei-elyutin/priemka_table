@@ -40,7 +40,7 @@ void Stage::setStageName(QString name)
 bool Stage::setDoneStatus(int status)
 {
     int days_left = QDate::currentDate().daysTo(_finish_date);
-    if ((_is_20_done & _is_10_done) & (days_left <= 0))
+    if (((_is_20_done & _is_10_done) & (days_left <= 0)) | (fileload_status))
     {
         if (status == Qt::Checked)
         {
@@ -61,7 +61,7 @@ bool Stage::setDoneStatus(int status)
 bool Stage::setLeft10Status(int status)
 {
     int days_left = QDate::currentDate().daysTo(_finish_date);
-    if ((_is_20_done) & (days_left <= 10))
+    if (((_is_20_done) & (days_left <= 10)) | (fileload_status))
     {
         if (status == Qt::Checked)
         {
@@ -88,7 +88,7 @@ bool Stage::setLeft10Status(int status)
 bool Stage::setLeft20Status(int status)
 {
     int days_left = QDate::currentDate().daysTo(_finish_date);
-    if (days_left <= 20)
+    if ((days_left <= 20) | (fileload_status))
     {
         if (status == Qt::Checked)
         {
@@ -121,12 +121,14 @@ void Stage::calculatePriority()
     if ((days_left <= 20)&(!_is_20_done)) new_priority = Overdude_20;
     if ((days_left <= 10)&(!_is_10_done)) new_priority = Overdude_10;
     if ((days_left < 0)&(!_is_done)) new_priority = Overdude;
+    if ((days_left < 0)&(_is_done)) new_priority = Normal;
+
 
 
     if (new_priority != _priority)
     {
         _priority = new_priority;
-        if (!fileload_status) emit priorityChanged();
+       // if (!fileload_status) emit priorityChanged();
     }
    // /*DEBUG*/ _stage_name= (QString::number(_priority));    
 }

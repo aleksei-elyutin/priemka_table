@@ -207,22 +207,6 @@ void StageProgressWidget::setStage(Stage *stage)
 
     connect(_stage, &Stage::stageChanged, this, &StageProgressWidget::draw);
 
-    _done20_checkbox->setChecked(_stage->getLeft20DoneStatus());
-    if (_stage->getLeft20DoneStatus() == Qt::Checked)
-    {
-        _done10_checkbox->setCheckable(true);
-        _done10_checkbox->setChecked(_stage->getLeft10DoneStatus());
-        if (_stage->getLeft10DoneStatus() == Qt::Checked)
-        {
-             _done_checkbox->setCheckable(true);
-             _done_checkbox->setChecked(_stage->getDoneStatus());
-        }
-        else _done_checkbox->setCheckable(false);
-    }
-    else
-    {
-         _done10_checkbox->setCheckable(false);
-    }
 
     connect (_done20_checkbox, &QCheckBox::stateChanged, this, &StageProgressWidget::setCheckBoxHandler);
     connect (_done10_checkbox, &QCheckBox::stateChanged, this, &StageProgressWidget::setCheckBoxHandler);
@@ -233,16 +217,17 @@ void StageProgressWidget::setStage(Stage *stage)
 
 void StageProgressWidget::setCheckBoxHandler(int state)
 {
-    /*Не отрабатывает ограничение по датам!*/
+    int days_left = QDate::currentDate().daysTo(_stage->getFinishDate());
+
     if (sender()->objectName() == "_done20_checkbox")
     {
         if (!_stage->setLeft20Status(state)) qDebug() << "setCheckBoxHandler: setLeft20Status state not set!";
         else
         {
-            if (_stage->getLeft20DoneStatus())
+            if ((_stage->getLeft20DoneStatus()) & (days_left <= 10))
             {
                 _done10_checkbox->setCheckable(true);
-                _done_checkbox->setCheckable(true);
+                //_done_checkbox->setCheckable(true);
             }
             else
             {
@@ -250,8 +235,8 @@ void StageProgressWidget::setCheckBoxHandler(int state)
                 _done_checkbox->setChecked(false);
                 _done10_checkbox->setCheckable(false);
                 _done_checkbox->setCheckable(false);
-                if (!_stage->setLeft10Status(Qt::Unchecked)) qDebug() << "setCheckBoxHandler: setLeft10Status state not set!";
-                if (!_stage->setDoneStatus(Qt::Unchecked)) qDebug() << "setCheckBoxHandler: setDoneStatus state not set!";
+               // if (!_stage->setLeft10Status(Qt::Unchecked)) qDebug() << "setCheckBoxHandler: setLeft10Status state not set!";
+               // if (!_stage->setDoneStatus(Qt::Unchecked)) qDebug() << "setCheckBoxHandler: setDoneStatus state not set!";
             }
         }
     }
@@ -261,19 +246,19 @@ void StageProgressWidget::setCheckBoxHandler(int state)
         if (!_stage->setLeft10Status(state)) qDebug() << "setCheckBoxHandler: setLeft20Status state not set!";
         else
         {
-            if (_stage->getLeft10DoneStatus()) _done_checkbox->setCheckable(true);
+            if ((_stage->getLeft10DoneStatus())  & (days_left <= 0)) _done_checkbox->setCheckable(true);
             else
             {
                  _done_checkbox->setChecked(false);
                  _done_checkbox->setCheckable(false);
-                 if (!_stage->setDoneStatus(Qt::Unchecked)) qDebug() << "setCheckBoxHandler: setDoneStatus state not set!";
+               //  if (!_stage->setDoneStatus(Qt::Unchecked)) qDebug() << "setCheckBoxHandler: setDoneStatus state not set!";
             }
 
         }
     }
     else if (sender()->objectName() == "_done_checkbox")
     {
-         if (!_stage->setDoneStatus(state)) qDebug() << "setLeft20Status state not set!";
+         if (!_stage->setDoneStatus(state)) qDebug() << "setDoneStatus state not set!";
     }
     else qDebug() << "setCheckBoxHandler: Object name not responsed!";
 
@@ -283,7 +268,33 @@ void StageProgressWidget::setCheckBoxHandler(int state)
 
 void StageProgressWidget::draw()
 {
-    /** Убрать проверку цвета по датам. Добавить проверку цвета по приоритету */
+
+    int days_left = QDate::currentDate().daysTo(_stage->getFinishDate());
+    if (days_left <= 20) _done20_checkbox->setCheckable(true);
+    else _done20_checkbox->setCheckable(false);
+    _done20_checkbox->setChecked(_stage->getLeft20DoneStatus());
+
+    if ((_stage->getLeft20DoneStatus()) & (days_left <= 10))
+    {
+        _done10_checkbox->setCheckable(true);
+        _done10_checkbox->setChecked(_stage->getLeft10DoneStatus());
+
+        if ((_stage->getLeft10DoneStatus()) & (days_left <= 0))
+        {
+             _done_checkbox->setCheckable(true);
+             _done_checkbox->setChecked(_stage->getDoneStatus());
+        }
+        else _done_checkbox->setCheckable(false);
+    }
+    else
+    {
+         _done10_checkbox->setCheckable(false);
+         _done_checkbox->setCheckable(false);
+    }
+
+
+
+    _stage->calculatePriority();
     _stage_name->setText(_stage->getStageName());
 
     QDate _today = QDate::currentDate();
@@ -315,7 +326,11 @@ void StageProgressWidget::draw()
          //_today = QDate( _selected_year, 1, 1);
          _progress->setValue(_progress->minimum());
     }
-    else _progress->setValue(_today.dayOfYear());
+    else
+    {
+        _progress->setValue(_today.dayOfYear());
+        if (_curr_finish_date.dayOfYear() < _today.dayOfYear())  _progress->setValue(_progress->maximum());
+    }
 
 
     _progress->setFormat("");
@@ -326,6 +341,10 @@ void StageProgressWidget::draw()
         else _days_left_label->setText("Осталось дней: "+QString::number(days_left_int));
 
     }
+    else if (_stage->getPriority() == Stage::Normal)
+    {
+        _days_left_label->setText("Завершено");
+    }
     else
     {
         _days_left_label->setText("Просрочено дней: "+QString::number(abs(days_left_int)));
@@ -333,24 +352,44 @@ void StageProgressWidget::draw()
 
 
 
-    if ((days_left_int <= 10)&(!_stage->getLeft10DoneStatus()))
+    if (_stage->getPriority() == Stage::Overdude)//((days_left_int <= 10)&(!_stage->getLeft10DoneStatus()))
+        {
+            _progress->setStyleSheet("QProgressBar {border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
+            QProgressBar::chunk {background-color: rgba(255, 0, 0, 100); width: 3px; margin: 0px;}");
+            setStyleSheet("QWidget:hover{background-color: rgba(255, 0, 0, 50);}");
+
+    }
+    else if (_stage->getPriority() == Stage::Overdude_10)//((days_left_int <= 10)&(!_stage->getLeft10DoneStatus()))
     {
         _progress->setStyleSheet("QProgressBar {border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
         QProgressBar::chunk {background-color: rgba(255, 0, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем красные chunk'и  и серую заливу
         setStyleSheet("QWidget:hover{background-color: rgba(255, 0, 0, 50);}");
 
 
-    } else if ((days_left_int <= 20)&(!_stage->getLeft20DoneStatus())&(!_stage->getLeft10DoneStatus()))
+    }
+    else if (_stage->getPriority() == Stage::Overdude_20) //((days_left_int <= 20)&(!_stage->getLeft20DoneStatus())&(!_stage->getLeft10DoneStatus()))
     {
         _progress->setStyleSheet("QProgressBar { border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
         QProgressBar::chunk {background-color: rgba(255, 255, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем желтые chunk'и  и серую заливу
        setStyleSheet("QWidget:hover{background-color: rgba(255, 255, 0, 50);}");
-    } else
-    {
-        _progress->setStyleSheet("QProgressBar {  border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
-        QProgressBar::chunk {background-color: rgba(0, 255, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем зеленые chunk'и  и серую заливу
-        setStyleSheet("QWidget:hover{background-color: rgba(0, 255, 0, 50);}");
     }
+    else if (_stage->getPriority() == Stage::Normal)
+    {
+        if (days_left_int < 0)
+        {
+            _progress->setStyleSheet("QProgressBar {  border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
+            QProgressBar::chunk {background-color: rgba(0, 128, 255, 100); width: 3px; margin: 0px;}");  //Устанавливаем зеленые chunk'и  и серую заливу
+            setStyleSheet("QWidget:hover{background-color: rgba(0, 128, 255, 50);}");
+        }
+        else
+        {
+            _progress->setStyleSheet("QProgressBar {  border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
+            QProgressBar::chunk {background-color: rgba(0, 255, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем зеленые chunk'и  и серую заливу
+            setStyleSheet("QWidget:hover{background-color: rgba(0, 255, 0, 50);}");
+        }
+    }
+
+
 
    /* QResizeEvent rse = QResizeEvent(QSize(),QSize());
     resizeEvent(&rse);*/

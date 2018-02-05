@@ -123,7 +123,7 @@ void DataBase::writeToFile()
 
             if  (tmp_stage_pointer->getLeft10DoneStatus()) ss._10_done = Qt::Checked; else ss._10_done = Qt::Unchecked;
             if  (tmp_stage_pointer->getLeft20DoneStatus())  ss._20_done = Qt::Checked; else ss._20_done = Qt::Unchecked;
-            //if  (tmp_stage_pointer->getDoneStatus()) ss._done = Qt::Checked; else ss._done = Qt::Unchecked;
+            if  (tmp_stage_pointer->getDoneStatus()) ss._done = Qt::Checked; else ss._done = Qt::Unchecked;
             _file->write((char*)&ss,sizeof(stage_structure));
 
         }
@@ -197,14 +197,14 @@ void DataBase::readFromFile()
                 stage_structure ss;
                 _file->read((char*)&ss,sizeof(stage_structure));
                 tmp_stage_pointer->setStartDate( QDate::fromJulianDay(ss.start_date_julian));
-                tmp_stage_pointer->setFinishDate( QDate::fromJulianDay(ss.finish_date_julian));
-                tmp_stage_pointer->setLeft10Status(ss._10_done);
+                tmp_stage_pointer->setFinishDate( QDate::fromJulianDay(ss.finish_date_julian));                
                 tmp_stage_pointer->setLeft20Status(ss._20_done);
-                //tmp_stage_pointer->setDoneStatus(ss._done);
-                tmp_stage_pointer->calculatePriority();
+                tmp_stage_pointer->setLeft10Status(ss._10_done);
+                tmp_stage_pointer->setDoneStatus(ss._done);
+               // tmp_stage_pointer->calculatePriority();
                 tmp_stage_pointer->setFileloadStatus(false);
             }
-          tmp_contract_pointer->calculateContractPriority();
+          //tmp_contract_pointer->calculateContractPriority();
           tmp_contract_pointer->setFileloadStatus(false);
     }
 

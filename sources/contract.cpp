@@ -17,9 +17,7 @@ Stage *Contract::createStage()
     Stage *st = new Stage(this);
     _stages.push_back(st);
     connect(st, &Stage::deleteRequested, this, &Contract::deleteStageRequestHandler);
-    connect(st, &Stage::priorityChanged, this, &Contract::calculateContractPriority);
     st->calculatePriority();
-    calculateContractPriority();
     return st;
 }
 
@@ -50,10 +48,9 @@ bool Contract::deleteStage(int stage_num)
         qDebug() << "Индекс вне границ массива";
         return false;
     }
-    calculateContractPriority();
 }
 
-void  Contract::calculateContractPriority()
+int Contract::getPriority()
 {
     int new_priority = Stage::Normal;
     int num_stages = _stages.size();
@@ -66,7 +63,7 @@ void  Contract::calculateContractPriority()
     {
         _priority = new_priority;
     }
- // /*DEBUG*/  _contract_name =  (QString::number(_priority));
+    return _priority;
 }
 
 void Contract::deleteStageRequestHandler()
@@ -81,7 +78,6 @@ void Contract::deleteStageRequestHandler()
     {
         qDebug() << "Ошибка при удалении этапа";
     }
-   calculateContractPriority();
 }
 
 

@@ -41,11 +41,9 @@ public:
 
     void deleteThisContract();
 
-    void calculateContractPriority();
-
     void setFileloadStatus(bool status) {fileload_status = status;}
 
-    int getPriority() {return _priority;}
+    int getPriority();
 
 
 public slots:
