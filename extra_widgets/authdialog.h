@@ -24,7 +24,7 @@ public:
     QString getHash() {return local_hash;} /** Inline impl */
 
 private:
-    QString master_password = "USAsucks";
+    QString master_password = "TheCakeIsALie";
 
     SimpleCrypt *crypto;
     Ui::AuthDialog *ui;

@@ -55,6 +55,7 @@ TableWidget::TableWidget(QWidget *parent) : QWidget(parent)
 
    pa = new QPropertyAnimation(this);
    loop = new QEventLoop(this);
+   connect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
 
 }
 
@@ -120,7 +121,7 @@ void TableWidget::addContractWidget(Contract *contract)
     pa->setStartValue(0);
     pa->setEndValue(255);
 
-    connect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
+
     pa->start();
     loop->exec();
 
@@ -166,7 +167,8 @@ void TableWidget::updateNumbers()
 
 void TableWidget::sort()
 {   
-    if (islocked){
+   // if (islocked)
+    {
         /*** ЗАГЛУШЕНО  **/
         qDebug() << "СОРТИРОВКА";
         qDebug() << "Sender" << sender();
@@ -176,45 +178,52 @@ void TableWidget::sort()
         int max_priority = 0;
 
 
-         int num_entries = table_dock_layout->count();
-         for (int i=0; (i < num_entries-2) ; i++)
+         int num_entries = table_dock_layout->count()-2;
+          for (int j=0; (j < num_entries); j++)
          {
-             tmp1 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(i)->widget())->getContract();
-             max_priority_pos = i;
-             max_priority = tmp1->getPriority();
-
-             for (int k=i+1; k < num_entries-2; k++)
+             for (int i=0; (i < num_entries); i++)
              {
-                 tmp2 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->getContract();
-                 if (tmp2->getPriority() > max_priority)
-                 {
-                     max_priority = tmp2->getPriority();
-                     max_priority_pos = k;
-                 }
+                 tmp1 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(i)->widget())->getContract();
+                 max_priority_pos = i;
+                 max_priority = tmp1->getPriority();
 
-                 if ( max_priority_pos != i)
+                 for (int k=i+1; k < num_entries; k++)
                  {
-                      qDebug() << "Moving: from pos. " << max_priority_pos << " to pos." << tmp1->getPriority();
-                     popEntryAnim(qobject_cast<QWidget*>(table_dock_layout->itemAt(max_priority_pos)->widget()),i);
-                    //   popEntry(k,i);
-                    // qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->draw();
+                     tmp2 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->getContract();
+                     if (tmp2->getPriority() > max_priority)
+                     {
+                         max_priority = tmp2->getPriority();
+                         max_priority_pos = k;
+                     }
+
+                     if ( max_priority_pos != i)
+                     {
+                          qDebug() << "Moving: from pos. " << max_priority_pos
+                                   << "(prioirity=" << (tmp2->getPriority()) <<") " << " to pos." << tmp1->getPriority()
+                                   << "(prioirity="<< (tmp1->getPriority()) <<")";
+                         popEntryAnim(qobject_cast<QWidget*>(table_dock_layout->itemAt(max_priority_pos)->widget()),i);
+                         //  popEntry(k,i);
+                           break;
+                        // qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->draw();
+                     }
+
                  }
              }
          }
          updateNumbers();
     }
-    else qDebug() << "СОРТИРОВКА ПРОПУЩЕНА - таблица редактируется";
+  //  else qDebug() << "СОРТИРОВКА ПРОПУЩЕНА - таблица редактируется";
 
 }
 
 void TableWidget::popSelected()
 {
-   qDebug() << "Origin: "<<sender();
+ /*  qDebug() << "Origin: "<<sender();
    QWidget *s  = qobject_cast<QWidget*>(sender());
     qDebug() << "Casted: "<< s;
    int num = table_dock_layout->indexOf(s);
     qDebug() << "Num: "<< num;
-   popEntryAnim(s,0);
+   popEntryAnim(s,0);*/
 }
 
 void TableWidget::popEntryAnim(QWidget* _widget, int pos)
@@ -262,8 +271,8 @@ void TableWidget::popEntry(int current_pos, int new_pos)
     QWidget *tmp = qobject_cast<QWidget*>(table_dock_layout->itemAt(current_pos)->widget());
     table_dock_layout->removeWidget(tmp);
     table_dock_layout->insertWidget(new_pos,tmp);
-    table_dock_layout->update();
-    qobject_cast<ContractWidget*>(table_dock_layout->itemAt(new_pos)->widget())->draw();
+   // table_dock_layout->update();
+   // qobject_cast<ContractWidget*>(table_dock_layout->itemAt(new_pos)->widget())->draw();
 }
 
 

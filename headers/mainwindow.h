@@ -18,6 +18,7 @@ private:
     QFile *file;
     QLabel *panel;
     QPushButton *lock_button;
+    QTimer *timer;
 
     QVBoxLayout *main_window_layout;
 

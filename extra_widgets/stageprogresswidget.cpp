@@ -334,11 +334,10 @@ void StageProgressWidget::draw()
 
 
     _progress->setFormat("");
-    int days_left_int = QDate::currentDate().daysTo(_stage->getFinishDate());
-    if (days_left_int >=0 )
+    if (days_left >=0 )
     {
-        if (days_left_int == 0 ) _days_left_label->setText("Истекает сегодня!");
-        else _days_left_label->setText("Осталось дней: "+QString::number(days_left_int));
+        if (days_left == 0 ) _days_left_label->setText("Истекает сегодня!");
+        else _days_left_label->setText("Осталось дней: "+QString::number(days_left));
 
     }
     else if (_stage->getPriority() == Stage::Normal)
@@ -347,27 +346,34 @@ void StageProgressWidget::draw()
     }
     else
     {
-        _days_left_label->setText("Просрочено дней: "+QString::number(abs(days_left_int)));
+        _days_left_label->setText("Просрочено дней: "+QString::number(abs(days_left)));
     }
 
 
 
-    if (_stage->getPriority() == Stage::Overdude)//((days_left_int <= 10)&(!_stage->getLeft10DoneStatus()))
+    if (_stage->getPriority() == Stage::Overdude)//((days_left <= 10)&(!_stage->getLeft10DoneStatus()))
+    {
+        if (days_left < 0)
+        {
+            _progress->setStyleSheet("QProgressBar {border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
+            QProgressBar::chunk {background-color: rgba(255, 0, 0, 100); width: 3px; margin: 0px;}");
+            setStyleSheet("QWidget {background-color: rgba(255, 0, 0, 50)}; QWidget:hover{background-color: rgba(255, 0, 0, 50);}");
+        }
+        else
         {
             _progress->setStyleSheet("QProgressBar {border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
             QProgressBar::chunk {background-color: rgba(255, 0, 0, 100); width: 3px; margin: 0px;}");
             setStyleSheet("QWidget:hover{background-color: rgba(255, 0, 0, 50);}");
-
+        }
     }
-    else if (_stage->getPriority() == Stage::Overdude_10)//((days_left_int <= 10)&(!_stage->getLeft10DoneStatus()))
+    else if (_stage->getPriority() == Stage::Overdude_10)//((days_left <= 10)&(!_stage->getLeft10DoneStatus()))
     {
         _progress->setStyleSheet("QProgressBar {border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
         QProgressBar::chunk {background-color: rgba(255, 0, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем красные chunk'и  и серую заливу
         setStyleSheet("QWidget:hover{background-color: rgba(255, 0, 0, 50);}");
 
-
     }
-    else if (_stage->getPriority() == Stage::Overdude_20) //((days_left_int <= 20)&(!_stage->getLeft20DoneStatus())&(!_stage->getLeft10DoneStatus()))
+    else if (_stage->getPriority() == Stage::Overdude_20) //((days_left <= 20)&(!_stage->getLeft20DoneStatus())&(!_stage->getLeft10DoneStatus()))
     {
         _progress->setStyleSheet("QProgressBar { border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
         QProgressBar::chunk {background-color: rgba(255, 255, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем желтые chunk'и  и серую заливу
@@ -375,11 +381,11 @@ void StageProgressWidget::draw()
     }
     else if (_stage->getPriority() == Stage::Normal)
     {
-        if (days_left_int < 0)
+        if (days_left < 0)
         {
             _progress->setStyleSheet("QProgressBar {  border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
             QProgressBar::chunk {background-color: rgba(0, 128, 255, 100); width: 3px; margin: 0px;}");  //Устанавливаем зеленые chunk'и  и серую заливу
-            setStyleSheet("QWidget:hover{background-color: rgba(0, 128, 255, 50);}");
+            setStyleSheet("QWidget {background-color: rgba(0, 128, 255, 50)}; QWidget:hover{background-color: rgba(0, 128, 255, 50);}");
         }
         else
         {

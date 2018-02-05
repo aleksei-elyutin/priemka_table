@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(base, &DataBase::storedToFile, this, &MainWindow::writeState);
 
     main_window_layout->addWidget(main_table);
-    connect (base, &DataBase::baseChanged, main_table, &TableWidget::sort);
+   // connect (base, &DataBase::baseChanged, main_table, &TableWidget::sort);
 
     menu_box = new QWidget(this);
     menu_box_layout = new QHBoxLayout(menu_box);
@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     menu_box_layout->addWidget(lock_button);
     connect (lock_button, &QPushButton::clicked, this, &MainWindow::on_lock_button_clicked);
 
-    QPushButton *read_from_file_button = new QPushButton(this);
+  /*  QPushButton *read_from_file_button = new QPushButton(this);
     read_from_file_button->setStyleSheet("QPushButton{text-align: middle; background-color: rgb(50, 50, 50); width: 0px; "
                                          "color: rgb(255, 255, 255); border: 0px solid grey; }"
                                          "QPushButton:hover{background-color: rgb(80, 80, 80); color: rgb(255, 255, 255);}");
@@ -64,10 +64,10 @@ MainWindow::MainWindow(QWidget *parent) :
     read_from_file_button->setIcon(read_icon);
     read_from_file_button->setIconSize(QSize(50,50));
     QObject::connect (read_from_file_button, &QPushButton::clicked, this, &MainWindow::load);
-    read_from_file_button->setToolTip("Загрузить из файла");
+    read_from_file_button->setToolTip("Загрузить из файла");*/
 
 
-    QPushButton *write_to_file_button = new QPushButton(this);
+   /* QPushButton *write_to_file_button = new QPushButton(this);
     write_to_file_button->setStyleSheet("QPushButton{text-align: middle; background-color: rgb(50, 50, 50); width: 0px; "
                                         "color: rgb(255, 255, 255); border: 0px solid grey; }"
                                         "QPushButton:hover{background-color: rgb(80, 80, 80); color: rgb(255, 255, 255);}");
@@ -81,7 +81,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QIcon write_icon(write_pixmap);
     write_to_file_button->setIcon(write_icon);
     write_to_file_button->setIconSize(QSize(50,50));
-    write_to_file_button->setToolTip("Записать в файл");
+    write_to_file_button->setToolTip("Записать в файл");*/
 
 
     panel = new QLabel(menu_box);
@@ -95,18 +95,21 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-    QTimer *timer = new QTimer(this);
+    timer = new QTimer(this);
+
     connect(timer, &QTimer::timeout, this, &MainWindow::updateHandler);
    // connect(timer, &QTimer::timeout, base, &DataBase::contractChangeHandler);
    //  connect(timer, &QTimer::timeout, base, &DataBase::writeToFile);
    // connect(timer, &QTimer::timeout, main_table, &TableWidget::sort);
 
     //timer->start(1000*60*1); // одна минута
-    timer->start(1000*3);
+
 
     load();
+    timer->start(1000*10);
 
 }
+
 void MainWindow::draw()
 {
     main_table->reDrawAll();
@@ -115,18 +118,18 @@ void MainWindow::draw()
 void MainWindow::updateHandler()
 {
     qDebug() << "updateHandler: " << update_counter;
-    if ((update_counter < 30)&(main_table->isLocked()))
+    if ((update_counter < 6)&(main_table->isLocked())&(!base->getFileloadStatus()))
     {
        main_table->sort();
        update_counter++;
-       if ((update_counter%6 == 0)) base->writeToFile();
+       if ((update_counter%3 == 0)) base->writeToFile();
     }
-    else if (main_table->isLocked())
+    else if (main_table->isLocked()&(!base->getFileloadStatus()))
     {
         base->writeToFile();
         base->readFromFile();
         update_counter = 0;
-        draw();
+       // draw();
     }
 
 }
