@@ -44,19 +44,25 @@ bool DataBase::deleteContract(int contract_num)
 void DataBase::purgeBase()
 {
 
-    int base_size = _contracts_base.size();
-    for (int c  = base_size-1; c >= 0 ; c--)
-    {
-        int contract_size = _contracts_base.at(c)->getNumStages();
+//    int base_size = _contracts_base.size();
+//    for (int c  = base_size-1; c >= 0 ; c--)
+//    {
+//        int contract_size = _contracts_base.at(c)->getNumStages();
 
-        for (int st = contract_size-1; st >= 0; st--)
-        {
-            _contracts_base.at(c)->getStage(st)->deleteStageRequestHandler();
-        }
-         _contracts_base.at(c)->deleteContractRequestHandler();
+//        for (int st = contract_size-1; st >= 0; st--)
+//        {
+//            _contracts_base.at(c)->getStage(st)->deleteStageRequestHandler();
+//        }
+//         _contracts_base.at(c)->deleteContractRequestHandler();
+//    }
+
+    int base_size = _contracts_base.size();
+    for (int i  = base_size-1; i >= 0  ; i--)
+    {
+        _contracts_base.at(i)->deleteContractRequestHandler();
     }
     qDebug() << "База очищена: " << _contracts_base.size();
-   //  if (!fileload_status) emit baseChanged();
+
 }
 
 void DataBase::setSecureHash(QString sh)
@@ -210,7 +216,7 @@ void DataBase::readFromFile()
 
     _file->close();
     fileload_status = false;
-    emit baseLoaded();
+    //emit baseLoaded();
     emit loadedFromFile(QDateTime::currentDateTime());
 }
 
@@ -232,7 +238,7 @@ void DataBase::deleteContractRequestHandler()
         qDebug() << "Ошибка при удалении контракта";
     }
 
-   if (!fileload_status) emit baseChanged();
+   //if (!fileload_status) emit baseChanged();
 }
 
 

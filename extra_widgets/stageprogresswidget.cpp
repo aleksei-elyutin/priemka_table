@@ -453,7 +453,7 @@ void StageProgressWidget::setupStage()
     connect(dial, &QDialog::accepted, sr, &stageRedactor::applyChanges);
     connect(dial, &QDialog::accepted, dial, &stageRedactor::deleteLater);
 
-    connect(dial, &QDialog::rejected, dial, QDialog::deleteLater );
+    connect(dial, &QDialog::rejected, dial, &QDialog::deleteLater );
     //connect(dial, &QDialog::accepted, this, &StageProgressWidget::draw);
     //connect(dial, &QDialog::accepted, _stage, &Stage::stageChanged);
 

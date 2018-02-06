@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -m64 -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -m64 -pipe -g -std=c++0x -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../wtest -I. -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64
+INCPATH       = -I../wtest -I. -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64
 QMAKE         = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -33,7 +33,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = wtest1.0.0
-DISTDIR = /home/aleksey/qt_projects/priemka_table/test/build-wtest-Desktop-Debug/.tmp/wtest1.0.0
+DISTDIR = /home/aleksey/priemka_table/test/build-wtest-Desktop-Debug/.tmp/wtest1.0.0
 LINK          = g++
 LFLAGS        = -m64
 LIBS          = $(SUBLIBS) -L/usr/X11R6/lib64 -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
@@ -139,7 +139,7 @@ first: all
 
 ####### Build rules
 
-$(TARGET):  $(OBJECTS)  
+$(TARGET): ui_form2.h ui_form1.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../wtest/wtest.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.conf /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -281,6 +281,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../wtest/mywidget.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../wtest/main.cpp ../wtest/mywidget.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../wtest/form2.ui ../wtest/form1.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -306,28 +307,41 @@ compiler_rcc_clean:
 compiler_moc_header_make_all: moc_mywidget.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mywidget.cpp
-moc_mywidget.cpp: ../wtest/mywidget.h
-	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/aleksey/qt_projects/priemka_table/test/wtest -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../wtest/mywidget.h -o moc_mywidget.cpp
+moc_mywidget.cpp: ui_form1.h \
+		ui_form2.h \
+		../wtest/mywidget.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/aleksey/priemka_table/test/wtest -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../wtest/mywidget.h -o moc_mywidget.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all:
+compiler_uic_make_all: ui_form2.h ui_form1.h
 compiler_uic_clean:
+	-$(DEL_FILE) ui_form2.h ui_form1.h
+ui_form2.h: ../wtest/form2.ui
+	/usr/lib/x86_64-linux-gnu/qt5/bin/uic ../wtest/form2.ui -o ui_form2.h
+
+ui_form1.h: ../wtest/form1.ui
+	/usr/lib/x86_64-linux-gnu/qt5/bin/uic ../wtest/form1.ui -o ui_form1.h
+
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
 compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_header_clean 
+compiler_clean: compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
 main.o: ../wtest/main.cpp ../wtest/mainwindow.h \
-		../wtest/mywidget.h
+		../wtest/mywidget.h \
+		ui_form1.h \
+		ui_form2.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../wtest/main.cpp
 
-mywidget.o: ../wtest/mywidget.cpp ../wtest/mywidget.h
+mywidget.o: ../wtest/mywidget.cpp ../wtest/mywidget.h \
+		ui_form1.h \
+		ui_form2.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mywidget.o ../wtest/mywidget.cpp
 
 moc_mywidget.o: moc_mywidget.cpp 

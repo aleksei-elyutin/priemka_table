@@ -19,6 +19,8 @@ private:
     QLabel *panel;
     QPushButton *lock_button;
     QTimer *timer;
+    bool auth_in_progress = false;
+
 
     QVBoxLayout *main_window_layout;
 
@@ -29,6 +31,8 @@ private:
 
 
 public:
+
+
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
@@ -38,6 +42,7 @@ public:
 
 private:
     //Ui::MainWindow *ui;
+    void set_auth_state();
     void on_lock_button_clicked();
     void on_action_accessGranted();
     void on_action_passwordChanged();

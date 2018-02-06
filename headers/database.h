@@ -60,7 +60,7 @@ public slots:
 
 
 signals:
-     void baseLoaded();
+     //void baseLoaded();
      void baseChanged();
 
      void storedToFile(QDateTime);

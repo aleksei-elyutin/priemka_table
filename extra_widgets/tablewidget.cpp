@@ -81,7 +81,7 @@ void TableWidget::reDrawAll()
     {
             addContractWidget(_base->getContract(i));
     }
-    sort();
+    //sort();
 
 }
 

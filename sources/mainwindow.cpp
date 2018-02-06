@@ -112,7 +112,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     load();
-    timer->start(1000*10);
+    timer->start(1000*1);
 
 }
 
@@ -124,18 +124,18 @@ void MainWindow::draw()
 void MainWindow::updateHandler()
 {
     qDebug() << "updateHandler: " << update_counter;
-    if ((update_counter < 6)&(main_table->isLocked())&(!base->getFileloadStatus()))
+    if ((update_counter < 6) & (main_table->isLocked()) & (!base->getFileloadStatus()) & (!auth_in_progress))
     {
        main_table->sort();
        update_counter++;
        if ((update_counter%3 == 0)) base->writeToFile();
     }
-    else if (main_table->isLocked()&(!base->getFileloadStatus()))
+    else if (main_table->isLocked() & (!base->getFileloadStatus()) & (!auth_in_progress))
     {
         base->writeToFile();
         base->readFromFile();
         update_counter = 0;
-       // draw();
+        draw();
     }
 
 }
@@ -200,11 +200,12 @@ void MainWindow::writeState(QDateTime)
 
 void MainWindow::on_lock_button_clicked()
 {
+
     if (main_table->isLocked())
     {
           auth_dial = new AuthDialog(0, base->getSecureHash());
-          connect(auth_dial, &AuthDialog::accessGranted, this, on_action_accessGranted);
-          connect(auth_dial, &AuthDialog::passwordChanged, this, on_action_passwordChanged);
+          connect(auth_dial, &AuthDialog::accessGranted, this, &MainWindow::on_action_accessGranted);
+          connect(auth_dial, &AuthDialog::passwordChanged, this,  &MainWindow::on_action_passwordChanged);
           lock_button->setToolTip("Заблокировать изменение");
     }
     else
@@ -217,6 +218,8 @@ void MainWindow::on_lock_button_clicked()
         panel->setText("Запрещено редактирование. "
                        "Дата: "+ QDate::currentDate().toString()+ " Время: " + QTime::currentTime().toString());
     }
+
+
 }
 
 void MainWindow::on_action_accessGranted()
@@ -227,6 +230,7 @@ void MainWindow::on_action_accessGranted()
     lock_button->setIcon(lock_icon);
      panel->setText("Разрешено редактирование. "
                     "Дата: "+ QDate::currentDate().toString()+ " Время: " + QTime::currentTime().toString());
+     //auth_in_progress = false;
 
 
 }

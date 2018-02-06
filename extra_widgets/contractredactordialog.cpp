@@ -6,7 +6,7 @@ contractRedactorDialog::contractRedactorDialog(QWidget *parent) :
     ui(new Ui::contractRedactorDialog)
 {
     ui->setupUi(this);
-    connect(ui->buttonBox, QDialogButtonBox::rejected, this, QWidget::deleteLater);
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &QWidget::deleteLater);
 }
 
 void contractRedactorDialog::draw()

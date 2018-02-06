@@ -34,7 +34,9 @@ AuthDialog::AuthDialog(QWidget *parent, QString hash) :
 
 AuthDialog::~AuthDialog()
 {
+    qDebug() << "AuthDialog destructor called.";
     delete ui;
+    delete crypto;
 }
 
 
@@ -45,6 +47,7 @@ void AuthDialog::on_ok_button_clicked()
     if (ui->lineEdit->text() == crypto->decryptToString(local_hash))
     {
         emit accessGranted();
+
         this->deleteLater();
     }
     else
@@ -93,7 +96,9 @@ void AuthDialog::on_changepass_change_button_clicked()
             if (change_pass_ui->lineEdit->text() == master_password) ui->status_label->setText("Пароль успешно изменен с помощью мастер-пароля");
             else ui->status_label->setText("Пароль успешно изменен");
             emit passwordChanged();
-            changepass_widget->close();
+
+            changepass_widget->deleteLater();
+            delete change_pass_ui;
         }
         else
             change_pass_ui->label_4->setText("Введенные пароли не совпадают!");
