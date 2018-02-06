@@ -38,6 +38,9 @@ private:
     QPushButton *delete_contract_button;
     QPushButton *setup_contract_button;
 
+    QEventLoop *loop ;
+    QPropertyAnimation *pa;
+
     int _alpha;
     bool islocked = true;
 

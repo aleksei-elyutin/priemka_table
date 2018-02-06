@@ -7,7 +7,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     _selected_year = QDate::currentDate().year();
 
     setFrameStyle(QFrame::WinPanel | QFrame::Raised);
-    setStyleSheet("text-align: middle; background-color: rgb(90, 90, 90); width: 10px; "
+    setStyleSheet("text-align: middle; background-color: rgba(90, 90, 90, 0); width: 10px; "
                        "color: rgb(255, 255, 255); border: 0px solid black;");
 
     _widget_layout = new QVBoxLayout(this);
@@ -524,4 +524,15 @@ void StageProgressWidget::selectYear()
 }
 
 
+void StageProgressWidget::setAlpha(int a)
+{
+    QString stsh = QString( "background-color: rgba(90, 90, 90,0 ); color: rgba(255, 255, 255, "
+                            + QString::number(a) + " ); border: 0px solid grey;" );
+    setStyleSheet(stsh);
 
+//    num->setStyleSheet(stsh);
+//    name->setStyleSheet(stsh);
+//    button_box->setStyleSheet(stsh);
+//    stages_box->setStyleSheet(stsh);
+
+}

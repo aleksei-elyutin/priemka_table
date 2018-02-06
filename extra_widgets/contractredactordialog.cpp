@@ -22,7 +22,7 @@ void contractRedactorDialog::draw()
         stageRedactor *sr = new stageRedactor(stages_box);
         sr->setStage(_contract->getStage(i));
         vlayout->addWidget(sr);
-
+        connect(this, &contractRedactorDialog::accepted, sr, &stageRedactor::applyChanges);
     }
 }
 

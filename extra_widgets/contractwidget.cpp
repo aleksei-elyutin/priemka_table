@@ -105,6 +105,10 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
     stages_box_layout->setSpacing(3);
     main_layout->addWidget(stages_box);
 
+   /* pa = new QPropertyAnimation(this);
+    loop = new QEventLoop(this);
+    connect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);*/
+
 
 }
 
@@ -207,6 +211,16 @@ void ContractWidget::addStageWidget(Stage *stage)
       connect(this, &ContractWidget::unlocked, stage_widget, &StageProgressWidget::unlock);
       //   draw();
 
+   /*   pa->setPropertyName("alpha");
+      pa->setTargetObject(stage_widget );
+      pa->setDuration(20);
+      pa->setStartValue(0);
+      pa->setEndValue(255);
+
+
+      pa->start();
+      loop->exec();*/
+
 }
 
 void ContractWidget::showDeleteDialog()
@@ -225,10 +239,10 @@ void ContractWidget::setAlpha(int a)
                             + QString::number(a) + "); color: rgba(255, 255, 255, "
                             + QString::number(a) + " ); border: 0px solid grey;" );
     setStyleSheet(stsh);
-//    num->setStyleSheet(stsh);
-//    name->setStyleSheet(stsh);
-//    button_box->setStyleSheet(stsh);
-//    stages_box->setStyleSheet(stsh);
+    num->setStyleSheet(stsh);
+    name->setStyleSheet(stsh);
+    button_box->setStyleSheet(stsh);
+    stages_box->setStyleSheet(stsh);
 
 }
 

@@ -20,6 +20,7 @@
 class StageProgressWidget : public QFrame
 {
     Q_OBJECT
+    Q_PROPERTY(int alpha READ alpha WRITE setAlpha)
 private:
     Stage *_stage;   
     QDate _curr_start_date;
@@ -32,11 +33,16 @@ private:
     MonHeaderWidget *_monheader;
     QLabel *_days_left_label;
 
+
+
+
     int _start_progress_bar_position = 0;
     int _end_progress_bar_position = 0;
 
     int _size_factor = 3;
     int _vert_size = 30;
+
+    int _alpha;
 
     QVBoxLayout *_widget_layout;
 
@@ -66,6 +72,11 @@ private:
     void resize();
 
     void setCheckBoxHandler(int state);
+
+
+    int alpha() {return _alpha;}
+    void setAlpha(int a);
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
 

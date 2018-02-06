@@ -117,7 +117,7 @@ void TableWidget::addContractWidget(Contract *contract)
 
     pa->setPropertyName("alpha");
     pa->setTargetObject(contractWidget);
-    pa->setDuration(50);
+    pa->setDuration(500);
     pa->setStartValue(0);
     pa->setEndValue(255);
 
