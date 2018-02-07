@@ -111,11 +111,13 @@ void TableWidget::addContractWidget(Contract *contract)
     connect(this, &TableWidget::unlocked, contractWidget, &ContractWidget::unlock);
     connect(this, &TableWidget::locked, contractWidget, &ContractWidget::lock);
 
-    connect(contractWidget, &ContractWidget::doubleClicked, this, &TableWidget::popSelected);
+   // connect(contractWidget, &ContractWidget::doubleClicked, this, &TableWidget::popSelected);
 
     updateNumbers();
 
-    pa->setPropertyName("alpha");
+
+
+  /*  pa->setPropertyName("alpha");
     pa->setTargetObject(contractWidget);
     pa->setDuration(500);
     pa->setStartValue(0);
@@ -123,7 +125,7 @@ void TableWidget::addContractWidget(Contract *contract)
 
 
     pa->start();
-    loop->exec();
+    loop->exec();*/
 
 }
 
@@ -167,52 +169,51 @@ void TableWidget::updateNumbers()
 
 void TableWidget::sort()
 {   
-   // if (islocked)
-    {
-        /*** ЗАГЛУШЕНО  **/
-        qDebug() << "СОРТИРОВКА";
-        qDebug() << "Sender" << sender();
+    qDebug() << "СОРТИРОВКА";
 
-        Contract *tmp1, *tmp2;
-        int max_priority_pos = 0;
-        int max_priority = 0;
+    Contract *tmp1, *tmp2;
+    int max_priority_pos = 0;
+    int max_priority = 0;
 
 
-         int num_entries = table_dock_layout->count()-2;
-          for (int j=0; (j < num_entries); j++)
+     int num_entries = table_dock_layout->count()-2;
+      for (int j=0; (j < num_entries); j++)
+     {
+         for (int i=0; (i < num_entries-1); i++)
          {
-             for (int i=0; (i < num_entries-1); i++)
+             tmp1 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(i)->widget())->getContract();
+             max_priority_pos = i;
+             max_priority = tmp1->getPriority();
+
+             for (int k=i+1; k < num_entries; k++)
              {
-                 tmp1 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(i)->widget())->getContract();
-                 max_priority_pos = i;
-                 max_priority = tmp1->getPriority();
-
-                 for (int k=i+1; k < num_entries; k++)
+                 tmp2 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->getContract();
+                 if (tmp2->getPriority() > max_priority)
                  {
-                     tmp2 = qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->getContract();
-                     if (tmp2->getPriority() > max_priority)
-                     {
-                         max_priority = tmp2->getPriority();
-                         max_priority_pos = k;
-                     }
-
-                     if ( max_priority_pos != i)
-                     {
-                          qDebug() << "Moving: from pos. " << max_priority_pos
-                                   << "(prioirity=" << (tmp2->getPriority()) <<") " << " to pos." << tmp1->getPriority()
-                                   << "(prioirity="<< (tmp1->getPriority()) <<")";
-                         popEntryAnim(qobject_cast<QWidget*>(table_dock_layout->itemAt(max_priority_pos)->widget()),i);
-                         //  popEntry(k,i);
-                           break;
-                        // qobject_cast<ContractWidget*>(table_dock_layout->itemAt(k)->widget())->draw();
-                     }
-
+                     max_priority = tmp2->getPriority();
+                     max_priority_pos = k;
                  }
+                 else if (tmp2->getPriority() == tmp1->getPriority())
+                 {
+                     if (tmp2->getDaysLeft() < tmp1->getDaysLeft()) max_priority_pos = k;
+                 }
+                 if ( max_priority_pos != i)
+                 {
+                      qDebug() << "Moving: from pos. " << max_priority_pos
+                               << "(prioirity=" << (tmp2->getPriority()) <<"; days left: " << tmp2->getDaysLeft() <<")"
+                               << " to pos." << tmp1->getPriority()
+                               << "(prioirity="<< (tmp1->getPriority())<<"; days left: " << tmp1->getDaysLeft() <<")";
+
+                       //popEntryAnim(qobject_cast<QWidget*>(table_dock_layout->itemAt(max_priority_pos)->widget()),i);
+                       popEntry(max_priority_pos,i);
+                       break;
+                 }
+
              }
          }
-         updateNumbers();
-    }
-  //  else qDebug() << "СОРТИРОВКА ПРОПУЩЕНА - таблица редактируется";
+     }
+     updateNumbers();
+     qDebug() << "СОРТИРОВКА ЗАКОНЧЕНА";
 
 }
 
@@ -228,9 +229,10 @@ void TableWidget::popSelected()
 
 void TableWidget::popEntryAnim(QWidget* _widget, int pos)
 {
+    qDebug() << "popAnim start";
     if (table_dock_layout->indexOf(_widget)!=pos)
     {
-        float duration_factor = 1.0;
+        float duration_factor = 0.5;
         if (pos < 0) pos = 0;
         if (pos > table_dock_layout->count()-3) pos = table_dock_layout->count()-3;
 
@@ -242,16 +244,16 @@ void TableWidget::popEntryAnim(QWidget* _widget, int pos)
         new_widget_geometry.setY(table_dock_layout->itemAt(pos)->geometry().y());
         new_widget_geometry.setWidth(_widget->geometry().width());
         new_widget_geometry.setHeight(_widget->geometry().height());
-        _widget->raise();
+        //_widget->raise();
 
         pa->setPropertyName("geometry");
         pa->setDuration((int) ((float) abs(new_widget_geometry.top()-current_widget_geometry.top())*duration_factor));
 
         pa->setTargetObject(_widget);
         pa->setStartValue(current_widget_geometry);
-        qDebug() << "startValue:"<< pa->startValue();
+        //qDebug() << "startValue:"<< pa->startValue();
         pa->setEndValue(new_widget_geometry);
-        qDebug() << "endValue:"<< pa->endValue();
+       // qDebug() << "endValue:"<< pa->endValue();
 
 
         //connect (pa, &QPropertyAnimation::finished, loop, &QEventLoop::quit);
@@ -263,6 +265,7 @@ void TableWidget::popEntryAnim(QWidget* _widget, int pos)
         table_dock_layout->insertWidget(pos,_widget);
         table_dock_layout->update();
     }
+    qDebug() << "popAnim finish";
 
 }
 

@@ -3,8 +3,8 @@
 ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
 {
     /*** widget stylesheet **/
-   /* setStyleSheet("border: 1px solid grey; text-align: middle; color: rgba(255, 255, 255, 255);"
-                  " background-color: rgb(20, 20, 20);");*/
+    setStyleSheet("border: 0px solid grey; text-align: middle; color: rgba(255, 255, 255, 255);"
+                  " background-color: rgb(50, 50, 50);");
 
      main_layout = new QHBoxLayout (this);
 

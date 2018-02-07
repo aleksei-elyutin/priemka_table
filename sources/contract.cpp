@@ -66,6 +66,20 @@ int Contract::getPriority()
     return _priority;
 }
 
+int Contract::getDaysLeft()
+{
+    QDate today = QDate::currentDate();
+    int num_stages = _stages.size();
+    int min_days_left = 0;
+    if (num_stages > 0) min_days_left = today.daysTo(_stages.at(0)->getFinishDate());
+    for (int i=0; i< num_stages; i++)
+    {
+        int st_days_left = today.daysTo(_stages.at(0)->getFinishDate());
+        if  (st_days_left < min_days_left) min_days_left = st_days_left;
+    }
+    return min_days_left;
+}
+
 void Contract::deleteStageRequestHandler()
 {
     /** Обработчик сигнала от Stage */

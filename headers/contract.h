@@ -45,6 +45,7 @@ public:
 
     int getPriority();
 
+    int getDaysLeft();
 
 public slots:
 

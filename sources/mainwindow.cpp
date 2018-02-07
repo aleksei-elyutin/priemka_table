@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(base, &DataBase::storedToFile, this, &MainWindow::writeState);
 
     main_window_layout->addWidget(main_table);
-   // connect (base, &DataBase::baseChanged, main_table, &TableWidget::sort);
+    //connect (base, &DataBase::baseLoaded, main_table, &TableWidget::sort);
 
     menu_box = new QWidget(this);
     menu_box_layout = new QHBoxLayout(menu_box);
@@ -112,23 +112,24 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     load();
-    timer->start(1000*10);
+    timer->start(1000*30);
 
 }
 
 void MainWindow::draw()
 {
     main_table->reDrawAll();
+     main_table->sort();
 }
 
 void MainWindow::updateHandler()
 {
     qDebug() << "updateHandler: " << update_counter;
-    if ((update_counter < 6) & (main_table->isLocked()) & (!base->getFileloadStatus()) & (!auth_in_progress))
+    if ((update_counter < 10) & (main_table->isLocked()) & (!base->getFileloadStatus()) & (!auth_in_progress))
     {
        main_table->sort();
        update_counter++;
-       if ((update_counter%3 == 0)) base->writeToFile();
+       if ((update_counter%2 == 0)) base->writeToFile();
     }
     else if (main_table->isLocked() & (!base->getFileloadStatus()) & (!auth_in_progress))
     {
@@ -136,6 +137,7 @@ void MainWindow::updateHandler()
         base->readFromFile();
         update_counter = 0;
         draw();
+       // main_table->sort();
     }
 
 }

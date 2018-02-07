@@ -216,7 +216,7 @@ void DataBase::readFromFile()
 
     _file->close();
     fileload_status = false;
-    //emit baseLoaded();
+    emit baseLoaded();
     emit loadedFromFile(QDateTime::currentDateTime());
 }
 
