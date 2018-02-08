@@ -25,12 +25,16 @@ private:
 
     QHBoxLayout *main_layout;
     QLCDNumber *num;
+
+    QWidget *name_buttons_box;
+    QVBoxLayout *name_buttons_box_layout;
     QLabel *name;
 
     QWidget *stages_box;
     QVBoxLayout *stages_box_layout;
     QWidget *button_box;
     QHBoxLayout *button_box_layout;
+    QSpacerItem *dummy;
 
 
     MonHeaderWidget *header;

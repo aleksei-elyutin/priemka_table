@@ -108,11 +108,11 @@ MainWindow::MainWindow(QWidget *parent) :
    //  connect(timer, &QTimer::timeout, base, &DataBase::writeToFile);
    // connect(timer, &QTimer::timeout, main_table, &TableWidget::sort);
 
-    //timer->start(1000*60*1); // одна минута
+
 
 
     load();
-    timer->start(1000*30);
+    timer->start(1000*1); //timer->start(1000*30);
 
 }
 

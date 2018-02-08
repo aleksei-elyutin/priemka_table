@@ -120,8 +120,8 @@ void Stage::calculatePriority()
     if (days_left > 20) new_priority = Normal;
     if ((days_left <= 20)&(!_is_20_done)) new_priority = Overdude_20;
     if ((days_left <= 10)&(!_is_10_done)) new_priority = Overdude_10;
-    if ((days_left < 0)&(!_is_done)) new_priority = Overdude;
-    if ((days_left < 0)&(_is_done)) new_priority = Normal;
+    if (days_left < 0) new_priority = Overdude; //(  &(!_is_done))
+   // if ((days_left < 0)&(_is_done)) new_priority = Normal;
 
 
 
