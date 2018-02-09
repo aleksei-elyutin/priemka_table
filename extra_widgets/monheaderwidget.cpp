@@ -44,7 +44,9 @@ void MonHeaderWidget::setNamesVisible(bool v)
 void MonHeaderWidget::setVerticalSize(int vs)
 {
       _wheight = vs;
-      this->resize(this->width(),_wheight );
+     // this->resize(this->width(),_wheight );
+      setMinimumHeight(_wheight);
+      setMaximumHeight(_wheight);
 //    for (int i=0; i < 12; i++)
 //    {
 //       mons.at(i)->setText("");

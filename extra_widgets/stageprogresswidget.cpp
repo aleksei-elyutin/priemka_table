@@ -19,7 +19,6 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
 
 
 
-
     /*Создание кнопок изменить, удалить и лейбла названия контракта*/
     _name_button_box  = new QWidget(this); //!!!!
     _name_button_box->setMinimumHeight(30);
@@ -173,13 +172,15 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     //_progress_box = new QWidget(this);
     _monheader = new MonHeaderWidget(this);
     _monheader->setNamesVisible(false);   ///Изменить на false
-    _monheader->setStyleSheet("text-align: middle; background-color: rgb(70, 70, 70); width: 10px; "
-                              "color: rgba(255, 255, 255); border: 1px solid grey;");
-    _monheader->setVerticalSize(30);
+    _monheader->setStyleSheet("text-align: middle; background-color: rgba(0, 0, 0, 0); width: 10px; "
+                              "color: rgba(255, 255, 255); border: 1px solid rgba(120,120,120,100);");
+    _monheader->setVerticalSize( _vert_size);
     _progress = new QProgressBar(_monheader);
+
     _days_left_label = new QLabel(_monheader);
-    _days_left_label->setStyleSheet("text-align: middle; background-color: rgba(0, 0, 0,0); width: 10px; "
+    _days_left_label->setStyleSheet("text-align: middle; background-color: rgba(0, 0, 0, 0); width: 10px; "
                                          "color: rgb(255, 255, 255); border: 0px solid black;");
+    _monheader->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     _widget_layout->addWidget(_monheader);
 
 
@@ -357,34 +358,34 @@ void StageProgressWidget::draw()
 
             if ((days_left < 0)&(_stage->getDoneStatus()))
             {
-                _progress->setStyleSheet("QProgressBar {  border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
+                _progress->setStyleSheet("QProgressBar {  border: 0px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
                 QProgressBar::chunk {background-color: rgba(0, 128, 255, 100); width: 3px; margin: 0px;}");  //Устанавливаем синие chunk'и и серую заливу
                 setStyleSheet("QWidget {background-color: rgba(0, 128, 255, 50)}; QWidget:hover{background-color: rgba(0, 128, 255, 50);}");
             }
             else
             {
-                _progress->setStyleSheet("QProgressBar {border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
+                _progress->setStyleSheet("QProgressBar {border: 0px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
                 QProgressBar::chunk {background-color: rgba(255, 0, 0, 100); width: 3px; margin: 0px;}");
                 setStyleSheet("QWidget {background-color: rgba(255, 0, 0, 50)}; QWidget:hover{background-color: rgba(255, 0, 0, 50);}");
             }
         }
         else
         {
-            _progress->setStyleSheet("QProgressBar {border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
+            _progress->setStyleSheet("QProgressBar {border: 0px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
             QProgressBar::chunk {background-color: rgba(255, 0, 0, 100); width: 3px; margin: 0px;}");
             setStyleSheet("QWidget:hover{background-color: rgba(255, 0, 0, 50);}");
         }
     }
     else if (_stage->getPriority() == Stage::Overdude_10)//((days_left <= 10)&(!_stage->getLeft10DoneStatus()))
     {
-        _progress->setStyleSheet("QProgressBar {border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
+        _progress->setStyleSheet("QProgressBar {border: 0px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
         QProgressBar::chunk {background-color: rgba(255, 0, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем красные chunk'и  и серую заливу
         setStyleSheet("QWidget:hover{background-color: rgba(255, 0, 0, 50);}");
 
     }
     else if (_stage->getPriority() == Stage::Overdude_20) //((days_left <= 20)&(!_stage->getLeft20DoneStatus())&(!_stage->getLeft10DoneStatus()))
     {
-        _progress->setStyleSheet("QProgressBar { border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
+        _progress->setStyleSheet("QProgressBar { border: 0px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
         QProgressBar::chunk {background-color: rgba(255, 255, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем желтые chunk'и  и серую заливу
        setStyleSheet("QWidget:hover{background-color: rgba(255, 255, 0, 50);}");
     }
@@ -398,7 +399,7 @@ void StageProgressWidget::draw()
         }
         else*/
         {
-            _progress->setStyleSheet("QProgressBar {  border: 1px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
+            _progress->setStyleSheet("QProgressBar {  border: 0px solid grey; background-color: rgba(180, 180, 180, 50); text-align: middle; border-radius: 0px;} \
             QProgressBar::chunk {background-color: rgba(0, 255, 0, 100); width: 3px; margin: 0px;}");  //Устанавливаем зеленые chunk'и  и серую заливу
             setStyleSheet("QWidget:hover{background-color: rgba(0, 255, 0, 50);}");
         }

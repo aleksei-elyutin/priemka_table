@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>561</width>
-    <height>355</height>
+    <width>955</width>
+    <height>397</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -441,21 +441,23 @@
    <enum>QTabWidget::Rounded</enum>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QLineEdit" name="lineEdit">
-      <property name="text">
-       <string>апвапывапывап</string>
-      </property>
-      <property name="frame">
-       <bool>false</bool>
-      </property>
-      <property name="cursorMoveStyle">
-       <enum>Qt::VisualMoveStyle</enum>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>190</y>
+      <width>80</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">image: url(:/resources/right_grey.png);
+background-color: rgb(85, 170, 127);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

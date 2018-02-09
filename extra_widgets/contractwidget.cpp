@@ -17,7 +17,7 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
      num = new QLCDNumber(this);
      num->setObjectName("number");
      /*Стиль номера*/
-//     num->setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 0px; "
+     num->setStyleSheet(" background-color: rgba(50, 50, 50, 150); background-image: url(:/resources/41009187.png);");
 //                        "color: rgb(255, 255, 255); border: 0px solid black;");
      num->setMinimumWidth(50);
      num->setMaximumWidth(50);
@@ -27,9 +27,12 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
      main_layout->addWidget(num);
 
      name_buttons_box = new QWidget(this);
+     name_buttons_box->setStyleSheet("background-image: url(://resources/20719.png)");
      name_buttons_box_layout = new QVBoxLayout(name_buttons_box);
      name_buttons_box_layout->setContentsMargins(0,0,0,0);
      name_buttons_box_layout->setSpacing(0);
+
+
 
      name = new QLabel(this);
      name->setStyleSheet("text-align: middle; qproperty-alignment: AlignCenter;"
