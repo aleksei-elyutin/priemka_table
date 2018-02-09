@@ -5,19 +5,27 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
 {
 
     _selected_year = QDate::currentDate().year();
-
     setFrameStyle(QFrame::WinPanel | QFrame::Raised);
     setStyleSheet("text-align: middle; background-color: rgba(90, 90, 90, 0); width: 10px; "
                        "color: rgb(255, 255, 255); border: 0px solid black;");
 
-    _widget_layout = new QVBoxLayout(this);
+
+    _widget_layout = new QHBoxLayout(this);
     _widget_layout->setSpacing (0);
+   // _widget_layout->setContentsMargins(3,1,3,1);
+   // _widget_layout->setStretch(0,1);
+   // _widget_layout->setStretch(1,1);
 
-    _widget_layout->setContentsMargins(3,1,3,1);
-    _widget_layout->setStretch(0,1);
-    _widget_layout->setStretch(1,1);
 
+    //_content_box - content_box_layout(QHBoxLayout)
 
+    //_top_box - top_box_layout(QHBoxLayout) :
+            //button_box
+            //spacer
+            //year_select_box
+
+    //_startfinish_labels_box - bottom_box_layout(QHBoxLayout):
+            //
 
     /*Создание кнопок изменить, удалить и лейбла названия контракта*/
     _name_button_box  = new QWidget(this); //!!!!

@@ -44,7 +44,7 @@ private:
 
     int _alpha;
 
-    QVBoxLayout *_widget_layout;
+    QHBoxLayout *_widget_layout;
 
     QWidget* _startfinish_labels_box;
     QWidget *_name_button_box;
