@@ -16,8 +16,17 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
    // _widget_layout->setStretch(0,1);
    // _widget_layout->setStretch(1,1);
 
+    _stage_number = new QLCDNumber(this);
+    _widget_layout->addWidget( _stage_number);
 
-    //_content_box - content_box_layout(QHBoxLayout)
+
+    //_elements_box - content_box_layout(QHBoxLayout)
+    _elements_box = new QWidget(this);
+    _widget_layout->addWidget(_elements_box);
+
+
+    _top_box = new QWidget(_elements_box);
+    _top_box_layout = new QHBoxLayout(_top_box);
 
     //_top_box - top_box_layout(QHBoxLayout) :
             //button_box
@@ -28,7 +37,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
             //
 
     /*Создание кнопок изменить, удалить и лейбла названия контракта*/
-    _name_button_box  = new QWidget(this); //!!!!
+  /*  _name_button_box  = new QWidget(this); //!!!!
     _name_button_box->setMinimumHeight(30);
     //_name_button_box->setMaximumHeight(30);
     _name_button_box->setStyleSheet("text-align: middle; background-color: rgba(70, 70, 70, 0); width: 10px; "
@@ -46,13 +55,15 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     _stage_name->setStyleSheet("text-align: middle; background-color: rgba(70, 70, 70, 0); width: 10px; "
                                "color: rgb(255, 255, 255); border: 0px solid black;");
     _stage_name->setWordWrap(true);
-    hLayout->addWidget(_stage_name);
+    hLayout->addWidget(_stage_name);*/
 
 
     QSpacerItem *hspacer = new QSpacerItem(50,20,QSizePolicy::Expanding,QSizePolicy::Expanding);
     hLayout->addItem(hspacer);
 
-    setup_stage_button = new QPushButton (_name_button_box); //QString("..."),
+     /*Создание кнопок изменить, удалить*/
+    _button_box = new QWidget(_top_box);
+    setup_stage_button = new QPushButton (_button_box); //QString("..."),
 
     QPixmap pen_pixmap("://resources/pen.png");
     QIcon pen_icon(pen_pixmap);
@@ -71,7 +82,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     hLayout->addWidget(setup_stage_button);
     connect(setup_stage_button, &QPushButton::clicked, this, &StageProgressWidget::setupStage);
 
-    delete_stage_button = new QPushButton (_name_button_box); //QString("X"),
+    delete_stage_button = new QPushButton (_button_box); //QString("X"),
     QPixmap delete_pixmap(":/resources/gnome_edit_delete.png");
     QIcon delete_icon(delete_pixmap);
     delete_stage_button->setIcon(delete_icon);
@@ -85,8 +96,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     delete_stage_button->setToolTip("Удалить этап");
     connect(delete_stage_button, &QPushButton::clicked, this, &StageProgressWidget::showDeleteDialog);
 
-
-    _widget_layout->addWidget(_name_button_box);
+    _top_box_layout->addWidget(_button_box);
 
      /** Создание чекбоксов "Выполнено..." и панели выбора года для отображения **/
 
@@ -303,7 +313,11 @@ void StageProgressWidget::draw()
 
 
     _stage->calculatePriority();
-    _stage_name->setText(_stage->getStageName());
+
+    //_stage_name->setText(_stage->getStageName());
+
+    setToolTip(_stage->getStageName());
+
 
     QDate _today = QDate::currentDate();
 

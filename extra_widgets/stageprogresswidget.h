@@ -11,6 +11,7 @@
 #include <QDialogButtonBox>
 #include <QEventLoop>
 #include <QPropertyAnimation>
+#include <QLCDNumber>
 #include "./headers/stage.h"
 #include "monheaderwidget.h"
 #include "dletedialog.h"
@@ -45,6 +46,9 @@ private:
     int _alpha;
 
     QHBoxLayout *_widget_layout;
+    QWidget *_elements_box;
+    QWidget *_top_box;
+    QHBoxLayout  *_top_box_layout;
 
     QWidget* _startfinish_labels_box;
     QWidget *_name_button_box;
@@ -56,6 +60,8 @@ private:
     QPushButton *delete_stage_button;
     QPushButton *setup_stage_button;
 
+
+    QLCDNumber *_stage_number;
     QLabel *_stage_name;
     QLabel *_start_date_label;
     QLabel *_finish_date_label;
