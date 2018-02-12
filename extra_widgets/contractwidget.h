@@ -70,6 +70,7 @@ public:
     void lock();
 
 
+    void updateNumbers();
 signals:
     void deleteRequested();
 

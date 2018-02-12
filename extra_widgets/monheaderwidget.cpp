@@ -3,6 +3,8 @@
 MonHeaderWidget::MonHeaderWidget(QWidget *parent) :   QWidget(parent)
 {
 
+
+
       //setMaximumHeight(_wheight);
       setMinimumHeight(_wheight);
       /*setStyleSheet("text-align: middle; background-color: rgb(50, 50, 50); width: 10px; "
@@ -20,7 +22,6 @@ MonHeaderWidget::MonHeaderWidget(QWidget *parent) :   QWidget(parent)
           mons.push_back(month);
       }
       setMinimumWidth(365*2);
-
 }
 
 
@@ -78,6 +79,7 @@ void MonHeaderWidget::resizeEvent(QResizeEvent *event)
 
 double MonHeaderWidget::getSizeFactor()
 {
+   _size_factor = (double)width()/ (double) QDate(_year,1,1).daysInYear();
     return _size_factor;
 }
 

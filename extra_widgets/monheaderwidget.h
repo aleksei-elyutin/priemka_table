@@ -16,7 +16,7 @@ class MonHeaderWidget : public QWidget
 private:
     int _year = QDate::currentDate().year(); ///!!!
     QLabel *lbl;
-    double _size_factor = 3;
+    double _size_factor = 2.9;
     int _grid_width;
     int _wheight = 30;
     QVector <QLabel*> mons;

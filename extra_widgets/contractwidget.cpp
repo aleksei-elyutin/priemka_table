@@ -11,23 +11,23 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
      main_layout->setStretch(0,0);
      main_layout->setStretch(1,0);
      main_layout->setStretch(2,1);
-     main_layout->setSpacing(3);
+     main_layout->setSpacing(4);
      main_layout->setContentsMargins(main_layout->contentsMargins().left(),0, main_layout->contentsMargins().right(),0);
 
      num = new QLCDNumber(this);
      num->setObjectName("number");
      /*Стиль номера*/
-     num->setStyleSheet(" background-color: rgba(50, 50, 50, 150); background-image: url(:/resources/41009187.png);");
+    // num->setStyleSheet(" background-color: rgba(50, 50, 50, 150); background-image: url(:/resources/41009187.png);");
 //                        "color: rgb(255, 255, 255); border: 0px solid black;");
      num->setMinimumWidth(50);
      num->setMaximumWidth(50);
-     num->setMinimumHeight(50);
+     num->setMinimumHeight(40);
      //num->setMaximumHeight(50);
 
      main_layout->addWidget(num);
 
      name_buttons_box = new QWidget(this);
-     name_buttons_box->setStyleSheet("background-image: url(://resources/20719.png)");
+    // name_buttons_box->setStyleSheet("background-image: url(://resources/20719.png)");
      name_buttons_box_layout = new QVBoxLayout(name_buttons_box);
      name_buttons_box_layout->setContentsMargins(0,0,0,0);
      name_buttons_box_layout->setSpacing(0);
@@ -41,7 +41,7 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
      name->setWordWrap(true);
      name->setMinimumWidth(250);
      name->setMaximumWidth(250);
-     name->setMinimumHeight(50);
+     name->setMinimumHeight(40);
      name->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
      name_buttons_box_layout->addWidget(name);
 
@@ -109,11 +109,12 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
     stages_box_layout->setSpacing(0);
     stages_box_layout->setMargin(0);
 
-    dummy = new QSpacerItem (20,50,QSizePolicy::Expanding,QSizePolicy::Expanding);
+    dummy = new QSpacerItem (20,40,QSizePolicy::Expanding,QSizePolicy::Expanding);
     stages_box_layout->addItem(dummy);
 
 
     stages_box_layout->setSpacing(3);
+    stages_box_layout->setContentsMargins(0,0,0,0);
     main_layout->addWidget(stages_box);
 
    /* pa = new QPropertyAnimation(this);
@@ -168,6 +169,7 @@ void ContractWidget::draw()
         }
 
     name->setText(_contract->getContractName());
+    updateNumbers();
 
 //    setToolTip(QString("Контракт. Приоритет: " + QString::number(_contract->getPriority()) + ", дней до конца: " + QString::number(_contract->getDaysLeft())));
 
@@ -212,6 +214,7 @@ void ContractWidget::deleteStageWidgetRequestHandler()
 {
     delete sender();
     if (stages_box_layout->count() == 0) stages_box_layout->addItem(dummy);
+    updateNumbers();
 }
 
 void ContractWidget::addStageWidget(Stage *stage)
@@ -230,6 +233,7 @@ void ContractWidget::addStageWidget(Stage *stage)
       connect(this, &ContractWidget::locked, stage_widget, &StageProgressWidget::lock);
       connect(this, &ContractWidget::unlocked, stage_widget, &StageProgressWidget::unlock);
       //   draw();
+      updateNumbers();
 
    /*   pa->setPropertyName("alpha");
       pa->setTargetObject(stage_widget );
@@ -241,6 +245,20 @@ void ContractWidget::addStageWidget(Stage *stage)
       pa->start();
       loop->exec();*/
 
+}
+
+void ContractWidget::updateNumbers()
+{
+    int num_entries = stages_box_layout->count();
+   if (stages_box_layout->itemAt(0)->spacerItem() == 0)
+   {
+       for (int i=0; i < num_entries; i ++)
+       {
+            QWidget* _widget = (stages_box_layout->itemAt(i)->widget());
+            QLCDNumber* lbl = _widget->findChild<QLCDNumber*>("number");
+            lbl->display(i+1);
+        }
+   }
 }
 
 void ContractWidget::showDeleteDialog()

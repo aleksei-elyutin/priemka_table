@@ -13,7 +13,7 @@ TableWidget::TableWidget(QWidget *parent) : QWidget(parent)
     header_dock ->setStyleSheet("text-align: middle; background-color: rgb(20, 20, 20); width: 10px; "
                             "color: rgb(255, 255, 255); border: 0px solid grey;");
     header_dock_layout = new QHBoxLayout(header_dock);
-    header_dock_layout->setSpacing(1);
+    header_dock_layout->setSpacing(3);
 
     int left_margin = 0, top_margin = 0, right_margin = 0, bottom_margin = 0;
     header_dock_layout->getContentsMargins(&left_margin, &top_margin, &right_margin, &bottom_margin);
@@ -290,6 +290,7 @@ void TableWidget::createHeader()
     num->setMinimumHeight(50);
     num->setMaximumHeight(50);
     header_dock_layout->addWidget(num);
+
     QLabel* name = new QLabel(QString("Наименование контракта"),header_dock); // \n
     name->setStyleSheet("text-align: middle; qproperty-alignment: AlignCenter;"
                         " background-color: rgb(50, 50, 50); width: 0px; "
@@ -300,6 +301,15 @@ void TableWidget::createHeader()
     name->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
     header_dock_layout->addWidget(name);
 
+    QLabel* stage_num = new QLabel(QString("Номер этапа"),header_dock); // \n
+    stage_num->setStyleSheet("text-align: middle; qproperty-alignment: AlignCenter;"
+                        " background-color: rgb(50, 50, 50); width: 0px; "
+                        "color: rgb(255, 255, 255); border: 1px solid grey;");
+    stage_num->setWordWrap(true);
+    stage_num->setMinimumWidth(50);
+    stage_num->setMaximumWidth(50);
+    stage_num->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
+    header_dock_layout->addWidget(stage_num);
 
     QWidget* monthes_dock = new QWidget (header_dock);
     QVBoxLayout* monthes_dock_layout = new QVBoxLayout(monthes_dock);

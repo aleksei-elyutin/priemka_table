@@ -32,26 +32,27 @@ private:
 
     QProgressBar *_progress;
     MonHeaderWidget *_monheader;
-    QLabel *_days_left_label;
-
-
-
 
     int _start_progress_bar_position = 0;
     int _end_progress_bar_position = 0;
 
     int _size_factor = 3;
-    int _vert_size = 30;
+    int _vert_size = 40;
 
     int _alpha;
 
     QHBoxLayout *_widget_layout;
     QWidget *_elements_box;
+    QVBoxLayout *_elements_box_layout;
     QWidget *_top_box;
     QHBoxLayout  *_top_box_layout;
 
+    QWidget *_status_box;
+    QLabel *_days_left_label;
+
     QWidget* _startfinish_labels_box;
-    QWidget *_name_button_box;
+    QWidget *_button_box;
+    QHBoxLayout *_button_box_layout;
 
     QCheckBox *_done_checkbox;
     QCheckBox *_done10_checkbox;
