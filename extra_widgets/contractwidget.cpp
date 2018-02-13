@@ -14,6 +14,7 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
      main_layout->setSpacing(4);
      main_layout->setContentsMargins(main_layout->contentsMargins().left(),0, main_layout->contentsMargins().right(),0);
 
+
      num = new QLCDNumber(this);
      num->setObjectName("number");
      /*Стиль номера*/
@@ -31,8 +32,6 @@ ContractWidget::ContractWidget(QWidget *parent) : QWidget(parent)
      name_buttons_box_layout = new QVBoxLayout(name_buttons_box);
      name_buttons_box_layout->setContentsMargins(0,0,0,0);
      name_buttons_box_layout->setSpacing(0);
-
-
 
      name = new QLabel(this);
      name->setStyleSheet("text-align: middle; qproperty-alignment: AlignCenter;"

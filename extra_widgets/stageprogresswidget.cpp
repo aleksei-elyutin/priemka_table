@@ -11,7 +11,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
 
 
     _widget_layout = new QHBoxLayout(this);
-    _widget_layout->setSpacing (0);
+    _widget_layout->setSpacing (7);
     _widget_layout->setContentsMargins(3,1,3,1);
    // _widget_layout->setStretch(0,1);
    // _widget_layout->setStretch(1,1);
@@ -83,41 +83,6 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     QSpacerItem *hspacer = new QSpacerItem(50,20,QSizePolicy::Expanding,QSizePolicy::Expanding);
     hLayout->addItem(hspacer);*/
 
-     /*Создание кнопок изменить, удалить*/
-    _button_box = new QWidget(_top_box);
-    _button_box_layout = new QHBoxLayout(_button_box);
-    _button_box_layout->setContentsMargins(0,0,0,0);
-
-    setup_stage_button = new QPushButton (_button_box);
-    QPixmap pen_pixmap("://resources/pen.png");
-    QIcon pen_icon(pen_pixmap);
-    setup_stage_button->setIcon(pen_icon);
-    setup_stage_button->setIconSize(QSize(20,20));
-    setup_stage_button->setStyleSheet("QPushButton:hover{background-color: rgb(80, 80, 80);}");
-    setup_stage_button->setMinimumHeight(20);
-    setup_stage_button->setMaximumHeight(20);
-    setup_stage_button->setMinimumWidth(20);
-    setup_stage_button->setMaximumWidth(20);
-    setup_stage_button->setToolTip("Изменить этап");
-    //setup_stage_button->setVisible(false);
-     _button_box_layout->addWidget(setup_stage_button);
-    connect(setup_stage_button, &QPushButton::clicked, this, &StageProgressWidget::setupStage);
-
-    delete_stage_button = new QPushButton (_button_box); //QString("X"),
-    QPixmap delete_pixmap(":/resources/gnome_edit_delete.png");
-    QIcon delete_icon(delete_pixmap);
-    delete_stage_button->setIcon(delete_icon);
-    delete_stage_button->setIconSize(QSize(20,20));
-    delete_stage_button->setStyleSheet("QPushButton:hover{background-color: rgb(80, 80, 80);}");
-    delete_stage_button->setMinimumHeight(20);
-    delete_stage_button->setMaximumHeight(20);
-    delete_stage_button->setMinimumWidth(20);
-    delete_stage_button->setMaximumWidth(20);
-    delete_stage_button->setToolTip("Удалить этап");
-    _button_box_layout->addWidget(delete_stage_button);
-    connect(delete_stage_button, &QPushButton::clicked, this, &StageProgressWidget::showDeleteDialog);
-
-    _top_box_layout->addWidget(_button_box);
 
      /** Создание лейбла остатка дней и чекбоксов контрольных точек **/
 
@@ -130,37 +95,85 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     _status_box_layout->setStretch(1,0);
     _status_box_layout->setStretch(2,0);
 
-    _days_left_label = new QLabel(_status_box);
-
-    _status_box_layout->addWidget(_days_left_label);
-
-    QLabel *checkpoints_label = new QLabel("КТ: ", _status_box);
+    QLabel *checkpoints_label = new QLabel("КТ:", _status_box);
     _status_box_layout->addWidget(checkpoints_label);
 
     _done20_checkbox = new QCheckBox (QString( "20 дней "),_status_box);
+    _done20_checkbox->setStyleSheet("QCheckBox::indicator:checked {background-color: rgba(100,100,100,90); "
+                                    "image:url(://resources/if_Checkbox Full_58508.png); width: 15px; height: 15px}"
+                                    "QCheckBox::indicator:unchecked {background-color: rgba(100,100,100,90);"
+                                    "width: 15px; height: 15px}"
+                                    );
+
+
     _done20_checkbox->setObjectName("_done20_checkbox");
-     _done20_checkbox->setMinimumWidth(120);
+     _done20_checkbox->setMinimumWidth(70);
     _status_box_layout->addWidget(_done20_checkbox);
 
     _done10_checkbox = new QCheckBox (QString("10 дней "),_status_box);
+    _done10_checkbox->setStyleSheet("QCheckBox::indicator:checked {background-color: rgba(100,100,100,90); "
+                                    "image:url(://resources/if_Checkbox Full_58508.png); width: 15px; height: 15px}"
+                                    "QCheckBox::indicator:unchecked {background-color: rgba(100,100,100,90); "
+                                    "width: 15px; height: 15px}");
+
     _done10_checkbox->setObjectName("_done10_checkbox");
-    _done10_checkbox->setMinimumWidth(120);
+    _done10_checkbox->setMinimumWidth(70);
     _status_box_layout->addWidget(_done10_checkbox);
 
     _done_checkbox = new QCheckBox (QString("выполнено"),_status_box);
+    _done_checkbox->setStyleSheet("QCheckBox::indicator:checked {background-color: rgba(100,100,100,90); "
+                                  "image:url(://resources/if_Checkbox Full_58508.png); width: 15px; height: 15px}"
+                                  "QCheckBox::indicator:unchecked {background-color: rgba(100,100,100,90);"
+                                  "width: 15px; height: 15px}");
     _done_checkbox->setObjectName("_done_checkbox");
-    _done_checkbox->setMinimumWidth(120);
+    _done_checkbox->setMinimumWidth(80);
     _status_box_layout->addWidget(_done_checkbox);
 
     // _done_checkbox->setStyleSheet("QCheckBox::indicator {background-color: rgba(255, 255, 255, 120);}");
-
+    _top_box_layout->addWidget(_status_box);
 
 
     QSpacerItem *top_box_spacer = new QSpacerItem(0,0,QSizePolicy::Expanding,QSizePolicy::Expanding);
     _top_box_layout->addItem(top_box_spacer);
 
-    /* Создание кнопок выбора года для отображения */
+    /*Создание кнопок изменить, удалить*/
+   _button_box = new QWidget(_top_box);
+   _button_box_layout = new QHBoxLayout(_button_box);
+   _button_box_layout->setContentsMargins(0,0,0,0);
 
+   setup_stage_button = new QPushButton (_button_box);
+   QPixmap pen_pixmap("://resources/pen.png");
+   QIcon pen_icon(pen_pixmap);
+   setup_stage_button->setIcon(pen_icon);
+   setup_stage_button->setIconSize(QSize(20,20));
+   setup_stage_button->setStyleSheet("QPushButton:hover{background-color: rgb(80, 80, 80);}");
+   setup_stage_button->setMinimumHeight(20);
+   setup_stage_button->setMaximumHeight(20);
+   setup_stage_button->setMinimumWidth(20);
+   setup_stage_button->setMaximumWidth(20);
+   setup_stage_button->setToolTip("Изменить этап");
+   //setup_stage_button->setVisible(false);
+    _button_box_layout->addWidget(setup_stage_button);
+   connect(setup_stage_button, &QPushButton::clicked, this, &StageProgressWidget::setupStage);
+
+   delete_stage_button = new QPushButton (_button_box); //QString("X"),
+   QPixmap delete_pixmap(":/resources/gnome_edit_delete.png");
+   QIcon delete_icon(delete_pixmap);
+   delete_stage_button->setIcon(delete_icon);
+   delete_stage_button->setIconSize(QSize(20,20));
+   delete_stage_button->setStyleSheet("QPushButton:hover{background-color: rgb(80, 80, 80);}");
+   delete_stage_button->setMinimumHeight(20);
+   delete_stage_button->setMaximumHeight(20);
+   delete_stage_button->setMinimumWidth(20);
+   delete_stage_button->setMaximumWidth(20);
+   delete_stage_button->setToolTip("Удалить этап");
+   _button_box_layout->addWidget(delete_stage_button);
+   connect(delete_stage_button, &QPushButton::clicked, this, &StageProgressWidget::showDeleteDialog);
+
+   _top_box_layout->addWidget(_button_box);
+
+
+    /* Создание кнопок выбора года для отображения **/
     QWidget *year_selector_box = new QWidget(_top_box);
     year_selector_box->setStyleSheet("text-align: middle; background-color: rgba(70, 70, 70, 0); width: 10px; "
                                            "color: rgb(255, 255, 255); border: 0px solid black;");
@@ -173,6 +186,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     QIcon decrease_icon(decrease_pixmap);
     decrease_year_button->setIcon(decrease_icon);
     decrease_year_button->setIconSize(QSize(20,20));
+    decrease_year_button->setStyleSheet("QPushButton:hover{background-color: rgba(80, 80, 80, 90);}");
     decrease_year_button->setMinimumHeight(20);
     decrease_year_button->setMaximumHeight(20);
     decrease_year_button->setMinimumWidth(20);
@@ -187,6 +201,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     year_label_btn->setMinimumWidth(40);
     year_label_btn->setMaximumWidth(40);
     year_label_btn->setObjectName("restore");
+    year_label_btn->setStyleSheet("QPushButton:hover{background-color: rgba(80, 80, 80, 90);}");
     connect(year_label_btn, &QPushButton::clicked, this, &StageProgressWidget::selectYear);
     year_selector_box_Layout ->addWidget(year_label_btn);
 
@@ -194,6 +209,7 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
     QPixmap increase_pixmap(":/resources/right_grey.png");
     QIcon increase_icon(increase_pixmap);
     increase_year_button->setIcon(increase_icon);
+    increase_year_button->setStyleSheet("QPushButton:hover{background-color: rgba(80, 80, 80, 90);}");
     increase_year_button->setIconSize(QSize(20,20));
     increase_year_button->setMinimumHeight(20);
     increase_year_button->setMaximumHeight(20);
@@ -205,7 +221,11 @@ StageProgressWidget::StageProgressWidget(QWidget *parent) : QFrame(parent)
 
     _top_box_layout->addWidget(year_selector_box);
 
+    /** Лейбл остатка дней*/
+    _days_left_label = new QLabel(_top_box);
+
     _elements_box_layout->addWidget(_top_box);
+
 
 
     /*Создание меток*/
@@ -365,7 +385,7 @@ void StageProgressWidget::draw()
     if (days_left >=0 )
     {
         if (days_left == 0 ) _days_left_label->setText("Истекает сегодня!");
-        else _days_left_label->setText("Осталось дней: "+QString::number(days_left) + ".");
+        else _days_left_label->setText("Осталось дней: "+QString::number(days_left));
 
     }
     else if (_stage->getDoneStatus())
@@ -374,7 +394,7 @@ void StageProgressWidget::draw()
     }
     else
     {
-        _days_left_label->setText("Просрочено дней: "+QString::number(abs(days_left)) + ".");
+        _days_left_label->setText("Просрочено дней: "+QString::number(abs(days_left)));
     }
 
 
@@ -524,6 +544,22 @@ void StageProgressWidget::lock()
 
     delete_stage_button->setVisible(false);
     setup_stage_button->setVisible(false);
+
+    _status_box->setStyleSheet("text-align: middle; background-color: rgba(70, 70, 70, 0); width: 10px; "
+                                     "color: rgba(255, 255, 255, 120); border: 0px solid black;");
+
+    _done20_checkbox->setStyleSheet("QCheckBox::indicator:checked {background-color: rgba(100,100,100,90); "
+                                  "image:url(://resources/if_Checkbox Full_58508.png); width: 15px; height: 15px}"
+                                  "QCheckBox::indicator:unchecked {background-color: rgba(100,100,100,90);"
+                                  "width: 15px; height: 15px}");
+    _done10_checkbox->setStyleSheet("QCheckBox::indicator:checked {background-color: rgba(100,100,100,90); "
+                                  "image:url(://resources/if_Checkbox Full_58508.png); width: 15px; height: 15px}"
+                                  "QCheckBox::indicator:unchecked {background-color: rgba(100,100,100,90);"
+                                  "width: 15px; height: 15px}");
+    _done_checkbox->setStyleSheet("QCheckBox::indicator:checked {background-color: rgba(100,100,100,90); "
+                                  "image:url(://resources/if_Checkbox Full_58508.png); width: 15px; height: 15px}"
+                                  "QCheckBox::indicator:unchecked {background-color: rgba(100,100,100,90);"
+                                  "width: 15px; height: 15px}");
 }
 void StageProgressWidget::unlock()
 {
@@ -534,6 +570,21 @@ void StageProgressWidget::unlock()
 
     delete_stage_button->setVisible(true);
     setup_stage_button->setVisible(true);
+
+    _status_box->setStyleSheet("text-align: middle; background-color: rgba(70, 70, 70, 0); width: 10px; "
+                                     "color: rgba(255, 255, 255, 255); border: 0px solid black;");
+    _done20_checkbox->setStyleSheet("QCheckBox::indicator:checked {background-color: rgba(100,100,100,90); "
+                                  "image:url(://resources/if_Checkbox Full_58508.png); width: 15px; height: 15px}"
+                                  "QCheckBox::indicator:unchecked {background-color: rgba(255,255,255,150);"
+                                  "width: 15px; height: 15px}");
+    _done10_checkbox->setStyleSheet("QCheckBox::indicator:checked {background-color: rgba(100,100,100,90); "
+                                  "image:url(://resources/if_Checkbox Full_58508.png); width: 15px; height: 15px}"
+                                  "QCheckBox::indicator:unchecked {background-color: rgba(255,255,255,150);"
+                                  "width: 15px; height: 15px}");
+    _done_checkbox->setStyleSheet("QCheckBox::indicator:checked {background-color: rgba(100,100,100,90); "
+                                  "image:url(://resources/if_Checkbox Full_58508.png); width: 15px; height: 15px}"
+                                  "QCheckBox::indicator:unchecked {background-color: rgba(255,255,255,150);"
+                                  "width: 15px; height: 15px}");
 }
 
 
@@ -541,12 +592,13 @@ void StageProgressWidget::unlock()
 void StageProgressWidget::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
-    double _size_factor =  _monheader->getSizeFactor();
+    /*double _size_factor =  _monheader->getSizeFactor();
     int length = _size_factor*(_curr_start_date.daysTo(_curr_finish_date));
 
     _progress->setGeometry((_curr_start_date.dayOfYear()-1)*_size_factor, 0, length, _vert_size);
-    _status_box->setGeometry(_monheader->geometry().width()/2-225,0,450,20);
-    updateStartFinishLabels();
+    _days_left_label->setGeometry(_monheader->geometry().width()/2-50,0,120,20);
+    updateStartFinishLabels();*/
+    resize();
 }
 
 void StageProgressWidget::resize()
@@ -555,7 +607,7 @@ void StageProgressWidget::resize()
     int length = _size_factor*(_curr_start_date.daysTo(_curr_finish_date));
 
     _progress->setGeometry((_curr_start_date.dayOfYear()-1)*_size_factor, 0, length, _vert_size);
-    _status_box->setGeometry(_monheader->geometry().width()/2-225,0,450,20);
+    _days_left_label->setGeometry(_monheader->geometry().width()/2-50,0,120,20);
     updateStartFinishLabels();
 }
 
